@@ -9,6 +9,6 @@ CREATE TABLE persons (
   phone VARCHAR(250) NOT NULL,
   email VARCHAR(250) NOT NULL
 );
-INSERT INTO persons (first_name, last_name, adress, city, zip, phone, email) VALUES
+INSERT INTO persons (first_name, last_name, address, city, zip, phone, email) VALUES
   ('John', 'Boyd', '1509 Culver St', 'Culver', '97451', '841-874-6512', 'jaboyd@email.com'),
   ('Jacob', 'Boyd', '1509 Culver St', 'Culver', '97451', '841-874-6512', 'drk@email.com');

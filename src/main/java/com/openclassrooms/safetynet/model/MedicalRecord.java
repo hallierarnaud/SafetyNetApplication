@@ -27,8 +27,8 @@ public class MedicalRecord {
 
   private String birthdate;
 
-  private List<String> medications = new ArrayList<>();
+  private String medications;
 
-  private List<String> allergies = new ArrayList<>();
+  private String allergies;
 
 }
