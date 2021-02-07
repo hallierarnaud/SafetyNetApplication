@@ -1,3 +1,13 @@
+GET http://localhost:9000/persons/1
+
+<> 2021-02-07T080027.200.json
+
+###
+
+GET http://localhost:9000/persons/{id}
+
+###
+
 GET http://localhost:9000/persons/2
 
 <> 2021-02-07T071151.200.json

@@ -1,18 +1,46 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>You first Spring application</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>SafetyNet</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     </head>
     <body>
-        <p><a href="/hello">Greet the world!</a></p>
-
-        <form action="/hello" method="GET" id="nameForm">
+        <form action="/add" method="POST">
+            <p>Let's add a person.</p>
             <div>
-                <label for="nameField">How should the app call you?</label>
-                <input name="myName" id="nameField">
-                <button>Greet me!</button>
+                <label for="firstName">First name:</label>
+                <input name="firstName" id="firstName" value="Homer">
             </div>
+            <div>
+                <label for="lastName">Last name:</label>
+                <input name="lastName" id="lastName" value="Simpson">
+            </div>
+            <div>
+                <label for="address">Address:</label>
+                <input name="address" id="address" value="unknown">
+            </div>
+            <div>
+                <label for="city">City:</label>
+                <input name="city" id="city" value="SpringVille">
+            </div>
+            <div>
+                <label for="zip">Zip:</label>
+                <input name="zip" id="zip" value="1456">
+            </div>
+            <div>
+                <label for="phone">Phone:</label>
+                <input name="phone" id="phone" value="555-555">
+            </div>
+            <div>
+                <label for="email">email:</label>
+                <input name="email" id="email" value="Simpson@yahoo.fr">
+            </div>
+            <div>
+                <button>Add person</button>
+            </div>
+        </form>
+        <form action="/persons" method="GET">
+            <button>List persons</button>
         </form>
     </body>
 </html>
