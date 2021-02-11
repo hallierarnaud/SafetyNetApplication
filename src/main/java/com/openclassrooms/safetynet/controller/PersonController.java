@@ -7,8 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -31,18 +34,18 @@ public class PersonController {
     }
   }
 
-  @PostMapping("/add")
-  public String addPerson(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String address, @RequestParam String city, @RequestParam String zip, @RequestParam String phone, @RequestParam String email) {
-    Person person = new Person();
-    person.setFirstName(firstName);
-    person.setLastName(lastName);
-    person.setAddress(address);
-    person.setCity(city);
-    person.setZip(zip);
-    person.setPhone(phone);
-    person.setEmail(email);
-    personService.savePerson(person);
-    return "Added new person to repo !";
+  @PostMapping("/persons")
+  public ResponseEntity<Void> addPerson(@RequestBody Person person) {
+    Person personAdded = personService.savePerson(person);
+    if (personAdded == null) {
+      return ResponseEntity.noContent().build();
+    }
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(personAdded.getId())
+            .toUri();
+    return ResponseEntity.created(location).build();
   }
 
 }
