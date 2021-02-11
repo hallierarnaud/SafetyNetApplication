@@ -3,11 +3,15 @@ package com.openclassrooms.safetynet;
 import com.openclassrooms.safetynet.controller.PersonController;
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.PersonService;
+
+import org.hibernate.collection.internal.PersistentBag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -22,6 +26,12 @@ public class PersonControllerTest {
 
   @MockBean
   private PersonService personService;
+
+  @Test
+  public void getPersons_shouldReturnOk() throws Exception {
+    when(personService.getPerson(any())).thenReturn(new Person());
+    mockMvc.perform(get("/persons")).andExpect(status().isOk());
+  }
 
   @Test
   public void getPersonById_shouldReturnOk() throws Exception {
