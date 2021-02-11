@@ -4,9 +4,7 @@ import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import lombok.Data;
 
 @Data
@@ -25,7 +23,9 @@ public class PersonService {
   }
 
   public void deletePerson(final Long id) {
-    personRepository.deleteById(id);
+    if (personRepository.existsById(id)) {
+      personRepository.deleteById(id);
+    }
   }
 
   public Person savePerson(Person person) {

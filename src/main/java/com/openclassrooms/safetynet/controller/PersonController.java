@@ -4,13 +4,14 @@ import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.NoSuchElementException;
 
@@ -46,6 +47,16 @@ public class PersonController {
             .buildAndExpand(personAdded.getId())
             .toUri();
     return ResponseEntity.created(location).build();
+  }
+
+  @DeleteMapping("/persons/{id}")
+  public void deletePerson(@PathVariable("id") long id) {
+    personService.deletePerson(id);
+  }
+
+  @PutMapping("/persons")
+  public void updatePerson(@RequestBody Person person) {
+    personService.savePerson(person);
   }
 
 }
