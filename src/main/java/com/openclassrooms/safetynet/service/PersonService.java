@@ -2,9 +2,14 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.repository.PersonRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.NoSuchElementException;
+
+import javax.persistence.EntityExistsException;
+
 import lombok.Data;
 
 @Data
@@ -29,8 +34,14 @@ public class PersonService {
   }
 
   public Person savePerson(Person person) {
-    Person savedPerson = personRepository.save(person);
-    return savedPerson;
+    return personRepository.save(person);
+  }
+
+  public Person addPerson(Person person) {
+    if (personRepository.existsById(person.getId())) {
+      throw new EntityExistsException("la personne " + person.getId() + " existe déjà");
+    }
+    return personRepository.save(person);
   }
 
 }

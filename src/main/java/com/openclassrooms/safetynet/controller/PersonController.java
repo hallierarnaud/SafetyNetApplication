@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.PersonService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,9 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import java.net.URI;
+
 import java.util.NoSuchElementException;
+
+import javax.persistence.EntityExistsException;
 
 @RestController
 public class PersonController {
@@ -36,17 +38,12 @@ public class PersonController {
   }
 
   @PostMapping("/persons")
-  public ResponseEntity<Void> addPerson(@RequestBody Person person) {
-    Person personAdded = personService.savePerson(person);
-    if (personAdded == null) {
-      return ResponseEntity.noContent().build();
+  public ResponseEntity<Person> addPerson(@RequestBody Person person) {
+    try {
+      return ResponseEntity.ok(personService.addPerson(person));
+    } catch (EntityExistsException e) {
+      return ResponseEntity.unprocessableEntity().build();
     }
-    URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(personAdded.getId())
-            .toUri();
-    return ResponseEntity.created(location).build();
   }
 
   @DeleteMapping("/persons/{id}")
