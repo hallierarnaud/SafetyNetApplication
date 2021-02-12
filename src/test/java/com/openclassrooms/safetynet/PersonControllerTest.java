@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PersonController.class)
@@ -64,6 +65,20 @@ public class PersonControllerTest {
   public void deletePerson_shouldReturnOk() throws Exception {
     when(personService.getPerson(any())).thenReturn(new Person());
     mockMvc.perform(delete("/persons/1")).andExpect(status().isOk());
+  }
+
+  @Test
+  public void updatePerson_shouldReturnOk() throws Exception {
+    when(personService.getPerson(any())).thenReturn(new Person());
+    mockMvc.perform(put("/persons/1")
+            .param("firstName", "Bart")
+            .param("lastName", "Simpson")
+            .param("address", "unknown")
+            .param("city", "SpringVille")
+            .param("zip", "11111")
+            .param("phone", "555-555")
+            .param("email", "bsimpson@email.com"))
+            .andExpect(status().isOk());
   }
 
 }
