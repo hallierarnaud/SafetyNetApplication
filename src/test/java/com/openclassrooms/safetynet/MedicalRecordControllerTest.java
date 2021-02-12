@@ -1,6 +1,6 @@
 package com.openclassrooms.safetynet;
 
-import com.openclassrooms.safetynet.controller.PersonController;
+import com.openclassrooms.safetynet.controller.MedicalRecordController;
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
 
@@ -20,9 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = PersonController.class)
+@WebMvcTest(controllers = MedicalRecordController.class)
 public class MedicalRecordControllerTest {
-
 
   @Autowired
   private MockMvc mockMvc;

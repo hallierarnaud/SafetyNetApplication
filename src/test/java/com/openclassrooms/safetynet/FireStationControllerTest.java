@@ -1,6 +1,6 @@
 package com.openclassrooms.safetynet;
 
-import com.openclassrooms.safetynet.controller.PersonController;
+import com.openclassrooms.safetynet.controller.FireStationController;
 import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.service.FireStationService;
 
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = PersonController.class)
+@WebMvcTest(controllers = FireStationController.class)
 public class FireStationControllerTest {
 
   @Autowired
