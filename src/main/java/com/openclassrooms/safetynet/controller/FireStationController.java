@@ -19,6 +19,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.NoSuchElementException;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
 @RestController
 public class FireStationController {
 
@@ -40,17 +43,12 @@ public class FireStationController {
   }
 
   @PostMapping("/firestations")
-  public ResponseEntity<Void> addFireStation(@RequestBody FireStation fireStation) {
-    FireStation fireStationAdded = fireStationService.saveFireStation(fireStation);
-    if (fireStationAdded == null) {
-      return ResponseEntity.noContent().build();
+  public ResponseEntity<FireStation> addFireStation(@RequestBody FireStation fireStation) {
+    try {
+      return ResponseEntity.ok(fireStationService.addFireStation(fireStation));
+    } catch (EntityExistsException e) {
+      return ResponseEntity.unprocessableEntity().build();
     }
-    URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(fireStationAdded.getId())
-            .toUri();
-    return ResponseEntity.created(location).build();
   }
 
   @DeleteMapping("/firestations/{id}")
@@ -59,8 +57,12 @@ public class FireStationController {
   }
 
   @PutMapping("/firestations")
-  public void updateFireStation(@RequestBody FireStation fireStation) {
-    fireStationService.saveFireStation(fireStation);
+  public ResponseEntity<FireStation> updateFireStation(@RequestBody FireStation fireStation) {
+    try {
+      return ResponseEntity.ok(fireStationService.updateFireStation(fireStation));
+    } catch (EntityNotFoundException e) {
+      return ResponseEntity.unprocessableEntity().build();
+    }
   }
 
 }

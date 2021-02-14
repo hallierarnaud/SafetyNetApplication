@@ -17,6 +17,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.NoSuchElementException;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
 @RestController
 public class MedicalRecordController {
 
@@ -38,17 +41,12 @@ public class MedicalRecordController {
   }
 
   @PostMapping("/medicalrecords")
-  public ResponseEntity<Void> addMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-    MedicalRecord medicalRecordAdded = medicalRecordService.saveMedicalRecord(medicalRecord);
-    if (medicalRecordAdded == null) {
-      return ResponseEntity.noContent().build();
+  public ResponseEntity<MedicalRecord> addMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+    try {
+      return ResponseEntity.ok(medicalRecordService.addMedicalRecord(medicalRecord));
+    } catch (EntityExistsException e) {
+      return ResponseEntity.unprocessableEntity().build();
     }
-    URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(medicalRecordAdded.getId())
-            .toUri();
-    return ResponseEntity.created(location).build();
   }
 
   @DeleteMapping("/medicalrecords/{id}")
@@ -57,8 +55,12 @@ public class MedicalRecordController {
   }
 
   @PutMapping("/medicalrecords")
-  public void updateMedicalRecord(@RequestBody MedicalRecord person) {
-    medicalRecordService.saveMedicalRecord(person);
+  public ResponseEntity<MedicalRecord> updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+    try {
+      return ResponseEntity.ok(medicalRecordService.updateMedicalRecord(medicalRecord));
+    } catch (EntityNotFoundException e) {
+      return ResponseEntity.unprocessableEntity().build();
+    }
   }
 
 }

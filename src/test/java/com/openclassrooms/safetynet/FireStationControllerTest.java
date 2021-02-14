@@ -2,17 +2,23 @@ package com.openclassrooms.safetynet;
 
 import com.openclassrooms.safetynet.controller.FireStationController;
 import com.openclassrooms.safetynet.model.FireStation;
+import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.FireStationService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.NoSuchElementException;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -49,27 +55,40 @@ public class FireStationControllerTest {
 
   @Test
   public void postFireStation_shouldReturnOk() throws Exception {
+    when(fireStationService.addFireStation(any())).thenReturn(new FireStation());
     mockMvc.perform(post("/firestations")
-            .param("id", "1")
-            .param("address", "unknown")
-            .param("station", "1"))
+            .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
   }
 
   @Test
+  public void postFireStation_shouldReturnUnprocessableEntity() throws Exception {
+    when(fireStationService.addFireStation(any())).thenThrow(EntityExistsException.class);
+    mockMvc.perform(post("/firestations")
+            .contentType(MediaType.APPLICATION_JSON).content("{}"))
+            .andExpect(status().isUnprocessableEntity());
+  }
+
+  @Test
   public void deleteFireStation_shouldReturnOk() throws Exception {
-    when(fireStationService.getFireStation(any())).thenReturn(new FireStation());
+    doNothing().when(fireStationService).deleteFireStation(any());
     mockMvc.perform(delete("/firestations/1")).andExpect(status().isOk());
   }
 
   @Test
   public void updateFireStation_shouldReturnOk() throws Exception {
-    when(fireStationService.getFireStation(any())).thenReturn(new FireStation());
-    mockMvc.perform(put("/persons/1")
-            .param("id", "1")
-            .param("address", "unknown")
-            .param("station", "1"))
+    when(fireStationService.updateFireStation(any())).thenReturn(new FireStation());
+    mockMvc.perform(put("/firestations")
+            .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
+  }
+
+  @Test
+  public void updateFireStation_shouldReturnUnprocessableEntity() throws Exception {
+    when(fireStationService.updateFireStation(any())).thenThrow(EntityNotFoundException.class);
+    mockMvc.perform(put("/firestations")
+            .contentType(MediaType.APPLICATION_JSON).content("{}"))
+            .andExpect(status().isUnprocessableEntity());
   }
 
 }

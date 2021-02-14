@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
 import lombok.Data;
 
 @Data
@@ -31,9 +34,18 @@ public class MedicalRecordService {
     }
   }
 
-  public MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord) {
-    MedicalRecord savedMedicalRecord = medicalRecordRepository.save(medicalRecord);
-    return savedMedicalRecord;
+  public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {
+    if (!medicalRecordRepository.existsById(medicalRecord.getId())) {
+      throw new EntityNotFoundException("medicalrecord " + medicalRecord.getId() + " doesn't exist");
+    }
+    return medicalRecordRepository.save(medicalRecord);
+  }
+
+  public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) {
+    if (medicalRecordRepository.existsById(medicalRecord.getId())) {
+      throw new EntityExistsException("medicalrecord " + medicalRecord.getId() + " already exists");
+    }
+    return medicalRecordRepository.save(medicalRecord);
   }
 
 }
