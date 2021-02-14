@@ -75,6 +75,12 @@ public class PersonControllerTest {
   }
 
   @Test
+  public void deletePerson_shouldReturnNotFound() throws Exception {
+    doNothing().when(personService).deletePerson(any());
+    mockMvc.perform(delete("/persons/1")).andExpect(status().isNotFound());
+  }
+
+  @Test
   public void updatePerson_shouldReturnOk() throws Exception {
     when(personService.updatePerson(any())).thenReturn(new Person());
     mockMvc.perform(put("/persons")
