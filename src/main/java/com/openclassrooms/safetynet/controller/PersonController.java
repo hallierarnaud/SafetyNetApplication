@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 public class PersonController {
@@ -52,8 +53,12 @@ public class PersonController {
   }
 
   @PutMapping("/persons")
-  public void updatePerson(@RequestBody Person person) {
-    personService.savePerson(person);
+  public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
+    try {
+      return ResponseEntity.ok(personService.updatePerson(person));
+    } catch (EntityNotFoundException e) {
+      return ResponseEntity.unprocessableEntity().build();
+    }
   }
 
 }

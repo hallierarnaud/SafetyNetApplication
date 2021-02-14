@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -75,16 +76,18 @@ public class PersonControllerTest {
 
   @Test
   public void updatePerson_shouldReturnOk() throws Exception {
-    when(personService.getPerson(any())).thenReturn(new Person());
-    mockMvc.perform(put("/persons/1")
-            .param("firstName", "Bart")
-            .param("lastName", "Simpson")
-            .param("address", "unknown")
-            .param("city", "SpringVille")
-            .param("zip", "11111")
-            .param("phone", "555-555")
-            .param("email", "bsimpson@email.com"))
+    when(personService.updatePerson(any())).thenReturn(new Person());
+    mockMvc.perform(put("/persons")
+            .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
+  }
+
+  @Test
+  public void updatePerson_shouldReturnUnprocessableEntity() throws Exception {
+    when(personService.updatePerson(any())).thenThrow(EntityNotFoundException.class);
+    mockMvc.perform(put("/persons")
+            .contentType(MediaType.APPLICATION_JSON).content("{}"))
+            .andExpect(status().isUnprocessableEntity());
   }
 
 }

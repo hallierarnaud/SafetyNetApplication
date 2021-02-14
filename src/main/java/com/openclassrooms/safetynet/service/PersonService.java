@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import lombok.Data;
 
@@ -20,7 +21,7 @@ public class PersonService {
   private PersonRepository personRepository;
 
   public Person getPerson(final Long id) {
-    return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("la personne " + id + " n'existe pas"));
+    return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " already exists"));
   }
 
   public Iterable<Person> getPersons() {
@@ -33,13 +34,16 @@ public class PersonService {
     }
   }
 
-  public Person savePerson(Person person) {
+  public Person updatePerson(Person person) {
+    if (!personRepository.existsById(person.getId())) {
+      throw new EntityNotFoundException("person " + person.getId() + " doesn't exist");
+    }
     return personRepository.save(person);
   }
 
   public Person addPerson(Person person) {
     if (personRepository.existsById(person.getId())) {
-      throw new EntityExistsException("la personne " + person.getId() + " existe déjà");
+      throw new EntityExistsException("person " + person.getId() + " already exists");
     }
     return personRepository.save(person);
   }
