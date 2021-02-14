@@ -1,4 +1,4 @@
-package com.openclassrooms.safetynet;
+package com.openclassrooms.safetynet.controllerTest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

@@ -1,4 +1,4 @@
-package com.openclassrooms.safetynet;
+package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.FireStationController;
 import com.openclassrooms.safetynet.model.FireStation;
