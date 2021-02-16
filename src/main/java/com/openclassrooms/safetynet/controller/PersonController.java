@@ -48,8 +48,13 @@ public class PersonController {
   }
 
   @DeleteMapping("/persons/{id}")
-  public void deletePerson(@PathVariable("id") long id) {
-    personService.deletePerson(id);
+  public ResponseEntity<Void> deletePersonById(@PathVariable("id") long id) {
+    try {
+      personService.deletePerson(id);
+      return ResponseEntity.ok().build();
+    } catch (NoSuchElementException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PutMapping("/persons")

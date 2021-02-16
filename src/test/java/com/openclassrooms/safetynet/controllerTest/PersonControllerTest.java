@@ -18,6 +18,7 @@ import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -76,7 +77,7 @@ public class PersonControllerTest {
 
   @Test
   public void deletePerson_shouldReturnNotFound() throws Exception {
-    doNothing().when(personService).deletePerson(any());
+    doThrow(NoSuchElementException.class).when(personService).deletePerson(any());
     mockMvc.perform(delete("/persons/1")).andExpect(status().isNotFound());
   }
 

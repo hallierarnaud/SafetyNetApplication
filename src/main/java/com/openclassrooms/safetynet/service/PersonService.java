@@ -21,7 +21,7 @@ public class PersonService {
   private PersonRepository personRepository;
 
   public Person getPerson(final Long id) {
-    return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " already exists"));
+    return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
   }
 
   public Iterable<Person> getPersons() {
@@ -29,9 +29,10 @@ public class PersonService {
   }
 
   public void deletePerson(final Long id) {
-    if (personRepository.existsById(id)) {
-      personRepository.deleteById(id);
+    if (!personRepository.existsById(id)) {
+      throw new NoSuchElementException("person " + id + " doesn't exist");
     }
+    personRepository.deleteById(id);
   }
 
   public Person updatePerson(Person person) {
