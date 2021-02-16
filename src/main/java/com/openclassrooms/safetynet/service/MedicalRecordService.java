@@ -21,7 +21,7 @@ public class MedicalRecordService {
   private MedicalRecordRepository medicalRecordRepository;
 
   public MedicalRecord getMedicalRecord(final Long id) {
-    return medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("les données santé " + id + " n'existent pas"));
+    return medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("medicalrecord " + id + " doesn't exist"));
   }
 
   public Iterable<MedicalRecord> getMedicalRecords() {
@@ -29,9 +29,10 @@ public class MedicalRecordService {
   }
 
   public void deleteMedicalRecord(final Long id) {
-    if (medicalRecordRepository.existsById(id)) {
-      medicalRecordRepository.deleteById(id);
+    if (!medicalRecordRepository.existsById(id)) {
+      throw new NoSuchElementException("person " + id + " doesn't exist");
     }
+    medicalRecordRepository.deleteById(id);
   }
 
   public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {

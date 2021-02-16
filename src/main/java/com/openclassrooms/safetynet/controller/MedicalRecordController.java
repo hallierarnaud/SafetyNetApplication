@@ -50,8 +50,13 @@ public class MedicalRecordController {
   }
 
   @DeleteMapping("/medicalrecords/{id}")
-  public void deleteMedicalRecord(@PathVariable("id") long id) {
-    medicalRecordService.deleteMedicalRecord(id);
+  public ResponseEntity<Void> deleteMedicalRecordById(@PathVariable("id") long id) {
+    try {
+      medicalRecordService.deleteMedicalRecord(id);
+      return ResponseEntity.ok().build();
+    } catch (NoSuchElementException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PutMapping("/medicalrecords")

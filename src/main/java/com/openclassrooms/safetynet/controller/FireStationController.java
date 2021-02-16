@@ -52,8 +52,13 @@ public class FireStationController {
   }
 
   @DeleteMapping("/firestations/{id}")
-  public void deleteFireStation(@PathVariable("id") long id) {
-    fireStationService.deleteFireStation(id);
+  public ResponseEntity<Void> deleteFireStationById(@PathVariable("id") long id) {
+    try {
+      fireStationService.deleteFireStation(id);
+      return ResponseEntity.ok().build();
+    } catch (NoSuchElementException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PutMapping("/firestations")

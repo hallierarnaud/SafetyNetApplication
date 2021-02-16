@@ -1,7 +1,6 @@
 package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.FireStation;
-import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.repository.FireStationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class FireStationService {
   private FireStationRepository fireStationRepository;
 
   public FireStation getFireStation(final Long id) {
-    return fireStationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("la caserne " + id + " n'existe pas"));
+    return fireStationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("firestation " + id + " doesn't exist"));
   }
 
   public Iterable<FireStation> getFireStations() {
@@ -30,9 +29,10 @@ public class FireStationService {
   }
 
   public void deleteFireStation(final Long id) {
-    if (fireStationRepository.existsById(id)) {
-      fireStationRepository.deleteById(id);
+    if (!fireStationRepository.existsById(id)) {
+      throw new NoSuchElementException("person " + id + " doesn't exist");
     }
+    fireStationRepository.deleteById(id);
   }
 
   public FireStation updateFireStation(FireStation fireStation) {

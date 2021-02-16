@@ -19,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -73,6 +74,12 @@ public class FireStationControllerTest {
   public void deleteFireStation_shouldReturnOk() throws Exception {
     doNothing().when(fireStationService).deleteFireStation(any());
     mockMvc.perform(delete("/firestations/1")).andExpect(status().isOk());
+  }
+
+  @Test
+  public void deleteFireStation_shouldReturnNotFound() throws Exception {
+    doThrow(NoSuchElementException.class).when(fireStationService).deleteFireStation(any());
+    mockMvc.perform(delete("/firestations/1")).andExpect(status().isNotFound());
   }
 
   @Test
