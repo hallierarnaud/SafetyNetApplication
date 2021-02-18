@@ -83,16 +83,16 @@ public class PersonControllerTest {
 
   @Test
   public void updatePerson_shouldReturnOk() throws Exception {
-    when(personService.updatePerson(any())).thenReturn(new Person());
-    mockMvc.perform(put("/persons")
+    when(personService.updatePerson(any(), any())).thenReturn(new Person());
+    mockMvc.perform(put("/persons/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
   }
 
   @Test
   public void updatePerson_shouldReturnUnprocessableEntity() throws Exception {
-    when(personService.updatePerson(any())).thenThrow(EntityNotFoundException.class);
-    mockMvc.perform(put("/persons")
+    when(personService.updatePerson(any(), any())).thenThrow(EntityNotFoundException.class);
+    mockMvc.perform(put("/persons/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());
   }

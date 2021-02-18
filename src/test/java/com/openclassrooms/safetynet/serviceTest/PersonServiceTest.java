@@ -97,17 +97,19 @@ public class PersonServiceTest {
   public void updatePerson_shouldReturnOk () {
     // GIVEN
     Person person = new Person();
+    person.setId(1L);
     person.setFirstName("Homer");
     Person newPerson = new Person();
     person.setFirstName("Bart");
-    when(personRepository.save(any(Person.class))).thenReturn(person);
+    when(personRepository.findById(person.getId())).thenReturn(java.util.Optional.of(person));
 
     // WHEN
-    Person updated = personService.updatePerson(newPerson);
+    personService.updatePerson(person.getId(), newPerson);
 
     // THEN
-    assertEquals(updated.getFirstName(), person.getFirstName());
+    //assertEquals(updated.getFirstName(), person.getFirstName());
     verify(personRepository.save(newPerson));
+    verify(personRepository).findById(person.getId());
   }
 
   @Test
@@ -120,10 +122,10 @@ public class PersonServiceTest {
     Person newPerson = new Person();
     newPerson.setId(2L);
     person.setFirstName("Bart");
-    when(personRepository.existsById(anyLong())).thenReturn(FALSE);
+    when(personRepository.findById(anyLong())).thenReturn(java.util.Optional.of(null));
 
     // WHEN
-    personService.updatePerson(newPerson);
+    personService.updatePerson(person.getId(), newPerson);
   }
 
   @Test

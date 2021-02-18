@@ -35,9 +35,9 @@ public class PersonService {
     personRepository.deleteById(id);
   }
 
-  public Person updatePerson(Person person) {
-    if (!personRepository.existsById(person.getId())) {
-      throw new EntityNotFoundException("person " + person.getId() + " doesn't exist");
+  public Person updatePerson(final Long id, Person person) {
+    if (!personRepository.existsById(id)) {
+      throw new EntityNotFoundException("person " + id + " doesn't exist");
     }
     return personRepository.save(person);
   }

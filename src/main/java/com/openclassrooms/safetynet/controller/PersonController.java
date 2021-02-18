@@ -57,10 +57,10 @@ public class PersonController {
     }
   }
 
-  @PutMapping("/persons")
-  public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
+  @PutMapping("/persons/{id}")
+  public ResponseEntity<Person> updatePerson(@PathVariable("id") long id, @RequestBody Person person) {
     try {
-      return ResponseEntity.ok(personService.updatePerson(person));
+      return ResponseEntity.ok(personService.updatePerson(id, person));
     } catch (EntityNotFoundException e) {
       return ResponseEntity.unprocessableEntity().build();
     }
