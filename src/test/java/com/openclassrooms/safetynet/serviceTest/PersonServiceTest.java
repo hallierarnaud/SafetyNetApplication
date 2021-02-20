@@ -46,7 +46,7 @@ public class PersonServiceTest {
     Person created = personService.addPerson(person);
 
     // THEN
-    assertEquals(person.getFirstName(), created.getFirstName());
+    assertEquals(created.getFirstName(), person.getFirstName());
     verify(personRepository).save(person);
   }
 

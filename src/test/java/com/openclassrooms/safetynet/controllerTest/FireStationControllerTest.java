@@ -2,7 +2,6 @@ package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.FireStationController;
 import com.openclassrooms.safetynet.model.FireStation;
-import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.FireStationService;
 
 import org.junit.jupiter.api.Test;
@@ -84,16 +83,16 @@ public class FireStationControllerTest {
 
   @Test
   public void updateFireStation_shouldReturnOk() throws Exception {
-    when(fireStationService.updateFireStation(any())).thenReturn(new FireStation());
-    mockMvc.perform(put("/firestations")
+    when(fireStationService.updateFireStation(any(), any())).thenReturn(new FireStation());
+    mockMvc.perform(put("/firestations/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
   }
 
   @Test
   public void updateFireStation_shouldReturnUnprocessableEntity() throws Exception {
-    when(fireStationService.updateFireStation(any())).thenThrow(EntityNotFoundException.class);
-    mockMvc.perform(put("/firestations")
+    when(fireStationService.updateFireStation(any(), any())).thenThrow(EntityNotFoundException.class);
+    mockMvc.perform(put("/firestations/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());
   }

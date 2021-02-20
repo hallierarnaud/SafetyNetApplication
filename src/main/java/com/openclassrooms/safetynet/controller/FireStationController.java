@@ -1,9 +1,7 @@
 package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.FireStation;
-import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.FireStationService;
-import com.openclassrooms.safetynet.service.PersonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
@@ -61,10 +57,10 @@ public class FireStationController {
     }
   }
 
-  @PutMapping("/firestations")
-  public ResponseEntity<FireStation> updateFireStation(@RequestBody FireStation fireStation) {
+  @PutMapping("/firestations/{id}")
+  public ResponseEntity<FireStation> updateFireStation(@PathVariable("id") long id, @RequestBody FireStation fireStation) {
     try {
-      return ResponseEntity.ok(fireStationService.updateFireStation(fireStation));
+      return ResponseEntity.ok(fireStationService.updateFireStation(id, fireStation));
     } catch (EntityNotFoundException e) {
       return ResponseEntity.unprocessableEntity().build();
     }
