@@ -12,10 +12,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -41,8 +46,22 @@ public class PersonServiceTest {
     Person created = personService.addPerson(person);
 
     // THEN
-    assertEquals(created.getFirstName(), person.getFirstName());
+    assertEquals(person.getFirstName(), created.getFirstName());
     verify(personRepository).save(person);
+  }
+
+  @Test
+  public void addPersonTest_shouldReturnAlreadyExist () {
+    // GIVEN
+    Person person = new Person();
+    person.setId(1L);
+
+    // WHEN
+    when(personRepository.existsById(anyLong())).thenReturn(TRUE);
+
+    // THEN
+    Throwable exception = assertThrows(EntityExistsException.class, () -> personService.addPerson(person));
+    assertEquals("person 1 already exists", exception.getMessage());
   }
 
   @Test
@@ -65,8 +84,7 @@ public class PersonServiceTest {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
-    person.setFirstName("Homer");
-    when(personRepository.existsById(person.getId())).thenReturn(TRUE);
+    when(personRepository.existsById(anyLong())).thenReturn(TRUE);
 
     // WHEN
     personService.deletePerson(person.getId());
@@ -76,56 +94,49 @@ public class PersonServiceTest {
   }
 
   @Test
-  //TODO : Corriger ce test non passant
-  //https://gabrielpulga.medium.com/a-beginners-guide-to-unit-testing-crud-endpoints-of-a-spring-boot-java-web-service-api-8ae342c9cbcd
   public void deletePerson_shouldReturnNotFound () {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
-    person.setFirstName("Homer");
-    when(personRepository.existsById(anyLong())).thenReturn(FALSE);
 
     // WHEN
-    personService.deletePerson(person.getId());
+    when(personRepository.existsById(anyLong())).thenReturn(FALSE);
 
     // THEN
-    //verify(personRepository).deleteById(person.getId());
+    Throwable exception = assertThrows(NoSuchElementException.class, () -> personService.deletePerson(person.getId()));
+    assertEquals("person 1 doesn't exist", exception.getMessage());
   }
 
   @Test
-  //TODO : Corriger ce test non passant
   public void updatePerson_shouldReturnOk () {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
     person.setFirstName("Homer");
-    Person newPerson = new Person();
-    person.setFirstName("Bart");
-    when(personRepository.findById(person.getId())).thenReturn(java.util.Optional.of(person));
+    when(personRepository.existsById(anyLong())).thenReturn(TRUE);
+    when(personRepository.save(any(Person.class))).thenReturn(person);
 
     // WHEN
-    personService.updatePerson(person.getId(), newPerson);
+    Person updated = personService.updatePerson(person.getId(), person);
 
     // THEN
-    //assertEquals(updated.getFirstName(), person.getFirstName());
-    verify(personRepository.save(newPerson));
-    verify(personRepository).findById(person.getId());
+    assertEquals(person.getFirstName(), updated.getFirstName());
+    verify(personRepository).existsById(person.getId());
+    verify(personRepository).save(person);
   }
 
   @Test
-  //TODO : Corriger ce test non passant
   public void updatePerson_shouldReturnNotFound () {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
-    person.setFirstName("Homer");
-    Person newPerson = new Person();
-    newPerson.setId(2L);
-    person.setFirstName("Bart");
-    when(personRepository.findById(anyLong())).thenReturn(java.util.Optional.of(null));
 
     // WHEN
-    personService.updatePerson(person.getId(), newPerson);
+    when(personRepository.existsById(anyLong())).thenReturn(FALSE);
+
+    // THEN
+    Throwable exception = assertThrows(EntityNotFoundException.class, () -> personService.updatePerson(person.getId(), person));
+    assertEquals("person 1 doesn't exist", exception.getMessage());
   }
 
   @Test
@@ -133,7 +144,7 @@ public class PersonServiceTest {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
-    when(personRepository.findById(person.getId())).thenReturn(java.util.Optional.of(person));
+    when(personRepository.findById(anyLong())).thenReturn(java.util.Optional.of(person));
 
     // WHEN
     Person expected = personService.getPerson(person.getId());
@@ -144,19 +155,16 @@ public class PersonServiceTest {
   }
 
   @Test
-  //TODO : Corriger ce test non passant
   public void getPerson_shouldReturnNotFound () {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
-    person.setFirstName("Homer");
-    when(personRepository.findById(anyLong())).thenReturn(null);
 
     // WHEN
-    personService.getPerson(person.getId());
+    when(personRepository.findById(anyLong())).thenReturn(null);
 
     // THEN
-
+    assertThrows(NullPointerException.class, () -> personService.getPerson(person.getId()));
   }
 
 }
