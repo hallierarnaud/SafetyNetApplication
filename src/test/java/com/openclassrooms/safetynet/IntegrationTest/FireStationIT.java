@@ -1,4 +1,4 @@
-package com.openclassrooms.safetynet.controllerTest;
+package com.openclassrooms.safetynet.IntegrationTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +13,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MedicalRecordControllerIT {
+public class FireStationIT {
 
   @Autowired
   private MockMvc mockMvc;
 
   @Test
-  public void testGetMedicalRecords() throws Exception {
+  public void testGetFireStations() throws Exception {
 
-    mockMvc.perform(get("/medicalrecords"))
+    mockMvc.perform(get("/firestations"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].id", is(1)));
 

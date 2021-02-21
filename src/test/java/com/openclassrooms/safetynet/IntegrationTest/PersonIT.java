@@ -1,4 +1,4 @@
-package com.openclassrooms.safetynet.controllerTest;
+package com.openclassrooms.safetynet.IntegrationTest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PersonControllerIT {
+public class PersonIT {
 
   @Autowired
   private MockMvc mockMvc;
