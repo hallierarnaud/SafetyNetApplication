@@ -2,7 +2,6 @@ package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.MedicalRecordController;
 import com.openclassrooms.safetynet.model.MedicalRecord;
-import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
 
 import org.junit.jupiter.api.Test;
@@ -84,16 +83,16 @@ public class MedicalRecordControllerTest {
 
   @Test
   public void updateMedicalRecord_shouldReturnOk() throws Exception {
-    when(medicalRecordService.updateMedicalRecord(any())).thenReturn(new MedicalRecord());
-    mockMvc.perform(put("/medicalrecords")
+    when(medicalRecordService.updateMedicalRecord(any(), any())).thenReturn(new MedicalRecord());
+    mockMvc.perform(put("/medicalrecords/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
   }
 
   @Test
   public void updateMedicalRecord_shouldReturnUnprocessableEntity() throws Exception {
-    when(medicalRecordService.updateMedicalRecord(any())).thenThrow(EntityNotFoundException.class);
-    mockMvc.perform(put("/medicalrecords")
+    when(medicalRecordService.updateMedicalRecord(any(), any())).thenThrow(EntityNotFoundException.class);
+    mockMvc.perform(put("/medicalrecords/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());
   }

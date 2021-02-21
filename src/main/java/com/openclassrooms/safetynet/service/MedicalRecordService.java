@@ -30,14 +30,14 @@ public class MedicalRecordService {
 
   public void deleteMedicalRecord(final Long id) {
     if (!medicalRecordRepository.existsById(id)) {
-      throw new NoSuchElementException("person " + id + " doesn't exist");
+      throw new NoSuchElementException("medicalrecord " + id + " doesn't exist");
     }
     medicalRecordRepository.deleteById(id);
   }
 
-  public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {
-    if (!medicalRecordRepository.existsById(medicalRecord.getId())) {
-      throw new EntityNotFoundException("medicalrecord " + medicalRecord.getId() + " doesn't exist");
+  public MedicalRecord updateMedicalRecord(final Long id, MedicalRecord medicalRecord) {
+    if (!medicalRecordRepository.existsById(id)) {
+      throw new EntityNotFoundException("medicalrecord " + id + " doesn't exist");
     }
     return medicalRecordRepository.save(medicalRecord);
   }
