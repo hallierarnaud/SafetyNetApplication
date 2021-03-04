@@ -1,6 +1,11 @@
 package com.openclassrooms.safetynet.IntegrationTest;
 
-import com.openclassrooms.safetynet.model.Person;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -9,12 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,42 +46,50 @@ public class PersonIT {
   public void testAddPerson_shouldReturnOk() throws Exception {
     mockMvc.perform(post("/persons")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("Homer"))
-            .andExpect(status().isOk());
+            .content("{\"id\": \"3\", \"firstName\":\"Bart\",\"lastName\":\"Simpson\",\"address\":\"1509 Culver St\",\"city\":\"Springville\",\"zip\":\"97451\",\"phone\":\"555-555\",\"email\":\"simpson@email.com\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.firstName", is("Bart")));
   }
 
   @Test
   public void testAddPerson_shouldReturnUnprocessableEntity() throws Exception {
     mockMvc.perform(post("/persons")
-            .contentType(MediaType.APPLICATION_JSON).content("{}"))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"id\": \"1\", \"firstName\":\"Bart\",\"lastName\":\"Simpson\",\"address\":\"1509 Culver St\",\"city\":\"Springville\",\"zip\":\"97451\",\"phone\":\"555-555\",\"email\":\"simpson@email.com\"}"))
             .andExpect(status().isUnprocessableEntity());
   }
 
   @Test
   public void testDeletePerson_shouldReturnOk() throws Exception {
-    mockMvc.perform(delete("/persons/1")).andExpect(status().isOk());
-    mockMvc.perform(get("/persons/1")).andExpect(status().isNotFound());
+    mockMvc.perform(delete("/persons/1"))
+            .andExpect(status().isOk());
+    mockMvc.perform(get("/persons/1"))
+            .andExpect(status().isNotFound());
   }
 
   @Test
   public void testDeletePerson_shouldReturnNotFound() throws Exception {
-    mockMvc.perform(delete("/persons/100")).andExpect(status().isNotFound());
+    mockMvc.perform(delete("/persons/100"))
+            .andExpect(status().isNotFound());
   }
 
   @Test
   public void testUpdatePerson_shouldReturnOk() throws Exception {
-    Person person = new Person();
-    person.setFirstName("Homer");
+    mockMvc.perform(get("/persons/1"))
+            .andExpect(jsonPath("$.firstName", is("John")));
     mockMvc.perform(put("/persons/1")
-            .contentType(MediaType.APPLICATION_JSON).content(String.valueOf(person)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"id\": \"1\", \"firstName\":\"Bart\",\"lastName\":\"Simpson\",\"address\":\"1509 Culver St\",\"city\":\"Springville\",\"zip\":\"97451\",\"phone\":\"555-555\",\"email\":\"simpson@email.com\"}"))
             .andExpect(status().isOk());
-    mockMvc.perform(get("/persons/1")).andExpect(status().isOk());
+    mockMvc.perform(get("/persons/1"))
+            .andExpect(jsonPath("$.firstName", is("Bart")));
   }
 
   @Test
   public void testUpdatePerson_shouldReturnNotFound() throws Exception {
     mockMvc.perform(put("/persons/100")
-            .contentType(MediaType.APPLICATION_JSON).content("{}"))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{}"))
             .andExpect(status().isUnprocessableEntity());
   }
 
