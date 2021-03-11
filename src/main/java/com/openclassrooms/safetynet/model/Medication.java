@@ -18,8 +18,4 @@ public class Medication {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn
-  private Medication medication;
-
 }
