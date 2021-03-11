@@ -40,14 +40,14 @@ public class FireStationServiceTest {
   public void addFireStationTest_shouldReturnOk () {
     // GIVEN
     FireStation fireStation = new FireStation();
-    fireStation.setStation("1");
+    fireStation.setStationNumber("1");
     when(fireStationRepository.save(any(FireStation.class))).thenReturn(fireStation);
 
     // WHEN
     FireStation created = fireStationService.addFireStation(fireStation);
 
     // THEN
-    assertEquals(created.getStation(), fireStation.getStation());
+    assertEquals(created.getStationNumber(), fireStation.getStationNumber());
     verify(fireStationRepository).save(fireStation);
   }
 
@@ -113,7 +113,7 @@ public class FireStationServiceTest {
     // GIVEN
     FireStation fireStation = new FireStation();
     fireStation.setId(1L);
-    fireStation.setStation("1");
+    fireStation.setStationNumber("1");
     when(fireStationRepository.existsById(anyLong())).thenReturn(TRUE);
     when(fireStationRepository.save(any(FireStation.class))).thenReturn(fireStation);
 
@@ -121,7 +121,7 @@ public class FireStationServiceTest {
     FireStation updated = fireStationService.updateFireStation(fireStation.getId(), fireStation);
 
     // THEN
-    assertEquals(fireStation.getStation(), updated.getStation());
+    assertEquals(fireStation.getStationNumber(), updated.getStationNumber());
     verify(fireStationRepository).existsById(fireStation.getId());
     verify(fireStationRepository).save(fireStation);
   }
