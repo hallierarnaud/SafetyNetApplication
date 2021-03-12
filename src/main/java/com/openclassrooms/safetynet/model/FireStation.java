@@ -2,7 +2,6 @@ package com.openclassrooms.safetynet.model;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -45,7 +44,7 @@ public class FireStation {
   }
 
   public Set<String> getAddresses() {
-    return addresses.stream().collect(Collectors.toSet());
+    return new HashSet<>(addresses);
   }
 
   @Override

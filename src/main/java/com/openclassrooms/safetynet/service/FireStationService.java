@@ -21,6 +21,7 @@ public class FireStationService {
   private FireStationRepository fireStationRepository;
 
   public Iterable<FireStation> getFireStations() {
+    //Iterable<FireStation> fireStationList = fireStationRepository.findAll();
     return fireStationRepository.findAll();
   }
 

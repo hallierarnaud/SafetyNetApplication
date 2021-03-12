@@ -13,6 +13,7 @@ import lombok.Data;
 @Table(name = "persons")
 public class Person {
 
+  // Pas besoin d'Id si mapping avec une clé composite
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -90,5 +91,9 @@ public class Person {
     this.city = city;
     this.email = email;
   }
+
+  //Pas besoin de mappedby pour cette relation onetoone
+  /*@OneToOne
+  MedicalRecord medicalRecord;*/
 
 }
