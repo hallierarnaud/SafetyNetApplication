@@ -3,27 +3,45 @@ package com.openclassrooms.safetynet;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 import com.openclassrooms.safetynet.model.FireStation;
+import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.repository.FireStationRepository;
+import com.openclassrooms.safetynet.repository.MedicalRecordRepository;
+import com.openclassrooms.safetynet.repository.PersonRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 @RestController
-public class SafetynetApplication {
+public class SafetynetApplication implements ApplicationRunner {
 
-  public static void main(String[] args) throws IOException {
+  @Autowired
+  private PersonRepository personRepository;
+
+  @Autowired
+  private FireStationRepository fireStationRepository;
+
+  @Autowired
+  private MedicalRecordRepository medicalRecordRepository;
+
+  public static void main(String[] args) {
     SpringApplication.run(SafetynetApplication.class, args);
+  }
+
+  @Override
+  public void run(ApplicationArguments args) throws Exception {
 
     String filePath = "src/main/resources/data.json";
     byte[] bytesFile = Files.readAllBytes(new File(filePath).toPath());
@@ -32,8 +50,8 @@ public class SafetynetApplication {
     Any any = iter.readAny();
 
     Any personAny = any.get("persons");
-    List<Person> persons = new ArrayList<>();
-    personAny.forEach(a -> persons.add(new Person.PersonBuilder()
+    List<Person> personList = new ArrayList<>();
+    personAny.forEach(a -> personList.add(new Person.PersonBuilder()
             .firstName(a.get("firstName").toString())
             .address(a.get("address").toString())
             .city(a.get("city").toString())
@@ -42,8 +60,7 @@ public class SafetynetApplication {
             .zip(a.get("zip").toString())
             .email(a.get("email").toString())
             .build()));
-
-    //persons.forEach(p -> System.out.println(p.firstName.concat(p.lastName).concat(p.address).concat(p.city).concat(p.phone).concat(p.zip)));
+    personRepository.saveAll(personList);
 
     Map<String, FireStation> fireStationMap = new HashMap<>();
     Any fireStationAny = any.get("firestations");
@@ -53,26 +70,31 @@ public class SafetynetApplication {
                       new FireStation(anyStation.get("station").toString()).addAddress(anyStation.get("address").toString()) :
                       v.addAddress(anyStation.get("address").toString()));
     });
-
-    List<FireStation> fireStations = fireStationMap.values().stream().collect(Collectors.toList());
+    List<FireStation> fireStations = new ArrayList<>(fireStationMap.values());
     fireStations.forEach(firestation -> System.out.println("Firestation " + firestation.toString()));
-
-    for(FireStation fireStation : fireStations) {
-      if(fireStation.getAddresses().contains("489 Manchester St")) {
-        System.out.println("Firestation " + fireStation.getStationNumber() + " selected");
-        break;
-      }
-    }
+    fireStationRepository.saveAll(fireStations);
 
     Any medicalAny = any.get("medicalrecords");
-    medicalAny.forEach(medicalRecord -> {System.out.println(medicalRecord.get("firstName").toString().concat(medicalRecord.get("lastName").toString())
-            .concat(medicalRecord.get("birthdate").toString()));
-      Any medications = medicalRecord.get("medications");
-      medications.forEach(a -> System.out.println(a.toString()));
-
-      Any allergies = medicalRecord.get("allergies");
-      allergies.forEach(a -> System.out.println(a.toString()));
+    List<MedicalRecord> medicalRecordList = new ArrayList<>();
+    medicalAny.forEach(a -> {
+      MedicalRecord medicalRecord = MedicalRecord.builder()
+              .firstName(a.get("firstName").toString())
+              .lastName(a.get("lastName").toString())
+              .birthdate(a.get("birthdate").toString())
+              .build();
+      List<String> allergyList = new ArrayList<>();
+      a.get("allergies").forEach(b -> {
+        allergyList.add(b.toString());
+      });
+      medicalRecord.setAllergies(allergyList);
+      List<String> medicationList = new ArrayList<>();
+      a.get("medications").forEach(c -> {
+        medicationList.add(c.toString());
+      });
+      medicalRecord.setMedications(medicationList);
+      medicalRecordList.add(medicalRecord);
     });
+    medicalRecordRepository.saveAll(medicalRecordList);
   }
 
 }
