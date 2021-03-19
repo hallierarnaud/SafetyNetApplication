@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -29,10 +28,6 @@ public class MedicalRecord {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String firstName;
-
-  private String lastName;
-
   private String birthdate;
 
   @ElementCollection
@@ -42,7 +37,6 @@ public class MedicalRecord {
   private List<String> allergies;
 
   @OneToOne
-  @JoinColumn
-  Person person;
+  private Person person;
 
 }

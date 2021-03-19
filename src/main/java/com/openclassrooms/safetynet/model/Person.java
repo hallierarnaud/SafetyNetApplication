@@ -9,13 +9,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
+@Getter
+@Setter
 @Entity
 @Table(name = "persons")
 public class Person {
 
-  // Pas besoin d'Id si mapping avec une clé composite
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -94,7 +97,6 @@ public class Person {
     this.email = email;
   }
 
-  //Pas besoin de mappedby pour cette relation onetoone
   @OneToOne
   MedicalRecord medicalRecord;
 

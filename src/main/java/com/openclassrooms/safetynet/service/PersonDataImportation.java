@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import lombok.Data;
 
@@ -22,7 +24,7 @@ public class PersonDataImportation {
 
   private DataReader dataReader = new DataReader();
 
-  public void getPersonList(String filePath) throws IOException {
+  public List<Person> getPersonList(String filePath) throws IOException {
     Any personAny = dataReader.getData(filePath).get("persons");
     List<Person> personList = new ArrayList<>();
     personAny.forEach(a -> personList.add(new Person.PersonBuilder()
@@ -34,7 +36,7 @@ public class PersonDataImportation {
             .zip(a.get("zip").toString())
             .email(a.get("email").toString())
             .build()));
-    personRepository.saveAll(personList);
+    return StreamSupport.stream(personRepository.saveAll(personList).spliterator(),false).collect(Collectors.toList());
   }
 
 }

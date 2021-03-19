@@ -35,7 +35,7 @@ public class PersonServiceTest {
   @InjectMocks
   private PersonService personService;
 
-  @Test
+  /*@Test
   public void addPersonTest_shouldReturnOk () {
     // GIVEN
     Person person = new Person();
@@ -165,6 +165,6 @@ public class PersonServiceTest {
 
     // THEN
     assertThrows(NullPointerException.class, () -> personService.getPerson(person.getId()));
-  }
+  }*/
 
 }

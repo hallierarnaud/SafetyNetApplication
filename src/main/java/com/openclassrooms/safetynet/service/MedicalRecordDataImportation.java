@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet.service;
 
 import com.jsoniter.any.Any;
 import com.openclassrooms.safetynet.model.MedicalRecord;
+import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.repository.MedicalRecordRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,15 @@ public class MedicalRecordDataImportation {
 
   private DataReader dataReader = new DataReader();
 
-  public void getMedicalRecordList(String filePath) throws IOException {
+  public void getMedicalRecordList(String filePath, List<Person> personList) throws IOException {
     Any medicalAny = dataReader.getData(filePath).get("medicalrecords");
     List<MedicalRecord> medicalRecordList = new ArrayList<>();
     medicalAny.forEach(a -> {
+      Person p = personList.stream()
+              .filter(person -> { return person.getFirstName().equals(a.get("firstName").toString()) && person.getLastName().equals(a.get("lastName").toString()); })
+              .findFirst().orElse(null);
       MedicalRecord medicalRecord = MedicalRecord.builder()
-              .firstName(a.get("firstName").toString())
-              .lastName(a.get("lastName").toString())
+              .person(p)
               .birthdate(a.get("birthdate").toString())
               .build();
       List<String> allergyList = new ArrayList<>();
