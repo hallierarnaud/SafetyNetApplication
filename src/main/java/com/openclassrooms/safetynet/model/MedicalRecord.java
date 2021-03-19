@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -39,8 +41,8 @@ public class MedicalRecord {
   @ElementCollection
   private List<String> allergies;
 
-  /*@OneToOne
-  @JoinColumn(name = "persons_id")
-  Person person;*/
+  @OneToOne
+  @JoinColumn
+  Person person;
 
 }

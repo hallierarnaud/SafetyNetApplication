@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.ElementCollection;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -15,7 +17,6 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "firestations")
-
 public class FireStation {
 
   @Id
@@ -39,17 +40,20 @@ public class FireStation {
     return this;
   }
 
-  public String getStationNumber() {
+  /*public String getStationNumber() {
     return stationNumber;
-  }
+  }*/
 
-  public Set<String> getAddresses() {
+  /*public Set<String> getAddresses() {
     return new HashSet<>(addresses);
-  }
+  }*/
 
   @Override
   public String toString() {
     return stationNumber.concat(": ") + String.join(", ", addresses);
   }
+
+  @OneToMany
+  List<Person> persons;
 
 }

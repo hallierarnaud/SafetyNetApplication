@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -93,7 +95,10 @@ public class Person {
   }
 
   //Pas besoin de mappedby pour cette relation onetoone
-  /*@OneToOne
-  MedicalRecord medicalRecord;*/
+  @OneToOne
+  MedicalRecord medicalRecord;
+
+  @ManyToOne
+  FireStation fireStation;
 
 }
