@@ -66,4 +66,9 @@ public class PersonController {
     }
   }
 
+  @GetMapping("/persons/name/{lastName}")
+  public Iterable<Person> getPersonByLastName(@PathVariable("lastName") String lastName) {
+      return personService.findByNomLike(lastName);
+  }
+
 }
