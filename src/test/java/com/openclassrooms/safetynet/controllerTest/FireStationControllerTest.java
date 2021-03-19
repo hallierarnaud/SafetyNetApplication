@@ -1,8 +1,13 @@
 package com.openclassrooms.safetynet.controllerTest;
 
+import com.jsoniter.any.Any;
 import com.openclassrooms.safetynet.controller.FireStationController;
 import com.openclassrooms.safetynet.model.FireStation;
+import com.openclassrooms.safetynet.service.DataReader;
+import com.openclassrooms.safetynet.service.FireStationDataImportation;
 import com.openclassrooms.safetynet.service.FireStationService;
+import com.openclassrooms.safetynet.service.MedicalRecordDataImportation;
+import com.openclassrooms.safetynet.service.PersonDataImportation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +16,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -34,6 +41,18 @@ public class FireStationControllerTest {
 
   @MockBean
   private FireStationService fireStationService;
+
+  @MockBean
+  private DataReader dataReader;
+
+  @MockBean
+  private PersonDataImportation personDataImportation;
+
+  @MockBean
+  private FireStationDataImportation fireStationDataImportation;
+
+  @MockBean
+  private MedicalRecordDataImportation medicalRecordDataImportation;
 
   @Test
   public void getFireStations_shouldReturnOk() throws Exception {

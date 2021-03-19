@@ -2,6 +2,10 @@ package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.PersonController;
 import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.service.DataReader;
+import com.openclassrooms.safetynet.service.FireStationDataImportation;
+import com.openclassrooms.safetynet.service.MedicalRecordDataImportation;
+import com.openclassrooms.safetynet.service.PersonDataImportation;
 import com.openclassrooms.safetynet.service.PersonService;
 
 import org.junit.jupiter.api.Test;
@@ -34,6 +38,18 @@ public class PersonControllerTest {
 
   @MockBean
   private PersonService personService;
+
+  @MockBean
+  private DataReader dataReader;
+
+  @MockBean
+  private PersonDataImportation personDataImportation;
+
+  @MockBean
+  private FireStationDataImportation fireStationDataImportation;
+
+  @MockBean
+  private MedicalRecordDataImportation medicalRecordDataImportation;
 
   @Test
   public void getPersons_shouldReturnOk() throws Exception {

@@ -2,7 +2,11 @@ package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.MedicalRecordController;
 import com.openclassrooms.safetynet.model.MedicalRecord;
+import com.openclassrooms.safetynet.service.DataReader;
+import com.openclassrooms.safetynet.service.FireStationDataImportation;
+import com.openclassrooms.safetynet.service.MedicalRecordDataImportation;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
+import com.openclassrooms.safetynet.service.PersonDataImportation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,18 @@ public class MedicalRecordControllerTest {
 
   @MockBean
   private MedicalRecordService medicalRecordService;
+
+  @MockBean
+  private DataReader dataReader;
+
+  @MockBean
+  private PersonDataImportation personDataImportation;
+
+  @MockBean
+  private FireStationDataImportation fireStationDataImportation;
+
+  @MockBean
+  private MedicalRecordDataImportation medicalRecordDataImportation;
 
   @Test
   public void getMedicalRecords_shouldReturnOk() throws Exception {

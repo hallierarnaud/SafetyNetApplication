@@ -46,7 +46,7 @@ public class PersonIT {
   public void testAddPerson_shouldReturnOk() throws Exception {
     mockMvc.perform(post("/persons")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"id\": \"3\", \"firstName\":\"Bart\",\"lastName\":\"Simpson\",\"address\":\"1509 Culver St\",\"city\":\"Springville\",\"zip\":\"97451\",\"phone\":\"555-555\",\"email\":\"simpson@email.com\"}"))
+            .content("{\"id\": \"100\", \"firstName\":\"Bart\",\"lastName\":\"Simpson\",\"address\":\"1509 Culver St\",\"city\":\"Springville\",\"zip\":\"97451\",\"phone\":\"555-555\",\"email\":\"simpson@email.com\"}"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.firstName", is("Bart")));
   }
