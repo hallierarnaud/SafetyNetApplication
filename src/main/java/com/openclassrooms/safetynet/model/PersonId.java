@@ -1,4 +1,4 @@
-package com.openclassrooms.safetynet.model;
+/*package com.openclassrooms.safetynet.model;
 
 import java.io.Serializable;
 
@@ -15,4 +15,4 @@ public class PersonId implements Serializable {
 
   private String lastName;
 
-}
+}*/
