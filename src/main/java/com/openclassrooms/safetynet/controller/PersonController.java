@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynet.controller;
 
+import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.PersonService;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -69,6 +71,15 @@ public class PersonController {
   @GetMapping("/persons/name/{lastName}")
   public Iterable<Person> getPersonByLastName(@PathVariable("lastName") String lastName) {
       return personService.findByNomLike(lastName);
+  }
+
+  @GetMapping("/persons/firestations/{id}")
+  public ResponseEntity<Optional<FireStation>> getPersonFireStation(@PathVariable("id") long id) {
+    try {
+      return ResponseEntity.ok(personService.getPersonFireStation(id));
+    } catch (NoSuchElementException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
 }

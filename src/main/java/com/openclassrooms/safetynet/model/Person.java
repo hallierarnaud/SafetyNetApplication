@@ -104,7 +104,7 @@ public class Person {
   @JsonManagedReference
   MedicalRecord medicalRecord;
 
-  @ManyToOne
-  FireStation fireStation;
+  /*@ManyToOne
+  FireStation fireStation;*/
 
 }

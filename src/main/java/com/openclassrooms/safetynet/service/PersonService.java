@@ -1,12 +1,15 @@
 package com.openclassrooms.safetynet.service;
 
+import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.repository.FireStationRepository;
 import com.openclassrooms.safetynet.repository.PersonRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -19,6 +22,9 @@ public class PersonService {
 
   @Autowired
   private PersonRepository personRepository;
+
+  @Autowired
+  private FireStationRepository fireStationRepository;
 
   public Person getPerson(final Long id) {
     return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
@@ -51,6 +57,10 @@ public class PersonService {
 
   public Iterable<Person> findByNomLike(String lastName) {
     return personRepository.findPersonByLastName(lastName);
+  }
+
+  public Optional<FireStation> getPersonFireStation(Long id) {
+    return fireStationRepository.findById(id);
   }
 
 }

@@ -53,7 +53,7 @@ public class FireStation {
     return stationNumber.concat(": ") + String.join(", ", addresses);
   }
 
-  @OneToMany
-  List<Person> persons;
+  /*@OneToMany
+  List<Person> persons;*/
 
 }
