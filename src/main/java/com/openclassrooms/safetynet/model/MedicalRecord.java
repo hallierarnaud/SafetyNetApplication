@@ -1,5 +1,7 @@
 package com.openclassrooms.safetynet.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.List;
 
 import javax.persistence.ElementCollection;
@@ -37,6 +39,7 @@ public class MedicalRecord {
   private List<String> allergies;
 
   @OneToOne
+  @JsonBackReference
   private Person person;
 
 }
