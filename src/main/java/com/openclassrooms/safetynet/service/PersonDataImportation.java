@@ -27,7 +27,7 @@ public class PersonDataImportation {
   public List<Person> getPersonList(String filePath) throws IOException {
     Any personAny = dataReader.getData(filePath).get("persons");
     List<Person> personList = new ArrayList<>();
-    personAny.forEach(a -> personList.add(new Person.PersonBuilder()
+    personAny.forEach(a -> personList.add(Person.builder()
             .firstName(a.get("firstName").toString())
             .address(a.get("address").toString())
             .city(a.get("city").toString())

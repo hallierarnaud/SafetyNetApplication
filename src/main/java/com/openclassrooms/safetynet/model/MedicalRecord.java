@@ -1,11 +1,10 @@
 package com.openclassrooms.safetynet.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import java.util.List;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,10 +13,12 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,8 +39,7 @@ public class MedicalRecord {
   @ElementCollection
   private List<String> allergies;
 
-  @OneToOne
-  @JsonBackReference
+  @OneToOne(fetch = FetchType.LAZY)
   private Person person;
 
 }
