@@ -2,6 +2,8 @@ package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
+import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.PersonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -26,9 +30,12 @@ public class PersonController {
   @Autowired
   private PersonService personService;
 
+  @Autowired
+  private MapService mapService;
+
   @GetMapping("/persons")
-  public Iterable<Person> getPersons() {
-    return personService.getPersons();
+  public List<PersonMedicalRecordDTO> getPersons() {
+    return personService.getPersons().stream().map(p -> mapService.convertToPersonMedicalRecordDTO(p)).collect(Collectors.toList());
   }
 
   @GetMapping("/persons/{id}")
@@ -74,7 +81,7 @@ public class PersonController {
   }
 
   @GetMapping("/persons/firestations/{id}")
-  public ResponseEntity<Optional<FireStation>> getPersonFireStation(@PathVariable("id") long id) {
+  public ResponseEntity<FireStation> getPersonFireStation(@PathVariable("id") long id) {
     try {
       return ResponseEntity.ok(personService.getPersonFireStation(id));
     } catch (NoSuchElementException e) {

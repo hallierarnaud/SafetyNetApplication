@@ -8,8 +8,10 @@ import com.openclassrooms.safetynet.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -30,8 +32,9 @@ public class PersonService {
     return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
   }
 
-  public Iterable<Person> getPersons() {
-    return personRepository.findAll();
+  public List<Person> getPersons() {
+    return StreamSupport.stream(personRepository.findAll().spliterator(),false)
+            .collect(Collectors.toList());
   }
 
   public void deletePerson(final Long id) {
@@ -56,11 +59,18 @@ public class PersonService {
   }
 
   public Iterable<Person> findByNomLike(String lastName) {
-    return personRepository.findPersonByLastName(lastName);
+    return personRepository.findByLastName(lastName);
   }
 
-  public Optional<FireStation> getPersonFireStation(Long id) {
-    return fireStationRepository.findById(id);
+  public FireStation getPersonFireStation(Long id) {
+    Person person = personRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
+    String personAddress = person.getAddress();
+    return fireStationRepository.findAll()
+            .stream()
+            .filter(fireStation -> fireStation.getAddresses().contains(personAddress))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException("person " + id + " hasn't firestation"));
   }
 
 }
