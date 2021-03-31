@@ -58,7 +58,7 @@ public class PersonService {
     return personRepository.save(person);
   }
 
-  public Iterable<Person> findByNomLike(String lastName) {
+  public List<Person> findByLastNameLike(String lastName) {
     return personRepository.findByLastName(lastName);
   }
 

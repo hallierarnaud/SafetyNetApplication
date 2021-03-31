@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
@@ -76,8 +75,8 @@ public class PersonController {
   }
 
   @GetMapping("/persons/name/{lastName}")
-  public Iterable<Person> getPersonByLastName(@PathVariable("lastName") String lastName) {
-      return personService.findByNomLike(lastName);
+  public List<Person> getPersonByLastName(@PathVariable("lastName") String lastName) {
+      return personService.findByLastNameLike(lastName);
   }
 
   @GetMapping("/persons/firestations/{id}")
