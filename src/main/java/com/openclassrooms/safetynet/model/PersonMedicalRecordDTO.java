@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class PersonMedicalRecordDTO {
 
+  private Long id;
   private String firstName;
   private String lastName;
   private String phone;

@@ -6,7 +6,9 @@ import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
 import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.PersonService;
 
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +17,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class PersonController {
@@ -38,11 +43,11 @@ public class PersonController {
   }
 
   @GetMapping("/persons/{id}")
-  public ResponseEntity<Person> getPersonById(@PathVariable("id") long id) {
+  public PersonMedicalRecordDTO getPersonById(@PathVariable("id") long id) {
     try {
-      return ResponseEntity.ok(personService.getPerson(id));
+      return mapService.convertToPersonMedicalRecordDTO(personService.getPerson(id));
     } catch (NoSuchElementException e) {
-      return ResponseEntity.notFound().build();
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "person " + id + " doesn't exist");
     }
   }
 

@@ -29,7 +29,7 @@ public class PersonService {
   private FireStationRepository fireStationRepository;
 
   public Person getPerson(final Long id) {
-    return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
+    return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
   }
 
   public List<Person> getPersons() {

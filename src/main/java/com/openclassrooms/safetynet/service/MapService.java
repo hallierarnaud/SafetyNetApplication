@@ -14,6 +14,7 @@ public class MapService {
 
   public PersonMedicalRecordDTO convertToPersonMedicalRecordDTO(Person person) {
     PersonMedicalRecordDTO personMedicalRecordDTO = new PersonMedicalRecordDTO();
+    personMedicalRecordDTO.setId(person.getId());
     personMedicalRecordDTO.setFirstName(person.getFirstName());
     personMedicalRecordDTO.setLastName(person.getLastName());
     personMedicalRecordDTO.setPhone(person.getPhone());
