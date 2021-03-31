@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynet.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class Person {
   public String city;
   public String email;
 
-  @OneToOne(fetch = FetchType.LAZY, mappedBy = "person")
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
   MedicalRecord medicalRecord;
 
 }

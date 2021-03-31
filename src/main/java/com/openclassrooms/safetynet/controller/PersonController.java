@@ -61,12 +61,11 @@ public class PersonController {
   }
 
   @DeleteMapping("/persons/{id}")
-  public ResponseEntity<Void> deletePersonById(@PathVariable("id") long id) {
+  public void deletePersonById(@PathVariable("id") long id) {
     try {
       personService.deletePerson(id);
-      return ResponseEntity.ok().build();
     } catch (NoSuchElementException e) {
-      return ResponseEntity.notFound().build();
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "person " + id + " doesn't exist");
     }
   }
 

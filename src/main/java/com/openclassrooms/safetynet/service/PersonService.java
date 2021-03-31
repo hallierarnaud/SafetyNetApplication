@@ -39,7 +39,7 @@ public class PersonService {
 
   public void deletePerson(final Long id) {
     if (!personRepository.existsById(id)) {
-      throw new NoSuchElementException("person " + id + " doesn't exist");
+      throw new NoSuchElementException();
     }
     personRepository.deleteById(id);
   }
