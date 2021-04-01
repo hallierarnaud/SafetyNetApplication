@@ -2,7 +2,6 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
-import com.openclassrooms.safetynet.model.PersonDTO;
 import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
 
 import org.springframework.stereotype.Service;
@@ -13,7 +12,7 @@ import lombok.Data;
 @Service
 public class MapService {
 
-  public PersonMedicalRecordDTO convertToPersonMedicalRecordDTO(Person person) {
+  public PersonMedicalRecordDTO convertPersonToPersonMedicalRecordDTO(Person person) {
     PersonMedicalRecordDTO personMedicalRecordDTO = new PersonMedicalRecordDTO();
     personMedicalRecordDTO.setId(person.getId());
     personMedicalRecordDTO.setFirstName(person.getFirstName());
@@ -30,8 +29,17 @@ public class MapService {
     return personMedicalRecordDTO;
   }
 
-  public Person updatePersonWithPersonDTO(Person person, PersonDTO personDTO) {
-    //TODO
+  public Person updatePersonWithPersonMedicalDTO(Person person, MedicalRecord medicalRecord, PersonMedicalRecordDTO personMedicalRecordDTO) {
+    person.setFirstName(personMedicalRecordDTO.getFirstName());
+    person.setLastName(personMedicalRecordDTO.getLastName());
+    person.setPhone(personMedicalRecordDTO.getPhone());
+    person.setZip(personMedicalRecordDTO.getZip());
+    person.setAddress(personMedicalRecordDTO.getAddress());
+    person.setCity(personMedicalRecordDTO.getCity());
+    person.setEmail(personMedicalRecordDTO.getEmail());
+    medicalRecord.setBirthdate(personMedicalRecordDTO.getBirthdate());
+    medicalRecord.setMedications(personMedicalRecordDTO.getMedications());
+    medicalRecord.setAllergies(personMedicalRecordDTO.getAllergies());
     return person;
   }
 

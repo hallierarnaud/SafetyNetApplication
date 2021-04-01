@@ -1,9 +1,11 @@
 package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.FireStation;
+import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
-import com.openclassrooms.safetynet.model.PersonDTO;
+import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
 import com.openclassrooms.safetynet.repository.FireStationRepository;
+import com.openclassrooms.safetynet.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynet.repository.PersonRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,13 @@ public class PersonService {
   private PersonRepository personRepository;
 
   @Autowired
+  private MedicalRecordRepository medicalRecordRepository;
+
+  @Autowired
   private FireStationRepository fireStationRepository;
+
+  @Autowired
+  private MapService mapService;
 
   public Person getPerson(final Long id) {
     return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
@@ -45,18 +53,10 @@ public class PersonService {
     personRepository.deleteById(id);
   }
 
-  public Person updatePerson(final Long id, PersonDTO personDTO) {
-    /*if (!personRepository.existsById(id)) {
-      throw new EntityNotFoundException("person " + id + " doesn't exist");
-    }*/
-    Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("person " + id + " doesn't exist"));
-    person.setFirstName(personDTO.getFirstName());
-    person.setLastName(personDTO.getLastName());
-    person.setPhone(personDTO.getPhone());
-    person.setZip(personDTO.getZip());
-    person.setAddress(personDTO.getAddress());
-    person.setCity(personDTO.getCity());
-    person.setEmail(personDTO.getEmail());
+  public Person updatePerson(final Long id, PersonMedicalRecordDTO personMedicalRecordDTO) {
+    Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+    MedicalRecord medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+    mapService.updatePersonWithPersonMedicalDTO(person, medicalRecord, personMedicalRecordDTO);
     return personRepository.save(person);
   }
 
