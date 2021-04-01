@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.model.PersonDTO;
 import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
 
 import org.springframework.stereotype.Service;
@@ -27,6 +28,11 @@ public class MapService {
     personMedicalRecordDTO.setMedications(medicalRecord.getMedications());
     personMedicalRecordDTO.setAllergies(medicalRecord.getAllergies());
     return personMedicalRecordDTO;
+  }
+
+  public Person updatePersonWithPersonDTO(Person person, PersonDTO personDTO) {
+    //TODO
+    return person;
   }
 
 }

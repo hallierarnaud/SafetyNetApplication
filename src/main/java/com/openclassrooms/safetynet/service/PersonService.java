@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.model.PersonDTO;
 import com.openclassrooms.safetynet.repository.FireStationRepository;
 import com.openclassrooms.safetynet.repository.PersonRepository;
 
@@ -44,10 +45,18 @@ public class PersonService {
     personRepository.deleteById(id);
   }
 
-  public Person updatePerson(final Long id, Person person) {
-    if (!personRepository.existsById(id)) {
+  public Person updatePerson(final Long id, PersonDTO personDTO) {
+    /*if (!personRepository.existsById(id)) {
       throw new EntityNotFoundException("person " + id + " doesn't exist");
-    }
+    }*/
+    Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("person " + id + " doesn't exist"));
+    person.setFirstName(personDTO.getFirstName());
+    person.setLastName(personDTO.getLastName());
+    person.setPhone(personDTO.getPhone());
+    person.setZip(personDTO.getZip());
+    person.setAddress(personDTO.getAddress());
+    person.setCity(personDTO.getCity());
+    person.setEmail(personDTO.getEmail());
     return personRepository.save(person);
   }
 
