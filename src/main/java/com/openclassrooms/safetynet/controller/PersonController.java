@@ -75,18 +75,17 @@ public class PersonController {
     }
   }
 
-
   @GetMapping("/persons/name/{lastName}")
-  public List<Person> getPersonByLastName(@PathVariable("lastName") String lastName) {
-      return personService.findByLastNameLike(lastName);
+  public List<PersonMedicalRecordDTO> getPersonByLastName(@PathVariable("lastName") String lastName) {
+      return personService.findByLastNameLike(lastName).stream().map(p -> mapService.convertPersonToPersonMedicalRecordDTO(p)).collect(Collectors.toList());
   }
 
   @GetMapping("/persons/firestations/{id}")
-  public ResponseEntity<FireStation> getPersonFireStation(@PathVariable("id") long id) {
+  public FireStation getPersonFireStation(@PathVariable("id") long id) {
     try {
-      return ResponseEntity.ok(personService.getPersonFireStation(id));
+      return personService.getPersonFireStation(id);
     } catch (NoSuchElementException e) {
-      return ResponseEntity.notFound().build();
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "person " + id + " doesn't exist or hasn't a firestation");
     }
   }
 

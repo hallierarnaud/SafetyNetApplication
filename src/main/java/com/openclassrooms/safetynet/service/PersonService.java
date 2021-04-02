@@ -73,13 +73,13 @@ public class PersonService {
 
   public FireStation getPersonFireStation(Long id) {
     Person person = personRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
+            .orElseThrow(() -> new NoSuchElementException());
     String personAddress = person.getAddress();
     return fireStationRepository.findAll()
             .stream()
             .filter(fireStation -> fireStation.getAddresses().contains(personAddress))
             .findFirst()
-            .orElseThrow(() -> new NoSuchElementException("person " + id + " hasn't firestation"));
+            .orElseThrow(() -> new NoSuchElementException());
   }
 
 }
