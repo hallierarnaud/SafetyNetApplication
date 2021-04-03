@@ -60,9 +60,14 @@ public class PersonService {
     return personRepository.save(person);
   }
 
-  public Person addPerson(Person person) {
-    if (personRepository.existsById(person.getId())) {
-      throw new EntityExistsException("person " + person.getId() + " already exists");
+  public Person addPerson(PersonMedicalRecordDTO personMedicalRecordDTO) {
+    Person person = new Person();
+    MedicalRecord medicalRecord = new MedicalRecord();
+    person.setMedicalRecord(medicalRecord);
+    medicalRecord.setPerson(person);
+    mapService.updatePersonWithPersonMedicalDTO(person, medicalRecord, personMedicalRecordDTO);
+    if (personRepository.existsById(personMedicalRecordDTO.getId())) {
+      throw new EntityExistsException();
     }
     return personRepository.save(person);
   }

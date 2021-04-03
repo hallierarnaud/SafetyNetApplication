@@ -1,14 +1,12 @@
 package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.FireStation;
-import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
 import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.PersonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,11 +47,11 @@ public class PersonController {
   }
 
   @PostMapping("/persons")
-  public ResponseEntity<Person> addPerson(@RequestBody Person person) {
+  public PersonMedicalRecordDTO addPerson(@RequestBody PersonMedicalRecordDTO personMedicalRecordDTO) {
     try {
-      return ResponseEntity.ok(personService.addPerson(person));
+      return mapService.convertPersonToPersonMedicalRecordDTO(personService.addPerson(personMedicalRecordDTO));
     } catch (EntityExistsException e) {
-      return ResponseEntity.unprocessableEntity().build();
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "person " + personMedicalRecordDTO.getId() + " already exists");
     }
   }
 
