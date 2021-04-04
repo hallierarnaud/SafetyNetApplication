@@ -46,6 +46,7 @@ public class MapService {
 
   public MedicalRecordDTO convertMedicalRecordToMedicalRecordDTO(MedicalRecord medicalRecord) {
     MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO();
+    medicalRecordDTO.setId(medicalRecord.getId());
     medicalRecordDTO.setBirthdate(medicalRecord.getBirthdate());
     medicalRecordDTO.setMedications(medicalRecord.getMedications());
     medicalRecordDTO.setAllergies(medicalRecord.getAllergies());

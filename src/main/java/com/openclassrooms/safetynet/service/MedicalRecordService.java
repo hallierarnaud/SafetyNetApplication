@@ -54,9 +54,11 @@ public class MedicalRecordService {
     return medicalRecordRepository.save(medicalRecord);
   }
 
-  public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) {
-    if (medicalRecordRepository.existsById(medicalRecord.getId())) {
-      throw new EntityExistsException("medicalrecord " + medicalRecord.getId() + " already exists");
+  public MedicalRecord addMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
+    MedicalRecord medicalRecord = new MedicalRecord();
+    mapService.updateMedicalRecordWithMedicalRecordDTO(medicalRecord, medicalRecordDTO);
+    if (medicalRecordRepository.existsById(medicalRecordDTO.getId())) {
+      throw new EntityExistsException();
     }
     return medicalRecordRepository.save(medicalRecord);
   }

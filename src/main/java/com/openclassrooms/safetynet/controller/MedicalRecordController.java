@@ -48,11 +48,11 @@ public class MedicalRecordController {
   }
 
   @PostMapping("/medicalrecords")
-  public ResponseEntity<MedicalRecord> addMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+  public MedicalRecordDTO addMedicalRecord(@RequestBody MedicalRecordDTO medicalRecordDTO) {
     try {
-      return ResponseEntity.ok(medicalRecordService.addMedicalRecord(medicalRecord));
+      return mapService.convertMedicalRecordToMedicalRecordDTO(medicalRecordService.addMedicalRecord(medicalRecordDTO));
     } catch (EntityExistsException e) {
-      return ResponseEntity.unprocessableEntity().build();
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "medicalrecord " + medicalRecordDTO.getId() + " already exists");
     }
   }
 
