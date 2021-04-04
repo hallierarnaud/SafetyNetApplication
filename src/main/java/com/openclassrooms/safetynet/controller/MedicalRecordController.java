@@ -67,11 +67,11 @@ public class MedicalRecordController {
   }
 
   @PutMapping("/medicalrecords/{id}")
-  public ResponseEntity<MedicalRecord> updateMedicalRecord(@PathVariable("id") long id, @RequestBody MedicalRecord medicalRecord) {
+  public MedicalRecordDTO updateMedicalRecord(@PathVariable("id") long id, @RequestBody MedicalRecordDTO medicalRecordDTO) {
     try {
-      return ResponseEntity.ok(medicalRecordService.updateMedicalRecord(id, medicalRecord));
+      return mapService.convertMedicalRecordToMedicalRecordDTO(medicalRecordService.updateMedicalRecord(id, medicalRecordDTO));
     } catch (EntityNotFoundException e) {
-      return ResponseEntity.unprocessableEntity().build();
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "medicalrecord " + id + " doesn't exist");
     }
   }
 

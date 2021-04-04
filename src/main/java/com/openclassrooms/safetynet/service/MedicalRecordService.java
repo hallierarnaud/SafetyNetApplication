@@ -1,7 +1,10 @@
 package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.MedicalRecord;
+import com.openclassrooms.safetynet.model.MedicalRecordDTO;
+import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.repository.MedicalRecordRepository;
+import com.openclassrooms.safetynet.repository.PersonRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,12 @@ public class MedicalRecordService {
   @Autowired
   private MedicalRecordRepository medicalRecordRepository;
 
+  @Autowired
+  private PersonRepository personRepository;
+
+  @Autowired
+  private MapService mapService;
+
   public MedicalRecord getMedicalRecord(final Long id) {
     return medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
   }
@@ -39,10 +48,9 @@ public class MedicalRecordService {
     medicalRecordRepository.deleteById(id);
   }
 
-  public MedicalRecord updateMedicalRecord(final Long id, MedicalRecord medicalRecord) {
-    if (!medicalRecordRepository.existsById(id)) {
-      throw new EntityNotFoundException("medicalrecord " + id + " doesn't exist");
-    }
+  public MedicalRecord updateMedicalRecord(final Long id, MedicalRecordDTO medicalRecordDTO) {
+    MedicalRecord medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+    mapService.updateMedicalRecordWithMedicalRecordDTO(medicalRecord, medicalRecordDTO);
     return medicalRecordRepository.save(medicalRecord);
   }
 

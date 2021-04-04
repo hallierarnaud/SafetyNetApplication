@@ -52,4 +52,10 @@ public class MapService {
     return medicalRecordDTO;
   }
 
+  public MedicalRecord updateMedicalRecordWithMedicalRecordDTO(MedicalRecord medicalRecord, MedicalRecordDTO medicalRecordDTO) {
+    medicalRecord.setBirthdate(medicalRecordDTO.getBirthdate());
+    medicalRecord.setMedications(medicalRecordDTO.getMedications());
+    medicalRecord.setAllergies(medicalRecordDTO.getAllergies());
+    return medicalRecord;
+  }
 }
