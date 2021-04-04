@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
@@ -25,7 +26,7 @@ public class FireStationController {
   private FireStationService fireStationService;
 
   @GetMapping("/firestations")
-  public Iterable<FireStation> getFireStations() {
+  public List<FireStation> getFireStations() {
     return fireStationService.getFireStations();
   }
 

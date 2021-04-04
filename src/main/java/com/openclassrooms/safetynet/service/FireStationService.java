@@ -6,7 +6,10 @@ import com.openclassrooms.safetynet.repository.FireStationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -20,9 +23,9 @@ public class FireStationService {
   @Autowired
   private FireStationRepository fireStationRepository;
 
-  public Iterable<FireStation> getFireStations() {
-    //Iterable<FireStation> fireStationList = fireStationRepository.findAll();
-    return fireStationRepository.findAll();
+  public List<FireStation> getFireStations() {
+    return StreamSupport.stream(fireStationRepository.findAll().spliterator(), false)
+            .collect(Collectors.toList());
   }
 
   public FireStation getFireStation(final Long id) {
