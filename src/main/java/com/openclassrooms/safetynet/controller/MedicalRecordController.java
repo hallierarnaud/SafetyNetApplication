@@ -1,6 +1,8 @@
 package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.MedicalRecord;
+import com.openclassrooms.safetynet.model.MedicalRecordDTO;
+import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -24,9 +28,12 @@ public class MedicalRecordController {
   @Autowired
   private MedicalRecordService medicalRecordService;
 
+  @Autowired
+  MapService mapService;
+
   @GetMapping("/medicalrecords")
-  public Iterable<MedicalRecord> getMedicalRecords() {
-    return medicalRecordService.getMedicalRecords();
+  public List<MedicalRecordDTO> getMedicalRecords() {
+    return medicalRecordService.getMedicalRecords().stream().map(m -> mapService.convertMedicalRecordToMedicalRecordDTO(m)).collect(Collectors.toList());
   }
 
   @GetMapping("/medicalrecords/{id}")

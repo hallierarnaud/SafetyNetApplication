@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.MedicalRecord;
+import com.openclassrooms.safetynet.model.MedicalRecordDTO;
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
 
@@ -41,6 +42,14 @@ public class MapService {
     medicalRecord.setMedications(personMedicalRecordDTO.getMedications());
     medicalRecord.setAllergies(personMedicalRecordDTO.getAllergies());
     return person;
+  }
+
+  public MedicalRecordDTO convertMedicalRecordToMedicalRecordDTO(MedicalRecord medicalRecord) {
+    MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO();
+    medicalRecordDTO.setBirthdate(medicalRecord.getBirthdate());
+    medicalRecordDTO.setMedications(medicalRecord.getMedications());
+    medicalRecordDTO.setAllergies(medicalRecord.getAllergies());
+    return medicalRecordDTO;
   }
 
 }

@@ -6,7 +6,10 @@ import com.openclassrooms.safetynet.repository.MedicalRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -24,8 +27,9 @@ public class MedicalRecordService {
     return medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("medicalrecord " + id + " doesn't exist"));
   }
 
-  public Iterable<MedicalRecord> getMedicalRecords() {
-    return medicalRecordRepository.findAll();
+  public List<MedicalRecord> getMedicalRecords() {
+    return StreamSupport.stream(medicalRecordRepository.findAll().spliterator(), false)
+            .collect(Collectors.toList());
   }
 
   public void deleteMedicalRecord(final Long id) {
