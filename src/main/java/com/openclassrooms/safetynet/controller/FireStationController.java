@@ -4,7 +4,7 @@ import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.service.FireStationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -31,39 +32,39 @@ public class FireStationController {
   }
 
   @GetMapping("/firestations/{id}")
-  public ResponseEntity<FireStation> getFireStationById(@PathVariable("id") long id) {
+  public FireStation getFireStationById(@PathVariable("id") long id) {
     try {
-      return ResponseEntity.ok(fireStationService.getFireStation(id));
+      return fireStationService.getFireStation(id);
     } catch (NoSuchElementException e) {
-      return ResponseEntity.notFound().build();
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "firestation " + id + " doesn't exist");
     }
   }
 
   @PostMapping("/firestations")
-  public ResponseEntity<FireStation> addFireStation(@RequestBody FireStation fireStation) {
+  public FireStation addFireStation(@RequestBody FireStation fireStation) {
     try {
-      return ResponseEntity.ok(fireStationService.addFireStation(fireStation));
+      return fireStationService.addFireStation(fireStation);
     } catch (EntityExistsException e) {
-      return ResponseEntity.unprocessableEntity().build();
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "firestation " + fireStation.getId() + " already exists");
     }
   }
 
   @DeleteMapping("/firestations/{id}")
-  public ResponseEntity<Void> deleteFireStationById(@PathVariable("id") long id) {
+  public void deleteFireStationById(@PathVariable("id") long id) {
     try {
       fireStationService.deleteFireStation(id);
-      return ResponseEntity.ok().build();
+      throw new ResponseStatusException(HttpStatus.OK, "firestation " + id + " was deleted");
     } catch (NoSuchElementException e) {
-      return ResponseEntity.notFound().build();
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "firestation " + id + " doesn't exist");
     }
   }
 
   @PutMapping("/firestations/{id}")
-  public ResponseEntity<FireStation> updateFireStation(@PathVariable("id") long id, @RequestBody FireStation fireStation) {
+  public FireStation updateFireStation(@PathVariable("id") long id, @RequestBody FireStation fireStation) {
     try {
-      return ResponseEntity.ok(fireStationService.updateFireStation(id, fireStation));
+      return fireStationService.updateFireStation(id, fireStation);
     } catch (EntityNotFoundException e) {
-      return ResponseEntity.unprocessableEntity().build();
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "firestation " + id + " doesn't exist");
     }
   }
 

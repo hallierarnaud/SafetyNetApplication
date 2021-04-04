@@ -1,13 +1,11 @@
 package com.openclassrooms.safetynet.controller;
 
-import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.MedicalRecordDTO;
 import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
