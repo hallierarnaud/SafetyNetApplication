@@ -57,12 +57,12 @@ public class MedicalRecordController {
   }
 
   @DeleteMapping("/medicalrecords/{id}")
-  public ResponseEntity<Void> deleteMedicalRecordById(@PathVariable("id") long id) {
+  public void deleteMedicalRecordById(@PathVariable("id") long id) {
     try {
       medicalRecordService.deleteMedicalRecord(id);
-      return ResponseEntity.ok().build();
+      throw new ResponseStatusException(HttpStatus.OK, "medicalrecord " + id + " was deleted");
     } catch (NoSuchElementException e) {
-      return ResponseEntity.notFound().build();
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "medicalrecord " + id + " doesn't exist");
     }
   }
 

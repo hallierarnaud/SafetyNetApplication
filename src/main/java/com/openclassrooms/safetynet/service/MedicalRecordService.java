@@ -34,7 +34,7 @@ public class MedicalRecordService {
 
   public void deleteMedicalRecord(final Long id) {
     if (!medicalRecordRepository.existsById(id)) {
-      throw new NoSuchElementException("medicalrecord " + id + " doesn't exist");
+      throw new NoSuchElementException();
     }
     medicalRecordRepository.deleteById(id);
   }

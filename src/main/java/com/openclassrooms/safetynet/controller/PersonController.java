@@ -59,6 +59,7 @@ public class PersonController {
   public void deletePersonById(@PathVariable("id") long id) {
     try {
       personService.deletePerson(id);
+      throw new ResponseStatusException(HttpStatus.OK, "person " + id + " was deleted");
     } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "person " + id + " doesn't exist");
     }
