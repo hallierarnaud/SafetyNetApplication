@@ -24,7 +24,7 @@ public class MedicalRecordService {
   private MedicalRecordRepository medicalRecordRepository;
 
   public MedicalRecord getMedicalRecord(final Long id) {
-    return medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("medicalrecord " + id + " doesn't exist"));
+    return medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
   }
 
   public List<MedicalRecord> getMedicalRecords() {
