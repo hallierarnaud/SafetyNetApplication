@@ -3,6 +3,7 @@ package com.openclassrooms.safetynet.service;
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.MedicalRecordDTO;
 import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.model.PersonDTO;
 import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
 
 import org.springframework.stereotype.Service;
@@ -59,4 +60,18 @@ public class MapService {
     medicalRecord.setAllergies(medicalRecordDTO.getAllergies());
     return medicalRecord;
   }
+
+  public PersonDTO convertPersonToPersonDTO(Person person) {
+    PersonDTO personDTO = new PersonDTO();
+    personDTO.setId(person.getId());
+    personDTO.setFirstName(person.getFirstName());
+    personDTO.setLastName(person.getLastName());
+    personDTO.setPhone(person.getPhone());
+    personDTO.setZip(person.getZip());
+    personDTO.setAddress(person.getAddress());
+    personDTO.setCity(person.getCity());
+    personDTO.setEmail(person.getEmail());
+    return personDTO;
+  }
+
 }

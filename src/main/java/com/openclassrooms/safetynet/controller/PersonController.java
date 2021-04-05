@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.FireStation;
+import com.openclassrooms.safetynet.model.PersonDTO;
 import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
 import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.PersonService;
@@ -33,14 +34,14 @@ public class PersonController {
   private MapService mapService;
 
   @GetMapping("/persons")
-  public List<PersonMedicalRecordDTO> getPersons() {
-    return personService.getPersons().stream().map(p -> mapService.convertPersonToPersonMedicalRecordDTO(p)).collect(Collectors.toList());
+  public List<PersonDTO> getPersons() {
+    return personService.getPersons().stream().map(p -> mapService.convertPersonToPersonDTO(p)).collect(Collectors.toList());
   }
 
   @GetMapping("/persons/{id}")
-  public PersonMedicalRecordDTO getPersonById(@PathVariable("id") long id) {
+  public PersonDTO getPersonById(@PathVariable("id") long id) {
     try {
-      return mapService.convertPersonToPersonMedicalRecordDTO(personService.getPerson(id));
+      return mapService.convertPersonToPersonDTO(personService.getPerson(id));
     } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "person " + id + " doesn't exist");
     }
