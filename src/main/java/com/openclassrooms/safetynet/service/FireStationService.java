@@ -34,21 +34,21 @@ public class FireStationService {
 
   public FireStation addFireStation(FireStation fireStation) {
     if (fireStationRepository.existsById(fireStation.getId())) {
-      throw new EntityExistsException();
+      throw new EntityExistsException("firestation 1 already exists");
     }
     return fireStationRepository.save(fireStation);
   }
 
   public void deleteFireStation(final Long id) {
     if (!fireStationRepository.existsById(id)) {
-      throw new NoSuchElementException();
+      throw new NoSuchElementException("firestation 1 doesn't exist");
     }
     fireStationRepository.deleteById(id);
   }
 
   public FireStation updateFireStation(Long id, FireStation fireStation) {
     if (!fireStationRepository.existsById(fireStation.getId())) {
-      throw new EntityNotFoundException();
+      throw new EntityNotFoundException("firestation 1 doesn't exist");
     }
     return fireStationRepository.save(fireStation);
   }
