@@ -4,6 +4,7 @@ import com.openclassrooms.safetynet.controller.PersonController;
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.DataReader;
 import com.openclassrooms.safetynet.service.FireStationDataImportation;
+import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.MedicalRecordDataImportation;
 import com.openclassrooms.safetynet.service.PersonDataImportation;
 import com.openclassrooms.safetynet.service.PersonService;
@@ -50,6 +51,9 @@ public class PersonControllerTest {
 
   @MockBean
   private MedicalRecordDataImportation medicalRecordDataImportation;
+
+  @MockBean
+  private MapService mapService;
 
   @Test
   public void getPersons_shouldReturnOk() throws Exception {
