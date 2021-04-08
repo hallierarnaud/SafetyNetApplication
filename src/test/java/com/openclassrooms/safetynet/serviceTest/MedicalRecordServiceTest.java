@@ -48,9 +48,9 @@ public class MedicalRecordServiceTest {
     // THEN
     assertEquals(created.getFirstName(), medicalRecord.getFirstName());
     verify(medicalRecordRepository).save(medicalRecord);
-  }
+  }*/
 
-  @Test
+  /*@Test
   public void addMedicalRecordTest_shouldReturnAlreadyExist () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
@@ -62,7 +62,7 @@ public class MedicalRecordServiceTest {
     // THEN
     Throwable exception = assertThrows(EntityExistsException.class, () -> medicalRecordService.addMedicalRecord(medicalRecord));
     assertEquals("medicalrecord 1 already exists", exception.getMessage());
-  }
+  }*/
 
   @Test
   public void getMedicalRecords_shouldReturnOk () {
@@ -107,7 +107,7 @@ public class MedicalRecordServiceTest {
     assertEquals("medicalrecord 1 doesn't exist", exception.getMessage());
   }
 
-  @Test
+  /*@Test
   public void updateMedicalRecord_shouldReturnOk () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
@@ -123,9 +123,9 @@ public class MedicalRecordServiceTest {
     assertEquals(medicalRecord.getFirstName(), updated.getFirstName());
     verify(medicalRecordRepository).existsById(medicalRecord.getId());
     verify(medicalRecordRepository).save(medicalRecord);
-  }
+  }*/
 
-  @Test
+  /*@Test
   public void updateMedicalRecord_shouldReturnNotFound () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
@@ -137,7 +137,7 @@ public class MedicalRecordServiceTest {
     // THEN
     Throwable exception = assertThrows(EntityNotFoundException.class, () -> medicalRecordService.updateMedicalRecord(medicalRecord.getId(), medicalRecord));
     assertEquals("medicalrecord 1 doesn't exist", exception.getMessage());
-  }
+  }*/
 
   @Test
   public void getMedicalRecord_shouldReturnOk () {
@@ -165,6 +165,6 @@ public class MedicalRecordServiceTest {
 
     // THEN
     assertThrows(NullPointerException.class, () -> medicalRecordService.getMedicalRecord(medicalRecord.getId()));
-  }*/
+  }
 
 }

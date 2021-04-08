@@ -1,7 +1,11 @@
 package com.openclassrooms.safetynet.serviceTest;
 
+import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.model.PersonMedicalRecordDTO;
+import com.openclassrooms.safetynet.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynet.repository.PersonRepository;
+import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.PersonService;
 
 import org.junit.jupiter.api.Test;
@@ -32,22 +36,29 @@ public class PersonServiceTest {
   @Mock
   private PersonRepository personRepository;
 
+  @Mock
+  private MedicalRecordRepository medicalRecordRepository;
+
+  @Mock
+  private MapService mapService;
+
   @InjectMocks
   private PersonService personService;
 
-  /*@Test
+  @Test
   public void addPersonTest_shouldReturnOk () {
     // GIVEN
     Person person = new Person();
     person.setFirstName("Homer");
+    PersonMedicalRecordDTO personMedicalRecordDTO = new PersonMedicalRecordDTO();
     when(personRepository.save(any(Person.class))).thenReturn(person);
 
     // WHEN
-    Person created = personService.addPerson(person);
+    Person created = personService.addPerson(personMedicalRecordDTO);
 
     // THEN
-    assertEquals(created.getFirstName(), person.getFirstName());
-    verify(personRepository).save(person);
+    assertEquals(person.getFirstName(), created.getFirstName());
+    verify(personRepository).save(any(Person.class));
   }
 
   @Test
@@ -55,12 +66,14 @@ public class PersonServiceTest {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
+    PersonMedicalRecordDTO personMedicalRecordDTO = new PersonMedicalRecordDTO();
+    personMedicalRecordDTO.setId(person.getId());
 
     // WHEN
     when(personRepository.existsById(anyLong())).thenReturn(TRUE);
 
     // THEN
-    Throwable exception = assertThrows(EntityExistsException.class, () -> personService.addPerson(person));
+    Throwable exception = assertThrows(EntityExistsException.class, () -> personService.addPerson(personMedicalRecordDTO));
     assertEquals("person 1 already exists", exception.getMessage());
   }
 
@@ -72,7 +85,7 @@ public class PersonServiceTest {
     when(personRepository.findAll()).thenReturn(persons);
 
     // WHEN
-    Iterable<Person> expected = personService.getPersons();
+    List<Person> expected = personService.getPersons();
 
     // THEN
     assertEquals(expected, persons);
@@ -113,15 +126,19 @@ public class PersonServiceTest {
     Person person = new Person();
     person.setId(1L);
     person.setFirstName("Homer");
-    when(personRepository.existsById(anyLong())).thenReturn(TRUE);
+    MedicalRecord medicalRecord = new MedicalRecord();
+    PersonMedicalRecordDTO personMedicalRecordDTO = new PersonMedicalRecordDTO();
+    when(personRepository.findById(anyLong())).thenReturn(java.util.Optional.of(person));
+    when(medicalRecordRepository.findById(anyLong())).thenReturn(java.util.Optional.of(medicalRecord));
+    when(mapService.updatePersonWithPersonMedicalDTO(person, medicalRecord, personMedicalRecordDTO)).thenReturn(person);
     when(personRepository.save(any(Person.class))).thenReturn(person);
 
     // WHEN
-    Person updated = personService.updatePerson(person.getId(), person);
+    Person updated = personService.updatePerson(person.getId(), personMedicalRecordDTO);
 
     // THEN
     assertEquals(person.getFirstName(), updated.getFirstName());
-    verify(personRepository).existsById(person.getId());
+    verify(personRepository).findById(person.getId());
     verify(personRepository).save(person);
   }
 
@@ -130,12 +147,10 @@ public class PersonServiceTest {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
-
-    // WHEN
-    when(personRepository.existsById(anyLong())).thenReturn(FALSE);
+    PersonMedicalRecordDTO personMedicalRecordDTO = new PersonMedicalRecordDTO();
 
     // THEN
-    Throwable exception = assertThrows(EntityNotFoundException.class, () -> personService.updatePerson(person.getId(), person));
+    Throwable exception = assertThrows(EntityNotFoundException.class, () -> personService.updatePerson(person.getId(), personMedicalRecordDTO));
     assertEquals("person 1 doesn't exist", exception.getMessage());
   }
 
@@ -165,6 +180,6 @@ public class PersonServiceTest {
 
     // THEN
     assertThrows(NullPointerException.class, () -> personService.getPerson(person.getId()));
-  }*/
+  }
 
 }

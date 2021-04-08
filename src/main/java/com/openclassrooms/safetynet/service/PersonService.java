@@ -48,13 +48,13 @@ public class PersonService {
 
   public void deletePerson(final Long id) {
     if (!personRepository.existsById(id)) {
-      throw new NoSuchElementException();
+      throw new NoSuchElementException("person " + id + " doesn't exist");
     }
     personRepository.deleteById(id);
   }
 
   public Person updatePerson(final Long id, PersonMedicalRecordDTO personMedicalRecordDTO) {
-    Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+    Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("person " + id + " doesn't exist"));
     MedicalRecord medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
     mapService.updatePersonWithPersonMedicalDTO(person, medicalRecord, personMedicalRecordDTO);
     return personRepository.save(person);
@@ -67,7 +67,7 @@ public class PersonService {
     medicalRecord.setPerson(person);
     mapService.updatePersonWithPersonMedicalDTO(person, medicalRecord, personMedicalRecordDTO);
     if (personRepository.existsById(personMedicalRecordDTO.getId())) {
-      throw new EntityExistsException();
+      throw new EntityExistsException("person " + personMedicalRecordDTO.getId() + " already exists");
     }
     return personRepository.save(person);
   }
