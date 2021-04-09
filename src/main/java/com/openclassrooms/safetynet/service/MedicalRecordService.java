@@ -2,7 +2,6 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.MedicalRecordDTO;
-import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynet.repository.PersonRepository;
 
@@ -43,13 +42,13 @@ public class MedicalRecordService {
 
   public void deleteMedicalRecord(final Long id) {
     if (!medicalRecordRepository.existsById(id)) {
-      throw new NoSuchElementException();
+      throw new NoSuchElementException("medicalrecord " + id + " doesn't exist");
     }
     medicalRecordRepository.deleteById(id);
   }
 
   public MedicalRecord updateMedicalRecord(final Long id, MedicalRecordDTO medicalRecordDTO) {
-    MedicalRecord medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+    MedicalRecord medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("medicalrecord " + id + " doesn't exist"));
     mapService.updateMedicalRecordWithMedicalRecordDTO(medicalRecord, medicalRecordDTO);
     return medicalRecordRepository.save(medicalRecord);
   }
@@ -58,7 +57,7 @@ public class MedicalRecordService {
     MedicalRecord medicalRecord = new MedicalRecord();
     mapService.updateMedicalRecordWithMedicalRecordDTO(medicalRecord, medicalRecordDTO);
     if (medicalRecordRepository.existsById(medicalRecordDTO.getId())) {
-      throw new EntityExistsException();
+      throw new EntityExistsException("medicalrecord " + medicalRecordDTO.getId() + " already exists");
     }
     return medicalRecordRepository.save(medicalRecord);
   }

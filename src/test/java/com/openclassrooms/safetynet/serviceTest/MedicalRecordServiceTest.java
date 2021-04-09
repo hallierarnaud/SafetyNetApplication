@@ -1,7 +1,9 @@
 package com.openclassrooms.safetynet.serviceTest;
 
 import com.openclassrooms.safetynet.model.MedicalRecord;
+import com.openclassrooms.safetynet.model.MedicalRecordDTO;
 import com.openclassrooms.safetynet.repository.MedicalRecordRepository;
+import com.openclassrooms.safetynet.service.MapService;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
 
 import org.junit.jupiter.api.Test;
@@ -32,37 +34,43 @@ public class MedicalRecordServiceTest {
   @Mock
   private MedicalRecordRepository medicalRecordRepository;
 
+  @Mock
+  private MapService mapService;
+
   @InjectMocks
   private MedicalRecordService medicalRecordService;
 
-  /*@Test
+  @Test
   public void addMedicalRecordTest_shouldReturnOk () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
-    medicalRecord.setFirstName("Homer");
+    medicalRecord.setBirthdate("01/01/2000");
+    MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO();
     when(medicalRecordRepository.save(any(MedicalRecord.class))).thenReturn(medicalRecord);
 
     // WHEN
-    MedicalRecord created = medicalRecordService.addMedicalRecord(medicalRecord);
+    MedicalRecord created = medicalRecordService.addMedicalRecord(medicalRecordDTO);
 
     // THEN
-    assertEquals(created.getFirstName(), medicalRecord.getFirstName());
-    verify(medicalRecordRepository).save(medicalRecord);
-  }*/
+    assertEquals(created.getBirthdate(), medicalRecord.getBirthdate());
+    verify(medicalRecordRepository).save(any(MedicalRecord.class));
+  }
 
-  /*@Test
+  @Test
   public void addMedicalRecordTest_shouldReturnAlreadyExist () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
     medicalRecord.setId(1L);
+    MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO();
+    medicalRecordDTO.setId(medicalRecord.getId());
 
     // WHEN
     when(medicalRecordRepository.existsById(anyLong())).thenReturn(TRUE);
 
     // THEN
-    Throwable exception = assertThrows(EntityExistsException.class, () -> medicalRecordService.addMedicalRecord(medicalRecord));
+    Throwable exception = assertThrows(EntityExistsException.class, () -> medicalRecordService.addMedicalRecord(medicalRecordDTO));
     assertEquals("medicalrecord 1 already exists", exception.getMessage());
-  }*/
+  }
 
   @Test
   public void getMedicalRecords_shouldReturnOk () {
@@ -107,37 +115,37 @@ public class MedicalRecordServiceTest {
     assertEquals("medicalrecord 1 doesn't exist", exception.getMessage());
   }
 
-  /*@Test
+  @Test
   public void updateMedicalRecord_shouldReturnOk () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
     medicalRecord.setId(1L);
-    medicalRecord.setFirstName("Homer");
-    when(medicalRecordRepository.existsById(anyLong())).thenReturn(TRUE);
+    medicalRecord.setBirthdate("01/01/2000");
+    MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO();
+    when(medicalRecordRepository.findById(anyLong())).thenReturn(java.util.Optional.of(medicalRecord));
+    when(mapService.updateMedicalRecordWithMedicalRecordDTO(medicalRecord, medicalRecordDTO)).thenReturn(medicalRecord);
     when(medicalRecordRepository.save(any(MedicalRecord.class))).thenReturn(medicalRecord);
 
     // WHEN
-    MedicalRecord updated = medicalRecordService.updateMedicalRecord(medicalRecord.getId(), medicalRecord);
+    MedicalRecord updated = medicalRecordService.updateMedicalRecord(medicalRecord.getId(), medicalRecordDTO);
 
     // THEN
-    assertEquals(medicalRecord.getFirstName(), updated.getFirstName());
-    verify(medicalRecordRepository).existsById(medicalRecord.getId());
+    assertEquals(medicalRecord.getBirthdate(), updated.getBirthdate());
+    verify(medicalRecordRepository).findById(medicalRecord.getId());
     verify(medicalRecordRepository).save(medicalRecord);
-  }*/
+  }
 
-  /*@Test
+  @Test
   public void updateMedicalRecord_shouldReturnNotFound () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
     medicalRecord.setId(1L);
-
-    // WHEN
-    when(medicalRecordRepository.existsById(anyLong())).thenReturn(FALSE);
+    MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO();
 
     // THEN
-    Throwable exception = assertThrows(EntityNotFoundException.class, () -> medicalRecordService.updateMedicalRecord(medicalRecord.getId(), medicalRecord));
+    Throwable exception = assertThrows(EntityNotFoundException.class, () -> medicalRecordService.updateMedicalRecord(medicalRecord.getId(), medicalRecordDTO));
     assertEquals("medicalrecord 1 doesn't exist", exception.getMessage());
-  }*/
+  }
 
   @Test
   public void getMedicalRecord_shouldReturnOk () {
