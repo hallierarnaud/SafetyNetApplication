@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet.controller.endpoint;
 
 import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
+import com.openclassrooms.safetynet.controller.DTO.PersonUpdateRequest;
 import com.openclassrooms.safetynet.model.entity.FireStationEntity;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
@@ -68,9 +69,9 @@ public class PersonController {
   }
 
   @PutMapping("/persons/{id}")
-  public PersonMedicalRecordResponse updatePerson(@PathVariable("id") long id, @RequestBody PersonMedicalRecordResponse personMedicalRecordResponse) {
+  public PersonMedicalRecordResponse updatePerson(@PathVariable("id") long id, @RequestBody PersonUpdateRequest personUpdateRequest) {
     try {
-      return mapService.convertPersonToPersonMedicalRecordDTO(personService.updatePerson(id, personMedicalRecordResponse));
+      return mapService.convertPersonToPersonMedicalRecordDTO(personService.updatePerson(id, personUpdateRequest));
     } catch (EntityNotFoundException e) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "person " + id + " doesn't exist");
     }
