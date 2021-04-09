@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -75,8 +76,8 @@ public class PersonController {
     }
   }
 
-  @GetMapping("/persons/name/{lastName}")
-  public List<PersonMedicalRecordResponse> getPersonByLastName(@PathVariable("lastName") String lastName) {
+  @GetMapping("/persons/name")
+  public List<PersonMedicalRecordResponse> getPersonByLastName(@RequestParam("lastName") String lastName) {
       return personService.findByLastNameLike(lastName).stream().map(p -> mapService.convertPersonToPersonMedicalRecordDTO(p)).collect(Collectors.toList());
   }
 
