@@ -1,5 +1,8 @@
 package com.openclassrooms.safetynet.domain.service;
 
+import com.openclassrooms.safetynet.controller.DTO.PersonUpdateRequest;
+import com.openclassrooms.safetynet.domain.object.Person;
+import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 import com.openclassrooms.safetynet.model.entity.FireStationEntity;
 import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
@@ -25,8 +28,12 @@ import lombok.Data;
 @Service
 public class PersonService {
 
+  // TODO : personRepository pourra être supprimer une fois que le personDAO fera le job
   @Autowired
   private PersonRepository personRepository;
+
+  @Autowired
+  private PersonDAO personDAO;
 
   @Autowired
   private MedicalRecordRepository medicalRecordRepository;
@@ -53,11 +60,13 @@ public class PersonService {
     personRepository.deleteById(id);
   }
 
-  public PersonEntity updatePerson(final Long id, PersonMedicalRecordResponse personMedicalRecordResponse) {
-    PersonEntity person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("person " + id + " doesn't exist"));
-    MedicalRecordEntity medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-    mapService.updatePersonWithPersonMedicalDTO(person, medicalRecord, personMedicalRecordResponse);
-    return personRepository.save(person);
+  public PersonEntity updatePerson(final Long id, PersonUpdateRequest personUpdateRequest) {
+    //PersonEntity person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("person " + id + " doesn't exist"));
+    //MedicalRecordEntity medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+    Person person = personDAO.findById(id);
+    person.setFirstName(personUpdateRequest.getFirstName());
+    person.setLastName(personUpdateRequest.getLastName());
+    return personDAO.update(person);
   }
 
   public PersonEntity addPerson(PersonMedicalRecordResponse personMedicalRecordResponse) {
