@@ -1,12 +1,11 @@
 package com.openclassrooms.safetynet.serviceTest;
 
-import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
-import com.openclassrooms.safetynet.model.entity.PersonEntity;
 import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
-import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
-import com.openclassrooms.safetynet.model.repository.PersonRepository;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
+import com.openclassrooms.safetynet.model.entity.PersonEntity;
+import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
+import com.openclassrooms.safetynet.model.repository.PersonRepository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -77,7 +73,7 @@ public class PersonEntityServiceTest {
     assertEquals("person 1 already exists", exception.getMessage());
   }
 
-  @Test
+  /*@Test
   public void getPersons_shouldReturnOk () {
     // GIVEN
     List<PersonEntity> persons = new ArrayList();
@@ -90,7 +86,7 @@ public class PersonEntityServiceTest {
     // THEN
     assertEquals(expected, persons);
     verify(personRepository).findAll();
-  }
+  }*/
 
   @Test
   public void deletePerson_shouldReturnOk () {
@@ -120,7 +116,7 @@ public class PersonEntityServiceTest {
     assertEquals("person 1 doesn't exist", exception.getMessage());
   }
 
-  @Test
+  /*@Test
   public void updatePerson_shouldReturnOk () {
     // GIVEN
     PersonEntity person = new PersonEntity();
@@ -152,7 +148,7 @@ public class PersonEntityServiceTest {
     // THEN
     Throwable exception = assertThrows(EntityNotFoundException.class, () -> personService.updatePerson(person.getId(), personMedicalRecordResponse));
     assertEquals("person 1 doesn't exist", exception.getMessage());
-  }
+  }*/
 
   @Test
   public void getPerson_shouldReturnOk () {

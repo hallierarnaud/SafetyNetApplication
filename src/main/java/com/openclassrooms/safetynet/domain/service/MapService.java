@@ -1,10 +1,11 @@
 package com.openclassrooms.safetynet.domain.service;
 
-import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
-import com.openclassrooms.safetynet.model.entity.PersonEntity;
-import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
+import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
+import com.openclassrooms.safetynet.domain.object.Person;
+import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
+import com.openclassrooms.safetynet.model.entity.PersonEntity;
 
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,20 @@ public class MapService {
     return medicalRecord;
   }
 
-  public PersonResponse convertPersonToPersonDTO(PersonEntity person) {
+  /*public PersonResponse convertPersonToPersonDTO(PersonEntity person) {
+    PersonResponse personResponse = new PersonResponse();
+    personResponse.setId(person.getId());
+    personResponse.setFirstName(person.getFirstName());
+    personResponse.setLastName(person.getLastName());
+    personResponse.setPhone(person.getPhone());
+    personResponse.setZip(person.getZip());
+    personResponse.setAddress(person.getAddress());
+    personResponse.setCity(person.getCity());
+    personResponse.setEmail(person.getEmail());
+    return personResponse;
+  }*/
+
+  public PersonResponse convertPersonToPersonResponse(Person person) {
     PersonResponse personResponse = new PersonResponse();
     personResponse.setId(person.getId());
     personResponse.setFirstName(person.getFirstName());
@@ -73,5 +87,4 @@ public class MapService {
     personResponse.setEmail(person.getEmail());
     return personResponse;
   }
-
 }

@@ -1,12 +1,12 @@
 package com.openclassrooms.safetynet.domain.service;
 
+import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonUpdateRequest;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 import com.openclassrooms.safetynet.model.entity.FireStationEntity;
 import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
-import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
 import com.openclassrooms.safetynet.model.repository.FireStationRepository;
 import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynet.model.repository.PersonRepository;
@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 import lombok.Data;
 
@@ -48,8 +47,8 @@ public class PersonService {
     return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
   }
 
-  public List<PersonEntity> getPersons() {
-    return StreamSupport.stream(personRepository.findAll().spliterator(),false)
+  public List<Person> getPersons() {
+    return StreamSupport.stream(personDAO.findAll().spliterator(),false)
             .collect(Collectors.toList());
   }
 
@@ -60,13 +59,26 @@ public class PersonService {
     personRepository.deleteById(id);
   }
 
-  public PersonEntity updatePerson(final Long id, PersonUpdateRequest personUpdateRequest) {
+  /*public PersonEntity updatePerson(final Long id, PersonUpdateRequest personUpdateRequest) {
     //PersonEntity person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("person " + id + " doesn't exist"));
     //MedicalRecordEntity medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
     Person person = personDAO.findById(id);
     person.setFirstName(personUpdateRequest.getFirstName());
     person.setLastName(personUpdateRequest.getLastName());
     return personDAO.update(person);
+  }*/
+
+  public Person updateSimplePerson(long id, PersonUpdateRequest personUpdateRequest) {
+    Person person = personDAO.findById(id);
+    person.setId(personUpdateRequest.getId());
+    person.setFirstName(personUpdateRequest.getFirstName());
+    person.setLastName(personUpdateRequest.getLastName());
+    person.setPhone(personUpdateRequest.getPhone());
+    person.setZip(personUpdateRequest.getZip());
+    person.setAddress(personUpdateRequest.getAddress());
+    person.setCity(personUpdateRequest.getCity());
+    person.setEmail(personUpdateRequest.getEmail());
+    return personDAO.updateSimplePerson(person);
   }
 
   public PersonEntity addPerson(PersonMedicalRecordResponse personMedicalRecordResponse) {

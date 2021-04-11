@@ -1,13 +1,13 @@
 package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.endpoint.PersonController;
-import com.openclassrooms.safetynet.model.entity.PersonEntity;
 import com.openclassrooms.safetynet.domain.service.DataReader;
 import com.openclassrooms.safetynet.domain.service.FireStationDataImportation;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.MedicalRecordDataImportation;
 import com.openclassrooms.safetynet.domain.service.PersonDataImportation;
 import com.openclassrooms.safetynet.domain.service.PersonService;
+import com.openclassrooms.safetynet.model.entity.PersonEntity;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -28,7 +27,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PersonController.class)
@@ -101,7 +99,7 @@ public class PersonEntityControllerTest {
     mockMvc.perform(delete("/persons/1")).andExpect(status().isNotFound());
   }
 
-  @Test
+  /*@Test
   public void updatePerson_shouldReturnOk() throws Exception {
     when(personService.updatePerson(any(), any())).thenReturn(new PersonEntity());
     mockMvc.perform(put("/persons/1")
@@ -115,6 +113,6 @@ public class PersonEntityControllerTest {
     mockMvc.perform(put("/persons/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());
-  }
+  }*/
 
 }
