@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 @RestController
 public class PersonController {
@@ -81,7 +80,7 @@ public class PersonController {
   public PersonResponse updateSimplePerson(@PathVariable("id") long id, @RequestBody PersonUpdateRequest personUpdateRequest) {
     try {
       return mapService.convertPersonToPersonResponse(personService.updateSimplePerson(id, personUpdateRequest));
-    } catch (EntityNotFoundException e) {
+    } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "person " + id + " doesn't exist");
     }
   }

@@ -68,9 +68,12 @@ public class PersonService {
     return personDAO.update(person);
   }*/
 
-  public Person updateSimplePerson(long id, PersonUpdateRequest personUpdateRequest) {
+  public Person updateSimplePerson(final Long id, PersonUpdateRequest personUpdateRequest) {
+    /*if (!personDAO.existById(id)) {
+      throw new EntityNotFoundException("person " + id + " doesn't exist");
+    }*/
     Person person = personDAO.findById(id);
-    person.setId(personUpdateRequest.getId());
+    person.setId(id);
     person.setFirstName(personUpdateRequest.getFirstName());
     person.setLastName(personUpdateRequest.getLastName());
     person.setPhone(personUpdateRequest.getPhone());
@@ -78,7 +81,7 @@ public class PersonService {
     person.setAddress(personUpdateRequest.getAddress());
     person.setCity(personUpdateRequest.getCity());
     person.setEmail(personUpdateRequest.getEmail());
-    return personDAO.updateSimplePerson(person);
+    return personDAO.updateSimplePerson(id, person);
   }
 
   public PersonEntity addPerson(PersonMedicalRecordResponse personMedicalRecordResponse) {

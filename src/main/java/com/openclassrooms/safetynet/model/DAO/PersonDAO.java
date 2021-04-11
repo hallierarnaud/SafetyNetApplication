@@ -29,8 +29,9 @@ public class PersonDAO {
   }
 
   public Person findById(Long id) {
-    PersonEntity entity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException(""));
+    PersonEntity entity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
     Person person = new Person();
+    person.setId(entity.getId());
     person.setFirstName(entity.getFirstName());
     person.setLastName(entity.getLastName());
     person.setPhone(entity.getPhone());
@@ -41,13 +42,17 @@ public class PersonDAO {
     return person;
   }
 
+  /*public boolean existById(Long id) {
+    return personRepository.existsById(id);
+  }*/
+
   /*public Person update(Person person) {
     // TODO : doit faire la transformation inverse entre entity et person
     return person;
   }*/
 
-  public Person updateSimplePerson(Person person) {
-    PersonEntity entity = personRepository.findById(person.getId()).orElseThrow(() -> new NoSuchElementException(""));
+  public Person updateSimplePerson(Long id, Person person) {
+    PersonEntity entity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
     entity.setFirstName(person.getFirstName());
     entity.setLastName(person.getLastName());
     entity.setPhone(person.getPhone());
