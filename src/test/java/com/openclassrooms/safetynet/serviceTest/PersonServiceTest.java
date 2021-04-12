@@ -1,10 +1,12 @@
 package com.openclassrooms.safetynet.serviceTest;
 
 import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
+import com.openclassrooms.safetynet.controller.DTO.PersonUpdateRequest;
+import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
+import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
-import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynet.model.repository.PersonRepository;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
@@ -23,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,10 +35,10 @@ import static org.mockito.Mockito.when;
 public class PersonServiceTest {
 
   @Mock
-  private PersonRepository personRepository;
+  private PersonDAO personDAO;
 
   @Mock
-  private MedicalRecordRepository medicalRecordRepository;
+  private PersonRepository personRepository;
 
   @Mock
   private MapService mapService;
@@ -73,20 +78,20 @@ public class PersonServiceTest {
     assertEquals("person 1 already exists", exception.getMessage());
   }
 
-  /*@Test
+  @Test
   public void getPersons_shouldReturnOk () {
     // GIVEN
-    List<PersonEntity> persons = new ArrayList();
-    persons.add(new PersonEntity());
-    when(personRepository.findAll()).thenReturn(persons);
+    List<Person> persons = new ArrayList();
+    persons.add(new Person());
+    when(personDAO.findAll()).thenReturn(persons);
 
     // WHEN
-    List<PersonEntity> expected = personService.getPersons();
+    List<Person> expected = personService.getPersons();
 
     // THEN
     assertEquals(expected, persons);
-    verify(personRepository).findAll();
-  }*/
+    verify(personDAO).findAll();
+  }
 
   @Test
   public void deletePerson_shouldReturnOk () {
@@ -116,66 +121,63 @@ public class PersonServiceTest {
     assertEquals("person 1 doesn't exist", exception.getMessage());
   }
 
-  /*@Test
+  @Test
   public void updatePerson_shouldReturnOk () {
     // GIVEN
-    PersonEntity person = new PersonEntity();
+    PersonUpdateRequest personUpdateRequest = new PersonUpdateRequest();
+    personUpdateRequest.setFirstName("Homer");
+    Person person = new Person();
     person.setId(1L);
-    person.setFirstName("Homer");
-    MedicalRecordEntity medicalRecord = new MedicalRecordEntity();
-    PersonMedicalRecordResponse personMedicalRecordResponse = new PersonMedicalRecordResponse();
-    when(personRepository.findById(anyLong())).thenReturn(java.util.Optional.of(person));
-    when(medicalRecordRepository.findById(anyLong())).thenReturn(java.util.Optional.of(medicalRecord));
-    when(mapService.updatePersonWithPersonMedicalDTO(person, medicalRecord, personMedicalRecordResponse)).thenReturn(person);
-    when(personRepository.save(any(PersonEntity.class))).thenReturn(person);
+    when(personDAO.findById(anyLong())).thenReturn(person);
+    when(personDAO.updateSimplePerson(anyLong(), any(Person.class))).thenReturn(person);
 
     // WHEN
-    PersonEntity updated = personService.updatePerson(person.getId(), personMedicalRecordResponse);
+    Person updated = personService.updateSimplePerson(person.getId(), personUpdateRequest);
 
     // THEN
     assertEquals(person.getFirstName(), updated.getFirstName());
-    verify(personRepository).findById(person.getId());
-    verify(personRepository).save(person);
+    verify(personDAO, times(2)).findById(person.getId());
+    verify(personDAO).updateSimplePerson(person.getId(), person);
   }
 
   @Test
   public void updatePerson_shouldReturnNotFound () {
     // GIVEN
-    PersonEntity person = new PersonEntity();
-    person.setId(1L);
-    PersonMedicalRecordResponse personMedicalRecordResponse = new PersonMedicalRecordResponse();
+    Person person = new Person();
+    person.setId(100L);
+    PersonUpdateRequest personUpdateRequest = new PersonUpdateRequest();
 
     // THEN
-    Throwable exception = assertThrows(EntityNotFoundException.class, () -> personService.updatePerson(person.getId(), personMedicalRecordResponse));
-    assertEquals("person 1 doesn't exist", exception.getMessage());
-  }*/
+    Throwable exception = assertThrows(NoSuchElementException.class, () -> personService.updateSimplePerson(person.getId(), personUpdateRequest));
+    assertEquals("person 100 doesn't exist", exception.getMessage());
+  }
 
   @Test
   public void getPerson_shouldReturnOk () {
     // GIVEN
-    PersonEntity person = new PersonEntity();
+    Person person = new Person();
     person.setId(1L);
-    when(personRepository.findById(anyLong())).thenReturn(java.util.Optional.of(person));
+    when(personDAO.findById(anyLong())).thenReturn(person);
 
     // WHEN
-    PersonEntity expected = personService.getPerson(person.getId());
+    Person expected = personService.getPerson(person.getId());
 
     // THEN
     assertEquals(expected, person);
-    verify(personRepository).findById(person.getId());
+    verify(personDAO, times(2)).findById(person.getId());
   }
 
   @Test
   public void getPerson_shouldReturnNotFound () {
     // GIVEN
-    PersonEntity person = new PersonEntity();
-    person.setId(1L);
+    Person person = new Person();
+    person.setId(100L);
 
     // WHEN
-    when(personRepository.findById(anyLong())).thenReturn(null);
+    when(personDAO.findById(anyLong())).thenReturn(null);
 
     // THEN
-    assertThrows(NullPointerException.class, () -> personService.getPerson(person.getId()));
+    assertThrows(NoSuchElementException.class, () -> personService.getPerson(person.getId()));
   }
 
 }

@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.endpoint.PersonController;
+import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.domain.service.DataReader;
 import com.openclassrooms.safetynet.domain.service.FireStationDataImportation;
 import com.openclassrooms.safetynet.domain.service.MapService;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PersonController.class)
@@ -55,13 +57,13 @@ public class PersonControllerTest {
 
   @Test
   public void getPersons_shouldReturnOk() throws Exception {
-    when(personService.getPerson(any())).thenReturn(new PersonEntity());
+    when(personService.getPerson(any())).thenReturn(new Person());
     mockMvc.perform(get("/persons")).andExpect(status().isOk());
   }
 
   @Test
   public void getPersonById_shouldReturnOk() throws Exception {
-    when(personService.getPerson(any())).thenReturn(new PersonEntity());
+    when(personService.getPerson(any())).thenReturn(new Person());
     mockMvc.perform(get("/persons/1")).andExpect(status().isOk());
   }
 
@@ -99,9 +101,9 @@ public class PersonControllerTest {
     mockMvc.perform(delete("/persons/1")).andExpect(status().isNotFound());
   }
 
-  /*@Test
+  @Test
   public void updatePerson_shouldReturnOk() throws Exception {
-    when(personService.updatePerson(any(), any())).thenReturn(new PersonEntity());
+    when(personService.updateSimplePerson(any(), any())).thenReturn(new Person());
     mockMvc.perform(put("/persons/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
@@ -109,10 +111,10 @@ public class PersonControllerTest {
 
   @Test
   public void updatePerson_shouldReturnUnprocessableEntity() throws Exception {
-    when(personService.updatePerson(any(), any())).thenThrow(EntityNotFoundException.class);
+    when(personService.updateSimplePerson(any(), any())).thenThrow(NoSuchElementException.class);
     mockMvc.perform(put("/persons/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());
-  }*/
+  }
 
 }

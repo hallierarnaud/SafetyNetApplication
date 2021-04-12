@@ -39,14 +39,14 @@ public class PersonController {
     return personService.getPersons().stream().map(p -> mapService.convertPersonToPersonResponse(p)).collect(Collectors.toList());
   }
 
-  /*@GetMapping("/persons/{id}")
+  @GetMapping("/persons/{id}")
   public PersonResponse getPersonById(@PathVariable("id") long id) {
     try {
       return mapService.convertPersonToPersonResponse(personService.getPerson(id));
     } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "person " + id + " doesn't exist");
     }
-  }*/
+  }
 
   @PostMapping("/persons")
   public PersonMedicalRecordResponse addPerson(@RequestBody PersonMedicalRecordResponse personMedicalRecordResponse) {

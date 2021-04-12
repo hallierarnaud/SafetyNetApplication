@@ -42,15 +42,6 @@ public class PersonDAO {
     return person;
   }
 
-  /*public boolean existById(Long id) {
-    return personRepository.existsById(id);
-  }*/
-
-  /*public Person update(Person person) {
-    // TODO : doit faire la transformation inverse entre entity et person
-    return person;
-  }*/
-
   public Person updateSimplePerson(Long id, Person person) {
     PersonEntity entity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
     entity.setFirstName(person.getFirstName());

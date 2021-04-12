@@ -43,8 +43,11 @@ public class PersonService {
   @Autowired
   private MapService mapService;
 
-  public PersonEntity getPerson(final Long id) {
-    return personRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+  public Person getPerson(final Long id) {
+    if (personDAO.findById(id) == null) {
+      throw new NoSuchElementException("person " + id + " doesn't exist");
+    }
+    return personDAO.findById(id);
   }
 
   public List<Person> getPersons() {
@@ -69,9 +72,9 @@ public class PersonService {
   }*/
 
   public Person updateSimplePerson(final Long id, PersonUpdateRequest personUpdateRequest) {
-    /*if (!personDAO.existById(id)) {
-      throw new EntityNotFoundException("person " + id + " doesn't exist");
-    }*/
+    if (personDAO.findById(id) == null) {
+      throw new NoSuchElementException("person " + id + " doesn't exist");
+    }
     Person person = personDAO.findById(id);
     person.setId(id);
     person.setFirstName(personUpdateRequest.getFirstName());
