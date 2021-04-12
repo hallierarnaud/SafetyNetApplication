@@ -13,15 +13,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MedicalRecordEntityIT {
+public class FireStationIT {
 
   @Autowired
   private MockMvc mockMvc;
 
   @Test
-  public void testGetMedicalRecords() throws Exception {
+  public void testGetFireStations() throws Exception {
 
-    mockMvc.perform(get("/medicalrecords"))
+    mockMvc.perform(get("/firestations"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].id", is(1)));
 

@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = MedicalRecordController.class)
-public class MedicalRecordEntityControllerTest {
+public class MedicalRecordControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
