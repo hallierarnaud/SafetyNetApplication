@@ -1,11 +1,11 @@
-package com.openclassrooms.safetynet.domain.object;
+package com.openclassrooms.safetynet.controller.DTO;
 
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class MedicalRecord {
+public class MedicalRecordAddOrUpdateRequest {
 
   private Long id;
   private String firstName;

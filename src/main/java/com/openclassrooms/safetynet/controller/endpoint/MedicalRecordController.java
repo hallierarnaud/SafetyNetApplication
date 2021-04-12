@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynet.controller.endpoint;
 
+import com.openclassrooms.safetynet.controller.DTO.MedicalRecordAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.MedicalRecordService;
@@ -20,7 +21,6 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 @RestController
 public class MedicalRecordController {
@@ -33,24 +33,24 @@ public class MedicalRecordController {
 
   @GetMapping("/medicalrecords")
   public List<MedicalRecordResponse> getMedicalRecords() {
-    return medicalRecordService.getMedicalRecords().stream().map(m -> mapService.convertMedicalRecordToMedicalRecordDTO(m)).collect(Collectors.toList());
+    return medicalRecordService.getMedicalRecords().stream().map(m -> mapService.convertMedicalRecordToMedicalRecordResponse(m)).collect(Collectors.toList());
   }
 
   @GetMapping("/medicalrecords/{id}")
   public MedicalRecordResponse getMedicalRecordById(@PathVariable("id") long id) {
     try {
-      return mapService.convertMedicalRecordToMedicalRecordDTO(medicalRecordService.getMedicalRecord(id));
+      return mapService.convertMedicalRecordToMedicalRecordResponse(medicalRecordService.getMedicalRecord(id));
     } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "medicalrecord " + id + " doesn't exist");
     }
   }
 
   @PostMapping("/medicalrecords")
-  public MedicalRecordResponse addMedicalRecord(@RequestBody MedicalRecordResponse medicalRecordResponse) {
+  public MedicalRecordResponse addMedicalRecord(@RequestBody MedicalRecordAddOrUpdateRequest medicalRecordAddRequest) {
     try {
-      return mapService.convertMedicalRecordToMedicalRecordDTO(medicalRecordService.addMedicalRecord(medicalRecordResponse));
+      return mapService.convertMedicalRecordToMedicalRecordResponse(medicalRecordService.addMedicalRecord(medicalRecordAddRequest));
     } catch (EntityExistsException e) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "medicalrecord " + medicalRecordResponse.getId() + " already exists");
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "medicalrecord " + medicalRecordAddRequest.getId() + " already exists");
     }
   }
 
@@ -65,10 +65,10 @@ public class MedicalRecordController {
   }
 
   @PutMapping("/medicalrecords/{id}")
-  public MedicalRecordResponse updateMedicalRecord(@PathVariable("id") long id, @RequestBody MedicalRecordResponse medicalRecordResponse) {
+  public MedicalRecordResponse updateMedicalRecord(@PathVariable("id") long id, @RequestBody MedicalRecordAddOrUpdateRequest medicalRecordUpdateRequest) {
     try {
-      return mapService.convertMedicalRecordToMedicalRecordDTO(medicalRecordService.updateMedicalRecord(id, medicalRecordResponse));
-    } catch (EntityNotFoundException e) {
+      return mapService.convertMedicalRecordToMedicalRecordResponse(medicalRecordService.updateMedicalRecord(id, medicalRecordUpdateRequest));
+    } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "medicalrecord " + id + " doesn't exist");
     }
   }

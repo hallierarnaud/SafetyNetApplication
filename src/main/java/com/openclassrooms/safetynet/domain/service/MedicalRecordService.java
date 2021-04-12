@@ -1,9 +1,8 @@
 package com.openclassrooms.safetynet.domain.service;
 
-import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
-import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
-import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
-import com.openclassrooms.safetynet.model.repository.PersonRepository;
+import com.openclassrooms.safetynet.controller.DTO.MedicalRecordAddOrUpdateRequest;
+import com.openclassrooms.safetynet.domain.object.MedicalRecord;
+import com.openclassrooms.safetynet.model.DAO.MedicalRecordDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 import lombok.Data;
 
@@ -23,43 +21,47 @@ import lombok.Data;
 public class MedicalRecordService {
 
   @Autowired
-  private MedicalRecordRepository medicalRecordRepository;
-
-  @Autowired
-  private PersonRepository personRepository;
+  private MedicalRecordDAO medicalRecordDAO;
 
   @Autowired
   private MapService mapService;
 
-  public MedicalRecordEntity getMedicalRecord(final Long id) {
-    return medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+  public MedicalRecord getMedicalRecord(final Long id) {
+    if (medicalRecordDAO.findById(id) == null) {
+      throw new NoSuchElementException("medicalRecord " + id + " doesn't exist");
+    }
+    return medicalRecordDAO.findById(id);
   }
 
-  public List<MedicalRecordEntity> getMedicalRecords() {
-    return StreamSupport.stream(medicalRecordRepository.findAll().spliterator(), false)
+  public List<MedicalRecord> getMedicalRecords() {
+    return StreamSupport.stream(medicalRecordDAO.findAll().spliterator(), false)
             .collect(Collectors.toList());
   }
 
   public void deleteMedicalRecord(final Long id) {
-    if (!medicalRecordRepository.existsById(id)) {
+    if (!medicalRecordDAO.existById(id)) {
       throw new NoSuchElementException("medicalrecord " + id + " doesn't exist");
     }
-    medicalRecordRepository.deleteById(id);
+    medicalRecordDAO.deleteById(id);
   }
 
-  public MedicalRecordEntity updateMedicalRecord(final Long id, MedicalRecordResponse medicalRecordResponse) {
-    MedicalRecordEntity medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("medicalrecord " + id + " doesn't exist"));
-    mapService.updateMedicalRecordWithMedicalRecordDTO(medicalRecord, medicalRecordResponse);
-    return medicalRecordRepository.save(medicalRecord);
-  }
-
-  public MedicalRecordEntity addMedicalRecord(MedicalRecordResponse medicalRecordResponse) {
-    MedicalRecordEntity medicalRecord = new MedicalRecordEntity();
-    mapService.updateMedicalRecordWithMedicalRecordDTO(medicalRecord, medicalRecordResponse);
-    if (medicalRecordRepository.existsById(medicalRecordResponse.getId())) {
-      throw new EntityExistsException("medicalrecord " + medicalRecordResponse.getId() + " already exists");
+  public MedicalRecord updateMedicalRecord(final Long id, MedicalRecordAddOrUpdateRequest medicalRecordUpdateRequest) {
+    if (medicalRecordDAO.findById(id) == null) {
+      throw new NoSuchElementException("medicalRecord " + id + " doesn't exist");
     }
-    return medicalRecordRepository.save(medicalRecord);
+    MedicalRecord medicalRecord = medicalRecordDAO.findById(id);
+    medicalRecord.setId(id);
+    mapService.updateMedicalRecordWithMedicalRecordRequest(medicalRecord, medicalRecordUpdateRequest);
+    return medicalRecordDAO.updateMedicalRecord(id, medicalRecord);
+  }
+
+  public MedicalRecord addMedicalRecord(MedicalRecordAddOrUpdateRequest medicalRecordAddRequest) {
+    if (medicalRecordDAO.existById(medicalRecordAddRequest.getId())) {
+      throw new EntityExistsException("medicalrecord " + medicalRecordAddRequest.getId() + " already exists");
+    }
+    MedicalRecord medicalRecord = new MedicalRecord();
+    mapService.updateMedicalRecordWithMedicalRecordRequest(medicalRecord, medicalRecordAddRequest);
+    return medicalRecordDAO.addMedicalRecord(medicalRecord);
   }
 
 }

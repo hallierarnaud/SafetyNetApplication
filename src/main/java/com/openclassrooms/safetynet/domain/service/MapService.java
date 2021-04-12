@@ -1,8 +1,10 @@
 package com.openclassrooms.safetynet.domain.service;
 
+import com.openclassrooms.safetynet.controller.DTO.MedicalRecordAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
+import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
@@ -15,7 +17,7 @@ import lombok.Data;
 @Service
 public class MapService {
 
-  public PersonMedicalRecordResponse convertPersonToPersonMedicalRecordDTO(PersonEntity person) {
+  /*public PersonMedicalRecordResponse convertPersonToPersonMedicalRecordDTO(PersonEntity person) {
     PersonMedicalRecordResponse personMedicalRecordResponse = new PersonMedicalRecordResponse();
     personMedicalRecordResponse.setId(person.getId());
     personMedicalRecordResponse.setFirstName(person.getFirstName());
@@ -30,7 +32,7 @@ public class MapService {
     personMedicalRecordResponse.setMedications(medicalRecord.getMedications());
     personMedicalRecordResponse.setAllergies(medicalRecord.getAllergies());
     return personMedicalRecordResponse;
-  }
+  }*/
 
   public PersonEntity updatePersonWithPersonMedicalDTO(PersonEntity person, MedicalRecordEntity medicalRecord, PersonMedicalRecordResponse personMedicalRecordResponse) {
     person.setFirstName(personMedicalRecordResponse.getFirstName());
@@ -46,34 +48,26 @@ public class MapService {
     return person;
   }
 
-  public MedicalRecordResponse convertMedicalRecordToMedicalRecordDTO(MedicalRecordEntity medicalRecord) {
+  public MedicalRecordResponse convertMedicalRecordToMedicalRecordResponse(MedicalRecord medicalRecord) {
     MedicalRecordResponse medicalRecordResponse = new MedicalRecordResponse();
     medicalRecordResponse.setId(medicalRecord.getId());
+    medicalRecordResponse.setFirstName(medicalRecord.getFirstName());
+    medicalRecordResponse.setLastName(medicalRecord.getLastName());
     medicalRecordResponse.setBirthdate(medicalRecord.getBirthdate());
     medicalRecordResponse.setMedications(medicalRecord.getMedications());
     medicalRecordResponse.setAllergies(medicalRecord.getAllergies());
     return medicalRecordResponse;
   }
 
-  public MedicalRecordEntity updateMedicalRecordWithMedicalRecordDTO(MedicalRecordEntity medicalRecord, MedicalRecordResponse medicalRecordResponse) {
-    medicalRecord.setBirthdate(medicalRecordResponse.getBirthdate());
-    medicalRecord.setMedications(medicalRecordResponse.getMedications());
-    medicalRecord.setAllergies(medicalRecordResponse.getAllergies());
+  public MedicalRecord updateMedicalRecordWithMedicalRecordRequest(MedicalRecord medicalRecord, MedicalRecordAddOrUpdateRequest medicalRecordAddOrUpdateRequest) {
+    medicalRecord.setId(medicalRecordAddOrUpdateRequest.getId());
+    medicalRecord.setFirstName(medicalRecordAddOrUpdateRequest.getFirstName());
+    medicalRecord.setLastName(medicalRecordAddOrUpdateRequest.getLastName());
+    medicalRecord.setBirthdate(medicalRecordAddOrUpdateRequest.getBirthdate());
+    medicalRecord.setMedications(medicalRecordAddOrUpdateRequest.getMedications());
+    medicalRecord.setAllergies(medicalRecordAddOrUpdateRequest.getAllergies());
     return medicalRecord;
   }
-
-  /*public PersonResponse convertPersonToPersonDTO(PersonEntity person) {
-    PersonResponse personResponse = new PersonResponse();
-    personResponse.setId(person.getId());
-    personResponse.setFirstName(person.getFirstName());
-    personResponse.setLastName(person.getLastName());
-    personResponse.setPhone(person.getPhone());
-    personResponse.setZip(person.getZip());
-    personResponse.setAddress(person.getAddress());
-    personResponse.setCity(person.getCity());
-    personResponse.setEmail(person.getEmail());
-    return personResponse;
-  }*/
 
   public PersonResponse convertPersonToPersonResponse(Person person) {
     PersonResponse personResponse = new PersonResponse();

@@ -1,32 +1,13 @@
 package com.openclassrooms.safetynet.serviceTest;
 
-import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
-import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
-import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.MedicalRecordService;
+import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MedicalRecordServiceTest {
@@ -40,7 +21,7 @@ public class MedicalRecordServiceTest {
   @InjectMocks
   private MedicalRecordService medicalRecordService;
 
-  @Test
+  /*@Test
   public void addMedicalRecordTest_shouldReturnOk () {
     // GIVEN
     MedicalRecordEntity medicalRecord = new MedicalRecordEntity();
@@ -173,6 +154,6 @@ public class MedicalRecordServiceTest {
 
     // THEN
     assertThrows(NullPointerException.class, () -> medicalRecordService.getMedicalRecord(medicalRecord.getId()));
-  }
+  }*/
 
 }
