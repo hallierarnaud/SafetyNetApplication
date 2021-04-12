@@ -8,7 +8,6 @@ import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.MedicalRecordDataImportation;
 import com.openclassrooms.safetynet.domain.service.PersonDataImportation;
 import com.openclassrooms.safetynet.domain.service.PersonService;
-import com.openclassrooms.safetynet.model.entity.PersonEntity;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,7 @@ public class PersonControllerTest {
 
   @Test
   public void postPerson_shouldReturnOk() throws Exception {
-    when(personService.addPerson(any())).thenReturn(new PersonEntity());
+    when(personService.addSimplePerson(any())).thenReturn(new Person());
     mockMvc.perform(post("/persons")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
@@ -83,7 +82,7 @@ public class PersonControllerTest {
 
   @Test
   public void postPerson_shouldReturnUnprocessableEntity() throws Exception {
-    when(personService.addPerson(any())).thenThrow(EntityExistsException.class);
+    when(personService.addSimplePerson(any())).thenThrow(EntityExistsException.class);
     mockMvc.perform(post("/persons")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());

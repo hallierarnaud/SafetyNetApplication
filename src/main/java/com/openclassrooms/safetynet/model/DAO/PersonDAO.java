@@ -18,56 +18,77 @@ public class PersonDAO {
   @Autowired
   private PersonRepository personRepository;
 
-  public List<Person> findByLastName(String lastName) {
-    List<PersonEntity> personEntities = personRepository.findByLastName(lastName);
-    return personEntities.stream().map((entity) -> {
-      Person person = new Person();
-      person.setFirstName(entity.getFirstName());
-      person.setLastName(entity.getLastName());
-      return person;
-    }).collect(Collectors.toList());
-  }
-
   public Person findById(Long id) {
-    PersonEntity entity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
+    PersonEntity personEntity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
     Person person = new Person();
-    person.setId(entity.getId());
-    person.setFirstName(entity.getFirstName());
-    person.setLastName(entity.getLastName());
-    person.setPhone(entity.getPhone());
-    person.setZip(entity.getZip());
-    person.setAddress(entity.getAddress());
-    person.setCity(entity.getCity());
-    person.setEmail(entity.getEmail());
-    return person;
-  }
-
-  public Person updateSimplePerson(Long id, Person person) {
-    PersonEntity entity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
-    entity.setFirstName(person.getFirstName());
-    entity.setLastName(person.getLastName());
-    entity.setPhone(person.getPhone());
-    entity.setZip(person.getZip());
-    entity.setAddress(person.getAddress());
-    entity.setCity(person.getCity());
-    entity.setEmail(person.getEmail());
-    personRepository.save(entity);
+    person.setId(personEntity.getId());
+    person.setFirstName(personEntity.getFirstName());
+    person.setLastName(personEntity.getLastName());
+    person.setPhone(personEntity.getPhone());
+    person.setZip(personEntity.getZip());
+    person.setAddress(personEntity.getAddress());
+    person.setCity(personEntity.getCity());
+    person.setEmail(personEntity.getEmail());
     return person;
   }
 
   public List<Person> findAll() {
     List<PersonEntity> personEntities =  StreamSupport.stream(personRepository.findAll().spliterator(),false)
             .collect(Collectors.toList());
-    return personEntities.stream().map((entity) -> {
+    return personEntities.stream().map((personEntity) -> {
       Person person = new Person();
-      person.setId(entity.getId());
-      person.setFirstName(entity.getFirstName());
-      person.setLastName(entity.getLastName());
-      person.setPhone(entity.getPhone());
-      person.setZip(entity.getZip());
-      person.setAddress(entity.getAddress());
-      person.setCity(entity.getCity());
-      person.setEmail(entity.getEmail());
+      person.setId(personEntity.getId());
+      person.setFirstName(personEntity.getFirstName());
+      person.setLastName(personEntity.getLastName());
+      person.setPhone(personEntity.getPhone());
+      person.setZip(personEntity.getZip());
+      person.setAddress(personEntity.getAddress());
+      person.setCity(personEntity.getCity());
+      person.setEmail(personEntity.getEmail());
+      return person;
+    }).collect(Collectors.toList());
+  }
+
+  public Person updateSimplePerson(Long id, Person person) {
+    PersonEntity personEntity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
+    personEntity.setFirstName(person.getFirstName());
+    personEntity.setLastName(person.getLastName());
+    personEntity.setPhone(person.getPhone());
+    personEntity.setZip(person.getZip());
+    personEntity.setAddress(person.getAddress());
+    personEntity.setCity(person.getCity());
+    personEntity.setEmail(person.getEmail());
+    personRepository.save(personEntity);
+    return person;
+  }
+
+  public Person addSimplePerson(Person person) {
+    PersonEntity personEntity = new PersonEntity();
+    personEntity.setFirstName(person.getFirstName());
+    personEntity.setLastName(person.getLastName());
+    personEntity.setPhone(person.getPhone());
+    personEntity.setZip(person.getZip());
+    personEntity.setAddress(person.getAddress());
+    personEntity.setCity(person.getCity());
+    personEntity.setEmail(person.getEmail());
+    personRepository.save(personEntity);
+    return person;
+  }
+
+  public Boolean existById(Long id) {
+    return personRepository.existsById(id);
+  }
+
+  public void deleteById(Long id) {
+    personRepository.deleteById(id);
+  }
+
+  public List<Person> findByLastName(String lastName) {
+    List<PersonEntity> personEntities = personRepository.findByLastName(lastName);
+    return personEntities.stream().map((personEntity) -> {
+      Person person = new Person();
+      person.setFirstName(personEntity.getFirstName());
+      person.setLastName(personEntity.getLastName());
       return person;
     }).collect(Collectors.toList());
   }

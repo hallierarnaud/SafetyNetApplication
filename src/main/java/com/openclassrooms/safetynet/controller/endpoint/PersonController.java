@@ -2,7 +2,7 @@ package com.openclassrooms.safetynet.controller.endpoint;
 
 import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
-import com.openclassrooms.safetynet.controller.DTO.PersonUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 import com.openclassrooms.safetynet.model.entity.FireStationEntity;
@@ -48,12 +48,21 @@ public class PersonController {
     }
   }
 
-  @PostMapping("/persons")
+  /*@PostMapping("/persons")
   public PersonMedicalRecordResponse addPerson(@RequestBody PersonMedicalRecordResponse personMedicalRecordResponse) {
     try {
       return mapService.convertPersonToPersonMedicalRecordDTO(personService.addPerson(personMedicalRecordResponse));
     } catch (EntityExistsException e) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "person " + personMedicalRecordResponse.getId() + " already exists");
+    }
+  }*/
+
+  @PostMapping("/persons")
+  public PersonResponse addSimplePerson(@RequestBody PersonAddOrUpdateRequest personAddRequest) {
+    try {
+      return mapService.convertPersonToPersonResponse(personService.addSimplePerson(personAddRequest));
+    } catch (EntityExistsException e) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "person " + personAddRequest.getId() + " already exists");
     }
   }
 
@@ -77,7 +86,7 @@ public class PersonController {
   }*/
 
   @PutMapping("/persons/{id}")
-  public PersonResponse updateSimplePerson(@PathVariable("id") long id, @RequestBody PersonUpdateRequest personUpdateRequest) {
+  public PersonResponse updateSimplePerson(@PathVariable("id") long id, @RequestBody PersonAddOrUpdateRequest personUpdateRequest) {
     try {
       return mapService.convertPersonToPersonResponse(personService.updateSimplePerson(id, personUpdateRequest));
     } catch (NoSuchElementException e) {

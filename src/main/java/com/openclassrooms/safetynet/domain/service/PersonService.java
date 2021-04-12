@@ -1,11 +1,9 @@
 package com.openclassrooms.safetynet.domain.service;
 
-import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
-import com.openclassrooms.safetynet.controller.DTO.PersonUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 import com.openclassrooms.safetynet.model.entity.FireStationEntity;
-import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
 import com.openclassrooms.safetynet.model.repository.FireStationRepository;
 import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
@@ -56,10 +54,10 @@ public class PersonService {
   }
 
   public void deletePerson(final Long id) {
-    if (!personRepository.existsById(id)) {
+    if (!personDAO.existById(id)) {
       throw new NoSuchElementException("person " + id + " doesn't exist");
     }
-    personRepository.deleteById(id);
+    personDAO.deleteById(id);
   }
 
   /*public PersonEntity updatePerson(final Long id, PersonUpdateRequest personUpdateRequest) {
@@ -71,7 +69,7 @@ public class PersonService {
     return personDAO.update(person);
   }*/
 
-  public Person updateSimplePerson(final Long id, PersonUpdateRequest personUpdateRequest) {
+  public Person updateSimplePerson(final Long id, PersonAddOrUpdateRequest personUpdateRequest) {
     if (personDAO.findById(id) == null) {
       throw new NoSuchElementException("person " + id + " doesn't exist");
     }
@@ -87,7 +85,7 @@ public class PersonService {
     return personDAO.updateSimplePerson(id, person);
   }
 
-  public PersonEntity addPerson(PersonMedicalRecordResponse personMedicalRecordResponse) {
+  /*public PersonEntity addPerson(PersonMedicalRecordResponse personMedicalRecordResponse) {
     PersonEntity person = new PersonEntity();
     MedicalRecordEntity medicalRecord = new MedicalRecordEntity();
     person.setMedicalRecord(medicalRecord);
@@ -97,6 +95,22 @@ public class PersonService {
       throw new EntityExistsException("person " + personMedicalRecordResponse.getId() + " already exists");
     }
     return personRepository.save(person);
+  }*/
+
+  public Person addSimplePerson(PersonAddOrUpdateRequest personAddRequest) {
+    if (personDAO.existById(personAddRequest.getId())) {
+      throw new EntityExistsException("person " + personAddRequest.getId() + " already exists");
+    }
+    Person person = new Person();
+    person.setId(personAddRequest.getId());
+    person.setFirstName(personAddRequest.getFirstName());
+    person.setLastName(personAddRequest.getLastName());
+    person.setPhone(personAddRequest.getPhone());
+    person.setZip(personAddRequest.getZip());
+    person.setAddress(personAddRequest.getAddress());
+    person.setCity(personAddRequest.getCity());
+    person.setEmail(personAddRequest.getEmail());
+    return personDAO.addSimplePerson(person);
   }
 
   public List<PersonEntity> findByLastNameLike(String lastName) {

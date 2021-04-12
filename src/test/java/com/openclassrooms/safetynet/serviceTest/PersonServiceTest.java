@@ -1,12 +1,10 @@
 package com.openclassrooms.safetynet.serviceTest;
 
-import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
-import com.openclassrooms.safetynet.controller.DTO.PersonUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
-import com.openclassrooms.safetynet.model.entity.PersonEntity;
 import com.openclassrooms.safetynet.model.repository.PersonRepository;
 
 import org.junit.jupiter.api.Test;
@@ -49,32 +47,30 @@ public class PersonServiceTest {
   @Test
   public void addPersonTest_shouldReturnOk () {
     // GIVEN
-    PersonEntity person = new PersonEntity();
-    person.setFirstName("Homer");
-    PersonMedicalRecordResponse personMedicalRecordResponse = new PersonMedicalRecordResponse();
-    when(personRepository.save(any(PersonEntity.class))).thenReturn(person);
+    PersonAddOrUpdateRequest personAddRequest = new PersonAddOrUpdateRequest();
+    personAddRequest.setFirstName("Homer");
+    Person person = new Person();
+    when(personDAO.addSimplePerson(any(Person.class))).thenReturn(person);
 
     // WHEN
-    PersonEntity created = personService.addPerson(personMedicalRecordResponse);
+    Person created = personService.addSimplePerson(personAddRequest);
 
     // THEN
     assertEquals(person.getFirstName(), created.getFirstName());
-    verify(personRepository).save(any(PersonEntity.class));
+    verify(personDAO).addSimplePerson(any(Person.class));
   }
 
   @Test
   public void addPersonTest_shouldReturnAlreadyExist () {
     // GIVEN
-    PersonEntity person = new PersonEntity();
-    person.setId(1L);
-    PersonMedicalRecordResponse personMedicalRecordResponse = new PersonMedicalRecordResponse();
-    personMedicalRecordResponse.setId(person.getId());
+    PersonAddOrUpdateRequest personAddRequest = new PersonAddOrUpdateRequest();
+    personAddRequest.setId(1L);
 
     // WHEN
-    when(personRepository.existsById(anyLong())).thenReturn(TRUE);
+    when(personDAO.existById(anyLong())).thenReturn(TRUE);
 
     // THEN
-    Throwable exception = assertThrows(EntityExistsException.class, () -> personService.addPerson(personMedicalRecordResponse));
+    Throwable exception = assertThrows(EntityExistsException.class, () -> personService.addSimplePerson(personAddRequest));
     assertEquals("person 1 already exists", exception.getMessage());
   }
 
@@ -96,25 +92,25 @@ public class PersonServiceTest {
   @Test
   public void deletePerson_shouldReturnOk () {
     // GIVEN
-    PersonEntity person = new PersonEntity();
+    Person person = new Person();
     person.setId(1L);
-    when(personRepository.existsById(anyLong())).thenReturn(TRUE);
+    when(personDAO.existById(anyLong())).thenReturn(TRUE);
 
     // WHEN
     personService.deletePerson(person.getId());
 
     // THEN
-    verify(personRepository).deleteById(person.getId());
+    verify(personDAO).deleteById(person.getId());
   }
 
   @Test
   public void deletePerson_shouldReturnNotFound () {
     // GIVEN
-    PersonEntity person = new PersonEntity();
+    Person person = new Person();
     person.setId(1L);
 
     // WHEN
-    when(personRepository.existsById(anyLong())).thenReturn(FALSE);
+    when(personDAO.existById(anyLong())).thenReturn(FALSE);
 
     // THEN
     Throwable exception = assertThrows(NoSuchElementException.class, () -> personService.deletePerson(person.getId()));
@@ -124,7 +120,7 @@ public class PersonServiceTest {
   @Test
   public void updatePerson_shouldReturnOk () {
     // GIVEN
-    PersonUpdateRequest personUpdateRequest = new PersonUpdateRequest();
+    PersonAddOrUpdateRequest personUpdateRequest = new PersonAddOrUpdateRequest();
     personUpdateRequest.setFirstName("Homer");
     Person person = new Person();
     person.setId(1L);
@@ -145,7 +141,7 @@ public class PersonServiceTest {
     // GIVEN
     Person person = new Person();
     person.setId(100L);
-    PersonUpdateRequest personUpdateRequest = new PersonUpdateRequest();
+    PersonAddOrUpdateRequest personUpdateRequest = new PersonAddOrUpdateRequest();
 
     // THEN
     Throwable exception = assertThrows(NoSuchElementException.class, () -> personService.updateSimplePerson(person.getId(), personUpdateRequest));

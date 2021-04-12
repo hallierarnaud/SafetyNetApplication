@@ -3,8 +3,9 @@ package com.openclassrooms.safetynet.controller.DTO;
 import lombok.Data;
 
 @Data
-public class PersonUpdateRequest {
+public class PersonAddOrUpdateRequest {
 
+  private Long id;
   private String firstName;
   private String lastName;
   private String phone;
