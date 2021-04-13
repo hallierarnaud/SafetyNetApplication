@@ -113,8 +113,8 @@ public class PersonService {
     return personDAO.addSimplePerson(person);
   }
 
-  public List<PersonEntity> findByLastNameLike(String lastName) {
-    return personRepository.findByLastName(lastName);
+  public List<Person> findByLastNameLike(String lastName) {
+    return personDAO.findByLastName(lastName);
   }
 
   public FireStationEntity getPersonFireStation(Long id) {

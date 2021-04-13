@@ -1,8 +1,7 @@
 package com.openclassrooms.safetynet.controller.endpoint;
 
-import com.openclassrooms.safetynet.controller.DTO.PersonMedicalRecordResponse;
-import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 import com.openclassrooms.safetynet.model.entity.FireStationEntity;
@@ -95,8 +94,8 @@ public class PersonController {
   }
 
   @GetMapping("/persons/name")
-  public List<PersonMedicalRecordResponse> getPersonByLastName(@RequestParam("lastName") String lastName) {
-      return personService.findByLastNameLike(lastName).stream().map(p -> mapService.convertPersonToPersonMedicalRecordDTO(p)).collect(Collectors.toList());
+  public List<PersonResponse> getPersonByLastName(@RequestParam("lastName") String lastName) {
+      return personService.findByLastNameLike(lastName).stream().map(p -> mapService.convertPersonToPersonResponse(p)).collect(Collectors.toList());
   }
 
   @GetMapping("/persons/firestations/{id}")
