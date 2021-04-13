@@ -36,7 +36,7 @@ public class PersonEntity {
   public String city;
   public String email;
 
-  @OneToOne(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
-  MedicalRecordEntity medicalRecord;
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "personEntity", orphanRemoval = true, cascade = CascadeType.ALL)
+  MedicalRecordEntity medicalRecordEntity;
 
 }

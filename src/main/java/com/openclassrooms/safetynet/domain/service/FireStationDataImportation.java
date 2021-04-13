@@ -33,8 +33,8 @@ public class FireStationDataImportation {
                       new FireStationEntity(anyStation.get("station").toString()).addAddress(anyStation.get("address").toString()) :
                       v.addAddress(anyStation.get("address").toString()));
     });
-    List<FireStationEntity> fireStations = new ArrayList<>(fireStationMap.values());
-    fireStations.forEach(firestation -> System.out.println("Firestation " + firestation.toString()));
-    fireStationRepository.saveAll(fireStations);
+    List<FireStationEntity> fireStationEntities = new ArrayList<>(fireStationMap.values());
+    fireStationEntities.forEach(fireStation -> System.out.println("Firestation " + fireStation.toString()));
+    fireStationRepository.saveAll(fireStationEntities);
   }
 }

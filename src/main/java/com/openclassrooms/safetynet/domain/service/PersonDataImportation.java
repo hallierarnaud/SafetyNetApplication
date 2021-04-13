@@ -26,8 +26,8 @@ public class PersonDataImportation {
 
   public List<PersonEntity> getPersonList(String filePath) throws IOException {
     Any personAny = dataReader.getData(filePath).get("persons");
-    List<PersonEntity> personList = new ArrayList<>();
-    personAny.forEach(a -> personList.add(PersonEntity.builder()
+    List<PersonEntity> personEntities = new ArrayList<>();
+    personAny.forEach(a -> personEntities.add(PersonEntity.builder()
             .firstName(a.get("firstName").toString())
             .address(a.get("address").toString())
             .city(a.get("city").toString())
@@ -36,7 +36,7 @@ public class PersonDataImportation {
             .zip(a.get("zip").toString())
             .email(a.get("email").toString())
             .build()));
-    return StreamSupport.stream(personRepository.saveAll(personList).spliterator(),false).collect(Collectors.toList());
+    return StreamSupport.stream(personRepository.saveAll(personEntities).spliterator(),false).collect(Collectors.toList());
   }
 
 }

@@ -40,6 +40,6 @@ public class MedicalRecordEntity {
   private List<String> allergies;
 
   @OneToOne(fetch = FetchType.LAZY)
-  private PersonEntity person;
+  private PersonEntity personEntity;
 
 }
