@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet.domain.service;
 
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
+import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
 import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
@@ -27,7 +28,16 @@ public class MapService {
     return personResponse;
   }
 
-
+  public Person updatePersonWithPersonRequest(Person person, PersonAddOrUpdateRequest personAddOrUpdateRequest) {
+    person.setFirstName(personAddOrUpdateRequest.getFirstName());
+    person.setLastName(personAddOrUpdateRequest.getLastName());
+    person.setPhone(personAddOrUpdateRequest.getPhone());
+    person.setZip(personAddOrUpdateRequest.getZip());
+    person.setAddress(personAddOrUpdateRequest.getAddress());
+    person.setCity(personAddOrUpdateRequest.getCity());
+    person.setEmail(personAddOrUpdateRequest.getEmail());
+    return person;
+  }
 
   public MedicalRecordResponse convertMedicalRecordToMedicalRecordResponse(MedicalRecord medicalRecord) {
     MedicalRecordResponse medicalRecordResponse = new MedicalRecordResponse();

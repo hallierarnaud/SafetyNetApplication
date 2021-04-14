@@ -62,13 +62,7 @@ public class PersonService {
     }
     Person person = personDAO.findById(id);
     person.setId(id);
-    person.setFirstName(personUpdateRequest.getFirstName());
-    person.setLastName(personUpdateRequest.getLastName());
-    person.setPhone(personUpdateRequest.getPhone());
-    person.setZip(personUpdateRequest.getZip());
-    person.setAddress(personUpdateRequest.getAddress());
-    person.setCity(personUpdateRequest.getCity());
-    person.setEmail(personUpdateRequest.getEmail());
+    mapService.updatePersonWithPersonRequest(person, personUpdateRequest);
     return personDAO.updateSimplePerson(id, person);
   }
 
@@ -90,13 +84,7 @@ public class PersonService {
     }
     Person person = new Person();
     person.setId(personAddRequest.getId());
-    person.setFirstName(personAddRequest.getFirstName());
-    person.setLastName(personAddRequest.getLastName());
-    person.setPhone(personAddRequest.getPhone());
-    person.setZip(personAddRequest.getZip());
-    person.setAddress(personAddRequest.getAddress());
-    person.setCity(personAddRequest.getCity());
-    person.setEmail(personAddRequest.getEmail());
+    mapService.updatePersonWithPersonRequest(person, personAddRequest);
     return personDAO.addSimplePerson(person);
   }
 
