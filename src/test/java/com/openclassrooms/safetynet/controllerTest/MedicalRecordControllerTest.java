@@ -1,17 +1,34 @@
 package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.endpoint.MedicalRecordController;
+import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
 import com.openclassrooms.safetynet.domain.service.DataImportation.FireStationDataImportation;
-import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.DataImportation.MedicalRecordDataImportation;
-import com.openclassrooms.safetynet.domain.service.MedicalRecordService;
 import com.openclassrooms.safetynet.domain.service.DataImportation.PersonDataImportation;
+import com.openclassrooms.safetynet.domain.service.MapService;
+import com.openclassrooms.safetynet.domain.service.MedicalRecordService;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.NoSuchElementException;
+
+import javax.persistence.EntityExistsException;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = MedicalRecordController.class)
 public class MedicalRecordControllerTest {
@@ -37,15 +54,15 @@ public class MedicalRecordControllerTest {
   @MockBean
   private MapService mapService;
 
-  /*@Test
+  @Test
   public void getMedicalRecords_shouldReturnOk() throws Exception {
-    when(medicalRecordService.getMedicalRecord(any())).thenReturn(new MedicalRecordEntity());
+    when(medicalRecordService.getMedicalRecord(any())).thenReturn(new MedicalRecord());
     mockMvc.perform(get("/medicalrecords")).andExpect(status().isOk());
   }
 
   @Test
   public void getMedicalRecordById_shouldReturnOk() throws Exception {
-    when(medicalRecordService.getMedicalRecord(any())).thenReturn(new MedicalRecordEntity());
+    when(medicalRecordService.getMedicalRecord(any())).thenReturn(new MedicalRecord());
     mockMvc.perform(get("/medicalrecords/1")).andExpect(status().isOk());
   }
 
@@ -57,7 +74,7 @@ public class MedicalRecordControllerTest {
 
   @Test
   public void postMedicalRecord_shouldReturnOk() throws Exception {
-    when(medicalRecordService.addMedicalRecord(any())).thenReturn(new MedicalRecordEntity());
+    when(medicalRecordService.addMedicalRecord(any())).thenReturn(new MedicalRecord());
     mockMvc.perform(post("/medicalrecords")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
@@ -85,7 +102,7 @@ public class MedicalRecordControllerTest {
 
   @Test
   public void updateMedicalRecord_shouldReturnOk() throws Exception {
-    when(medicalRecordService.updateMedicalRecord(any(), any())).thenReturn(new MedicalRecordEntity());
+    when(medicalRecordService.updateMedicalRecord(any(), any())).thenReturn(new MedicalRecord());
     mockMvc.perform(put("/medicalrecords/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
@@ -93,10 +110,10 @@ public class MedicalRecordControllerTest {
 
   @Test
   public void updateMedicalRecord_shouldReturnUnprocessableEntity() throws Exception {
-    when(medicalRecordService.updateMedicalRecord(any(), any())).thenThrow(EntityNotFoundException.class);
+    when(medicalRecordService.updateMedicalRecord(any(), any())).thenThrow(NoSuchElementException.class);
     mockMvc.perform(put("/medicalrecords/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());
-  }*/
+  }
 
 }
