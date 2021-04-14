@@ -2,7 +2,9 @@ package com.openclassrooms.safetynet.domain.service;
 
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordAddOrUpdateRequest;
 import com.openclassrooms.safetynet.domain.object.MedicalRecord;
+import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.model.DAO.MedicalRecordDAO;
+import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class MedicalRecordService {
 
   @Autowired
   private MedicalRecordDAO medicalRecordDAO;
+
+  @Autowired
+  private PersonDAO personDAO;
 
   @Autowired
   private MapService mapService;
@@ -60,6 +65,13 @@ public class MedicalRecordService {
       throw new EntityExistsException("medicalrecord " + medicalRecordAddRequest.getId() + " already exists");
     }
     MedicalRecord medicalRecord = new MedicalRecord();
+    medicalRecord.setId(medicalRecordAddRequest.getId());
+    if (personDAO.findById(medicalRecordAddRequest.getId()) == null) {
+      throw new NoSuchElementException("person " + medicalRecordAddRequest.getId() + "doesn't exist");
+    }
+    Person person = personDAO.findById(medicalRecordAddRequest.getId());
+    medicalRecord.setFirstName(person.getFirstName());
+    medicalRecord.setLastName(person.getLastName());
     mapService.updateMedicalRecordWithMedicalRecordRequest(medicalRecord, medicalRecordAddRequest);
     return medicalRecordDAO.addMedicalRecord(medicalRecord);
   }

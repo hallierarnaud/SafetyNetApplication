@@ -51,6 +51,8 @@ public class MedicalRecordController {
       return mapService.convertMedicalRecordToMedicalRecordResponse(medicalRecordService.addMedicalRecord(medicalRecordAddRequest));
     } catch (EntityExistsException e) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "medicalrecord " + medicalRecordAddRequest.getId() + " already exists");
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "person " + medicalRecordAddRequest.getId() + " doesn't exist");
     }
   }
 
