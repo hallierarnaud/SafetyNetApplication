@@ -6,7 +6,6 @@ import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 import com.openclassrooms.safetynet.model.entity.FireStationEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
 import com.openclassrooms.safetynet.model.repository.FireStationRepository;
-import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynet.model.repository.PersonRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +32,6 @@ public class PersonService {
   private PersonDAO personDAO;
 
   @Autowired
-  private MedicalRecordRepository medicalRecordRepository;
-
-  @Autowired
   private FireStationRepository fireStationRepository;
 
   @Autowired
@@ -59,15 +55,6 @@ public class PersonService {
     }
     personDAO.deleteById(id);
   }
-
-  /*public PersonEntity updatePerson(final Long id, PersonUpdateRequest personUpdateRequest) {
-    //PersonEntity person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("person " + id + " doesn't exist"));
-    //MedicalRecordEntity medicalRecord = medicalRecordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-    Person person = personDAO.findById(id);
-    person.setFirstName(personUpdateRequest.getFirstName());
-    person.setLastName(personUpdateRequest.getLastName());
-    return personDAO.update(person);
-  }*/
 
   public Person updateSimplePerson(final Long id, PersonAddOrUpdateRequest personUpdateRequest) {
     if (personDAO.findById(id) == null) {
