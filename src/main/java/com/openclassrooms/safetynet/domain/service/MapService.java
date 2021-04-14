@@ -60,9 +60,6 @@ public class MapService {
   }
 
   public MedicalRecord updateMedicalRecordWithMedicalRecordRequest(MedicalRecord medicalRecord, MedicalRecordAddOrUpdateRequest medicalRecordAddOrUpdateRequest) {
-    medicalRecord.setId(medicalRecordAddOrUpdateRequest.getId());
-    medicalRecord.setFirstName(medicalRecordAddOrUpdateRequest.getFirstName());
-    medicalRecord.setLastName(medicalRecordAddOrUpdateRequest.getLastName());
     medicalRecord.setBirthdate(medicalRecordAddOrUpdateRequest.getBirthdate());
     medicalRecord.setMedications(medicalRecordAddOrUpdateRequest.getMedications());
     medicalRecord.setAllergies(medicalRecordAddOrUpdateRequest.getAllergies());
