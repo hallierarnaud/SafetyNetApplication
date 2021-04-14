@@ -1,7 +1,9 @@
 package com.openclassrooms.safetynet.controller.endpoint;
 
-import com.openclassrooms.safetynet.model.entity.FireStationEntity;
+import com.openclassrooms.safetynet.controller.DTO.FireStationAddOrUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.FireStationResponse;
 import com.openclassrooms.safetynet.domain.service.FireStationService;
+import com.openclassrooms.safetynet.domain.service.MapService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +18,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 @RestController
 public class FireStationController {
@@ -26,26 +28,29 @@ public class FireStationController {
   @Autowired
   private FireStationService fireStationService;
 
+  @Autowired
+  MapService mapService;
+
   @GetMapping("/firestations")
-  public List<FireStationEntity> getFireStations() {
-    return fireStationService.getFireStations();
+  public List<FireStationResponse> getFireStations() {
+    return fireStationService.getFireStations().stream().map(f -> mapService.convertFireStationToFireStationResponse(f)).collect(Collectors.toList());
   }
 
   @GetMapping("/firestations/{id}")
-  public FireStationEntity getFireStationById(@PathVariable("id") long id) {
+  public FireStationResponse getFireStationById(@PathVariable("id") long id) {
     try {
-      return fireStationService.getFireStation(id);
+      return mapService.convertFireStationToFireStationResponse(fireStationService.getFireStation(id));
     } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "firestation " + id + " doesn't exist");
     }
   }
 
   @PostMapping("/firestations")
-  public FireStationEntity addFireStation(@RequestBody FireStationEntity fireStation) {
+  public FireStationResponse addFireStation(@RequestBody FireStationAddOrUpdateRequest fireStationAddRequest) {
     try {
-      return fireStationService.addFireStation(fireStation);
+      return mapService.convertFireStationToFireStationResponse(fireStationService.addFireStation(fireStationAddRequest));
     } catch (EntityExistsException e) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "firestation " + fireStation.getId() + " already exists");
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "firestation " + fireStationAddRequest.getId() + " already exists");
     }
   }
 
@@ -60,10 +65,10 @@ public class FireStationController {
   }
 
   @PutMapping("/firestations/{id}")
-  public FireStationEntity updateFireStation(@PathVariable("id") long id, @RequestBody FireStationEntity fireStation) {
+  public FireStationResponse updateFireStation(@PathVariable("id") long id, @RequestBody FireStationAddOrUpdateRequest fireStationUpdateRequest) {
     try {
-      return fireStationService.updateFireStation(id, fireStation);
-    } catch (EntityNotFoundException e) {
+      return mapService.convertFireStationToFireStationResponse(fireStationService.updateFireStation(id, fireStationUpdateRequest));
+    } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "firestation " + id + " doesn't exist");
     }
   }

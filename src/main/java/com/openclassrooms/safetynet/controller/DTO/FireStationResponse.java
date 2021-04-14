@@ -1,4 +1,4 @@
-package com.openclassrooms.safetynet.domain.object;
+package com.openclassrooms.safetynet.controller.DTO;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,7 +6,7 @@ import java.util.Set;
 import lombok.Data;
 
 @Data
-public class FireStation {
+public class FireStationResponse {
 
   private Long id;
   private Set<String> addresses = new HashSet<>();

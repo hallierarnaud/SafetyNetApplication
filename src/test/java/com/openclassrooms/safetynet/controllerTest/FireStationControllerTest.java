@@ -1,12 +1,13 @@
 package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.endpoint.FireStationController;
-import com.openclassrooms.safetynet.model.entity.FireStationEntity;
+import com.openclassrooms.safetynet.domain.object.FireStation;
 import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
 import com.openclassrooms.safetynet.domain.service.DataImportation.FireStationDataImportation;
-import com.openclassrooms.safetynet.domain.service.FireStationService;
 import com.openclassrooms.safetynet.domain.service.DataImportation.MedicalRecordDataImportation;
 import com.openclassrooms.safetynet.domain.service.DataImportation.PersonDataImportation;
+import com.openclassrooms.safetynet.domain.service.FireStationService;
+import com.openclassrooms.safetynet.domain.service.MapService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -51,15 +51,18 @@ public class FireStationControllerTest {
   @MockBean
   private MedicalRecordDataImportation medicalRecordDataImportation;
 
+  @MockBean
+  MapService mapService;
+
   @Test
   public void getFireStations_shouldReturnOk() throws Exception {
-    when(fireStationService.getFireStation(any())).thenReturn(new FireStationEntity());
+    when(fireStationService.getFireStation(any())).thenReturn(new FireStation());
     mockMvc.perform(get("/firestations")).andExpect(status().isOk());
   }
 
   @Test
   public void getFireStationById_shouldReturnOk() throws Exception {
-    when(fireStationService.getFireStation(any())).thenReturn(new FireStationEntity());
+    when(fireStationService.getFireStation(any())).thenReturn(new FireStation());
     mockMvc.perform(get("/firestations/1")).andExpect(status().isOk());
   }
 
@@ -71,7 +74,7 @@ public class FireStationControllerTest {
 
   @Test
   public void postFireStation_shouldReturnOk() throws Exception {
-    when(fireStationService.addFireStation(any())).thenReturn(new FireStationEntity());
+    when(fireStationService.addFireStation(any())).thenReturn(new FireStation());
     mockMvc.perform(post("/firestations")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
@@ -99,7 +102,7 @@ public class FireStationControllerTest {
 
   @Test
   public void updateFireStation_shouldReturnOk() throws Exception {
-    when(fireStationService.updateFireStation(any(), any())).thenReturn(new FireStationEntity());
+    when(fireStationService.updateFireStation(any(), any())).thenReturn(new FireStation());
     mockMvc.perform(put("/firestations/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isOk());
@@ -107,7 +110,7 @@ public class FireStationControllerTest {
 
   @Test
   public void updateFireStation_shouldReturnUnprocessableEntity() throws Exception {
-    when(fireStationService.updateFireStation(any(), any())).thenThrow(EntityNotFoundException.class);
+    when(fireStationService.updateFireStation(any(), any())).thenThrow(NoSuchElementException.class);
     mockMvc.perform(put("/firestations/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());

@@ -1,7 +1,9 @@
 package com.openclassrooms.safetynet.model.DAO;
 
+import com.openclassrooms.safetynet.domain.object.FireStation;
 import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
+import com.openclassrooms.safetynet.model.entity.FireStationEntity;
 import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
 
@@ -48,6 +50,19 @@ public class MapDAO {
     medicalRecordEntity.setMedications(medicalRecord.getMedications());
     medicalRecordEntity.setAllergies(medicalRecord.getAllergies());
     return medicalRecordEntity;
+  }
+
+  public FireStation updateFireStationWithFireStationEntity (FireStation fireStation, FireStationEntity fireStationEntity) {
+    fireStation.setId(fireStationEntity.getId());
+    fireStation.setAddresses(fireStationEntity.getAddresses());
+    fireStation.setStationNumber(fireStationEntity.getStationNumber());
+    return fireStation;
+  }
+
+  public FireStationEntity updateFireStationEntityWithFireStation (FireStationEntity fireStationEntity, FireStation fireStation) {
+    fireStationEntity.setAddresses(fireStation.getAddresses());
+    fireStationEntity.setStationNumber(fireStation.getStationNumber());
+    return fireStationEntity;
   }
 
 }

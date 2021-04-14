@@ -1,9 +1,12 @@
 package com.openclassrooms.safetynet.domain.service;
 
+import com.openclassrooms.safetynet.controller.DTO.FireStationAddOrUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.FireStationResponse;
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
+import com.openclassrooms.safetynet.domain.object.FireStation;
 import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
 
@@ -52,6 +55,20 @@ public class MapService {
     medicalRecord.setMedications(medicalRecordAddOrUpdateRequest.getMedications());
     medicalRecord.setAllergies(medicalRecordAddOrUpdateRequest.getAllergies());
     return medicalRecord;
+  }
+
+  public FireStationResponse convertFireStationToFireStationResponse(FireStation fireStation) {
+    FireStationResponse fireStationResponse = new FireStationResponse();
+    fireStationResponse.setId(fireStation.getId());
+    fireStationResponse.setAddresses(fireStation.getAddresses());
+    fireStationResponse.setStationNumber(fireStation.getStationNumber());
+    return fireStationResponse;
+  }
+
+  public FireStation updateFireStationWithFireStationRequest(FireStation fireStation, FireStationAddOrUpdateRequest fireStationAddOrUpdateRequest) {
+    fireStation.setAddresses(fireStationAddOrUpdateRequest.getAddresses());
+    fireStation.setStationNumber(fireStationAddOrUpdateRequest.getStationNumber());
+    return fireStation;
   }
 
 }

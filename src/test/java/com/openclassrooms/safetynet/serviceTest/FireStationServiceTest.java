@@ -1,8 +1,10 @@
 package com.openclassrooms.safetynet.serviceTest;
 
-import com.openclassrooms.safetynet.model.entity.FireStationEntity;
-import com.openclassrooms.safetynet.model.repository.FireStationRepository;
+import com.openclassrooms.safetynet.controller.DTO.FireStationAddOrUpdateRequest;
+import com.openclassrooms.safetynet.domain.object.FireStation;
 import com.openclassrooms.safetynet.domain.service.FireStationService;
+import com.openclassrooms.safetynet.domain.service.MapService;
+import com.openclassrooms.safetynet.model.DAO.FireStationDAO;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +17,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +32,10 @@ import static org.mockito.Mockito.when;
 public class FireStationServiceTest {
 
   @Mock
-  private FireStationRepository fireStationRepository;
+  private FireStationDAO fireStationDAO;
+
+  @Mock
+  private MapService mapService;
 
   @InjectMocks
   private FireStationService fireStationService;
@@ -38,69 +43,70 @@ public class FireStationServiceTest {
   @Test
   public void addFireStationTest_shouldReturnOk () {
     // GIVEN
-    FireStationEntity fireStation = new FireStationEntity();
-    fireStation.setStationNumber("1");
-    when(fireStationRepository.save(any(FireStationEntity.class))).thenReturn(fireStation);
+    FireStationAddOrUpdateRequest fireStationAddRequest = new FireStationAddOrUpdateRequest();
+    fireStationAddRequest.setStationNumber("1");
+    FireStation fireStation = new FireStation();
+    when(fireStationDAO.addFireStation(any(FireStation.class))).thenReturn(fireStation);
 
     // WHEN
-    FireStationEntity created = fireStationService.addFireStation(fireStation);
+    FireStation created = fireStationService.addFireStation(fireStationAddRequest);
 
     // THEN
     assertEquals(created.getStationNumber(), fireStation.getStationNumber());
-    verify(fireStationRepository).save(fireStation);
+    verify(fireStationDAO).addFireStation(fireStation);
   }
 
   @Test
   public void addFireStationTest_shouldReturnAlreadyExist () {
     // GIVEN
-    FireStationEntity fireStation = new FireStationEntity();
-    fireStation.setId(1L);
+    FireStationAddOrUpdateRequest fireStationAddRequest = new FireStationAddOrUpdateRequest();
+    fireStationAddRequest.setId(1L);
 
     // WHEN
-    when(fireStationRepository.existsById(anyLong())).thenReturn(TRUE);
+    when(fireStationDAO.existById(anyLong())).thenReturn(TRUE);
 
     // THEN
-    Throwable exception = assertThrows(EntityExistsException.class, () -> fireStationService.addFireStation(fireStation));
+    Throwable exception = assertThrows(EntityExistsException.class, () -> fireStationService.addFireStation(fireStationAddRequest));
     assertEquals("firestation 1 already exists", exception.getMessage());
   }
 
   @Test
   public void getFireStations_shouldReturnOk () {
     // GIVEN
-    List<FireStationEntity> fireStations = new ArrayList();
-    fireStations.add(new FireStationEntity());
-    when(fireStationRepository.findAll()).thenReturn(fireStations);
+    List<FireStation> fireStations = new ArrayList();
+    fireStations.add(new FireStation());
+    when(fireStationDAO.findAll()).thenReturn(fireStations);
 
     // WHEN
-    Iterable<FireStationEntity> expected = fireStationService.getFireStations();
+    List<FireStation> expected = fireStationService.getFireStations();
 
     // THEN
     assertEquals(expected, fireStations);
-    verify(fireStationRepository).findAll();
+    verify(fireStationDAO).findAll();
   }
 
   @Test
   public void deleteFireStation_shouldReturnOk () {
     // GIVEN
-    FireStationEntity fireStation = new FireStationEntity();
+    FireStation fireStation = new FireStation();
     fireStation.setId(1L);
-    when(fireStationRepository.existsById(anyLong())).thenReturn(TRUE);
+    when(fireStationDAO.existById(anyLong())).thenReturn(TRUE);
 
     // WHEN
     fireStationService.deleteFireStation(fireStation.getId());
 
     // THEN
-    verify(fireStationRepository).deleteById(fireStation.getId());
+    verify(fireStationDAO).deleteById(fireStation.getId());
   }
 
   @Test
   public void deleteFireStation_shouldReturnNotFound () {
     // GIVEN
-    FireStationEntity fireStation = new FireStationEntity();
+    FireStation fireStation = new FireStation();
     fireStation.setId(1L);
 
     // WHEN
-    when(fireStationRepository.existsById(anyLong())).thenReturn(FALSE);
+    when(fireStationDAO.existById(anyLong())).thenReturn(FALSE);
 
     // THEN
     Throwable exception = assertThrows(NoSuchElementException.class, () -> fireStationService.deleteFireStation(fireStation.getId()));
@@ -110,61 +116,60 @@ public class FireStationServiceTest {
   @Test
   public void updateFireStation_shouldReturnOk () {
     // GIVEN
-    FireStationEntity fireStation = new FireStationEntity();
+    FireStationAddOrUpdateRequest fireStationUpdateRequest = new FireStationAddOrUpdateRequest();
+    fireStationUpdateRequest.setStationNumber("1");
+    FireStation fireStation = new FireStation();
     fireStation.setId(1L);
-    fireStation.setStationNumber("1");
-    when(fireStationRepository.existsById(anyLong())).thenReturn(TRUE);
-    when(fireStationRepository.save(any(FireStationEntity.class))).thenReturn(fireStation);
+    when(fireStationDAO.findById(anyLong())).thenReturn(fireStation);
+    when(fireStationDAO.updateFireStation(anyLong(), any(FireStation.class))).thenReturn(fireStation);
 
     // WHEN
-    FireStationEntity updated = fireStationService.updateFireStation(fireStation.getId(), fireStation);
+    FireStation updated = fireStationService.updateFireStation(fireStation.getId(), fireStationUpdateRequest);
 
     // THEN
     assertEquals(fireStation.getStationNumber(), updated.getStationNumber());
-    verify(fireStationRepository).existsById(fireStation.getId());
-    verify(fireStationRepository).save(fireStation);
+    verify(fireStationDAO, times(2)).findById(fireStation.getId());
+    verify(fireStationDAO).updateFireStation(fireStation.getId(), fireStation);
   }
 
   @Test
   public void updateFireStation_shouldReturnNotFound () {
     // GIVEN
-    FireStationEntity fireStation = new FireStationEntity();
-    fireStation.setId(1L);
-
-    // WHEN
-    when(fireStationRepository.existsById(anyLong())).thenReturn(FALSE);
+    FireStation fireStation = new FireStation();
+    fireStation.setId(100L);
+    FireStationAddOrUpdateRequest fireStationUpdateRequest = new FireStationAddOrUpdateRequest();
 
     // THEN
-    Throwable exception = assertThrows(EntityNotFoundException.class, () -> fireStationService.updateFireStation(fireStation.getId(), fireStation));
-    assertEquals("firestation 1 doesn't exist", exception.getMessage());
+    Throwable exception = assertThrows(NoSuchElementException.class, () -> fireStationService.updateFireStation(fireStation.getId(), fireStationUpdateRequest));
+    assertEquals("firestation 100 doesn't exist", exception.getMessage());
   }
 
   @Test
   public void getFireStation_shouldReturnOk () {
     // GIVEN
-    FireStationEntity fireStation = new FireStationEntity();
+    FireStation fireStation = new FireStation();
     fireStation.setId(1L);
-    when(fireStationRepository.findById(anyLong())).thenReturn(java.util.Optional.of(fireStation));
+    when(fireStationDAO.findById(anyLong())).thenReturn(fireStation);
 
     // WHEN
-    FireStationEntity expected = fireStationService.getFireStation(fireStation.getId());
+    FireStation expected = fireStationService.getFireStation(fireStation.getId());
 
     // THEN
     assertEquals(expected, fireStation);
-    verify(fireStationRepository).findById(fireStation.getId());
+    verify(fireStationDAO, times(2)).findById(fireStation.getId());
   }
 
   @Test
   public void getFireStation_shouldReturnNotFound () {
     // GIVEN
-    FireStationEntity fireStation = new FireStationEntity();
-    fireStation.setId(1L);
+    FireStation fireStation = new FireStation();
+    fireStation.setId(100L);
 
     // WHEN
-    when(fireStationRepository.findById(anyLong())).thenReturn(null);
+    when(fireStationDAO.findById(anyLong())).thenReturn(null);
 
     // THEN
-    assertThrows(NullPointerException.class, () -> fireStationService.getFireStation(fireStation.getId()));
+    assertThrows(NoSuchElementException.class, () -> fireStationService.getFireStation(fireStation.getId()));
   }
 
 }

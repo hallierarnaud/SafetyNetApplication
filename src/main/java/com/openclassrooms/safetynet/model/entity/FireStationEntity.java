@@ -10,9 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "firestations")
 public class FireStationEntity {
@@ -29,29 +35,14 @@ public class FireStationEntity {
     this.stationNumber = stationNumber;
   }
 
-  public FireStationEntity() {
-
-  }
-
   public FireStationEntity addAddress(String address) {
     addresses.add(address);
     return this;
   }
 
-  /*public String getStationNumber() {
-    return stationNumber;
-  }*/
-
-  /*public Set<String> getAddresses() {
-    return new HashSet<>(addresses);
-  }*/
-
   @Override
   public String toString() {
     return stationNumber.concat(": ") + String.join(", ", addresses);
   }
-
-  /*@OneToMany
-  List<Person> persons;*/
 
 }
