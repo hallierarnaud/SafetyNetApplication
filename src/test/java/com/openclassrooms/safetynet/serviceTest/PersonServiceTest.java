@@ -5,7 +5,6 @@ import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
-import com.openclassrooms.safetynet.model.repository.PersonRepository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,9 +33,6 @@ public class PersonServiceTest {
 
   @Mock
   private PersonDAO personDAO;
-
-  @Mock
-  private PersonRepository personRepository;
 
   @Mock
   private MapService mapService;

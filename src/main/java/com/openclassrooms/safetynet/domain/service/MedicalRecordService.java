@@ -33,7 +33,7 @@ public class MedicalRecordService {
 
   public MedicalRecord getMedicalRecord(final Long id) {
     if (medicalRecordDAO.findById(id) == null) {
-      throw new NoSuchElementException("medicalRecord " + id + " doesn't exist");
+      throw new NoSuchElementException("medicalrecord " + id + " doesn't exist");
     }
     return medicalRecordDAO.findById(id);
   }
@@ -52,7 +52,7 @@ public class MedicalRecordService {
 
   public MedicalRecord updateMedicalRecord(final Long id, MedicalRecordAddOrUpdateRequest medicalRecordUpdateRequest) {
     if (medicalRecordDAO.findById(id) == null) {
-      throw new NoSuchElementException("medicalRecord " + id + " doesn't exist");
+      throw new NoSuchElementException("medicalrecord " + id + " doesn't exist");
     }
     MedicalRecord medicalRecord = medicalRecordDAO.findById(id);
     medicalRecord.setId(id);

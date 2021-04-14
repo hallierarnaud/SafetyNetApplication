@@ -27,7 +27,7 @@ public class MedicalRecordDAO {
   MapDAO mapDAO;
 
   public MedicalRecord findById(Long id) {
-    MedicalRecordEntity medicalRecordEntity = medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("medicalRecord " + id + " doesn't exist"));
+    MedicalRecordEntity medicalRecordEntity = medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("medicalrecord " + id + " doesn't exist"));
     MedicalRecord medicalRecord = new MedicalRecord();
     mapDAO.updateMedicalRecordWithMedicalRecordEntity(medicalRecord, medicalRecordEntity);
     return medicalRecord;
@@ -44,7 +44,7 @@ public class MedicalRecordDAO {
   }
 
   public MedicalRecord updateMedicalRecord(Long id, MedicalRecord medicalRecord) {
-    MedicalRecordEntity medicalRecordEntity = medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("medicalRecord " + id + " doesn't exist"));
+    MedicalRecordEntity medicalRecordEntity = medicalRecordRepository.findById(id).orElseThrow(() -> new NoSuchElementException("medicalrecord " + id + " doesn't exist"));
     medicalRecordEntity.getPersonEntity().setFirstName(medicalRecord.getFirstName());
     medicalRecordEntity.getPersonEntity().setLastName(medicalRecord.getLastName());
     mapDAO.updateMedicalRecordEntityWithMedicalRecord(medicalRecordEntity, medicalRecord);
