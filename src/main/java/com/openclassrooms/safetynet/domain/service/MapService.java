@@ -9,9 +9,6 @@ import com.openclassrooms.safetynet.domain.object.Person;
 
 import org.springframework.stereotype.Service;
 
-import lombok.Data;
-
-@Data
 @Service
 public class MapService {
 

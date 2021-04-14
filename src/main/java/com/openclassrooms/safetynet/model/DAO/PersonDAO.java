@@ -18,17 +18,13 @@ public class PersonDAO {
   @Autowired
   private PersonRepository personRepository;
 
+  @Autowired
+  MapDAO mapDAO;
+
   public Person findById(Long id) {
     PersonEntity personEntity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
     Person person = new Person();
-    person.setId(personEntity.getId());
-    person.setFirstName(personEntity.getFirstName());
-    person.setLastName(personEntity.getLastName());
-    person.setPhone(personEntity.getPhone());
-    person.setZip(personEntity.getZip());
-    person.setAddress(personEntity.getAddress());
-    person.setCity(personEntity.getCity());
-    person.setEmail(personEntity.getEmail());
+    mapDAO.updatePersonWithPersonEntity(person, personEntity);
     return person;
   }
 
@@ -37,40 +33,21 @@ public class PersonDAO {
             .collect(Collectors.toList());
     return personEntities.stream().map((personEntity) -> {
       Person person = new Person();
-      person.setId(personEntity.getId());
-      person.setFirstName(personEntity.getFirstName());
-      person.setLastName(personEntity.getLastName());
-      person.setPhone(personEntity.getPhone());
-      person.setZip(personEntity.getZip());
-      person.setAddress(personEntity.getAddress());
-      person.setCity(personEntity.getCity());
-      person.setEmail(personEntity.getEmail());
+      mapDAO.updatePersonWithPersonEntity(person, personEntity);
       return person;
     }).collect(Collectors.toList());
   }
 
   public Person updateSimplePerson(Long id, Person person) {
     PersonEntity personEntity = personRepository.findById(id).orElseThrow(() -> new NoSuchElementException("person " + id + " doesn't exist"));
-    personEntity.setFirstName(person.getFirstName());
-    personEntity.setLastName(person.getLastName());
-    personEntity.setPhone(person.getPhone());
-    personEntity.setZip(person.getZip());
-    personEntity.setAddress(person.getAddress());
-    personEntity.setCity(person.getCity());
-    personEntity.setEmail(person.getEmail());
+    mapDAO.updatePersonEntityWithPerson(personEntity, person);
     personRepository.save(personEntity);
     return person;
   }
 
   public Person addSimplePerson(Person person) {
     PersonEntity personEntity = new PersonEntity();
-    personEntity.setFirstName(person.getFirstName());
-    personEntity.setLastName(person.getLastName());
-    personEntity.setPhone(person.getPhone());
-    personEntity.setZip(person.getZip());
-    personEntity.setAddress(person.getAddress());
-    personEntity.setCity(person.getCity());
-    personEntity.setEmail(person.getEmail());
+    mapDAO.updatePersonEntityWithPerson(personEntity, person);
     personRepository.save(personEntity);
     return person;
   }
