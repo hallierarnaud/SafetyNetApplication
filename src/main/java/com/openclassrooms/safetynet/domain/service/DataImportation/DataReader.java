@@ -1,4 +1,4 @@
-package com.openclassrooms.safetynet.domain.service;
+package com.openclassrooms.safetynet.domain.service.DataImportation;
 
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;

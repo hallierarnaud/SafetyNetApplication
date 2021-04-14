@@ -1,12 +1,12 @@
 package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.endpoint.MedicalRecordController;
-import com.openclassrooms.safetynet.domain.service.DataReader;
-import com.openclassrooms.safetynet.domain.service.FireStationDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
+import com.openclassrooms.safetynet.domain.service.DataImportation.FireStationDataImportation;
 import com.openclassrooms.safetynet.domain.service.MapService;
-import com.openclassrooms.safetynet.domain.service.MedicalRecordDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.MedicalRecordDataImportation;
 import com.openclassrooms.safetynet.domain.service.MedicalRecordService;
-import com.openclassrooms.safetynet.domain.service.PersonDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.PersonDataImportation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

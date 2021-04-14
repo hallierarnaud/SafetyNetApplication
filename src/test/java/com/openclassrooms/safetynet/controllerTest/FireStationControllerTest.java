@@ -2,11 +2,11 @@ package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.endpoint.FireStationController;
 import com.openclassrooms.safetynet.model.entity.FireStationEntity;
-import com.openclassrooms.safetynet.domain.service.DataReader;
-import com.openclassrooms.safetynet.domain.service.FireStationDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
+import com.openclassrooms.safetynet.domain.service.DataImportation.FireStationDataImportation;
 import com.openclassrooms.safetynet.domain.service.FireStationService;
-import com.openclassrooms.safetynet.domain.service.MedicalRecordDataImportation;
-import com.openclassrooms.safetynet.domain.service.PersonDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.MedicalRecordDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.PersonDataImportation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

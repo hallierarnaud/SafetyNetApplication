@@ -1,10 +1,10 @@
 package com.openclassrooms.safetynet;
 
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
-import com.openclassrooms.safetynet.domain.service.DataReader;
-import com.openclassrooms.safetynet.domain.service.FireStationDataImportation;
-import com.openclassrooms.safetynet.domain.service.MedicalRecordDataImportation;
-import com.openclassrooms.safetynet.domain.service.PersonDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
+import com.openclassrooms.safetynet.domain.service.DataImportation.FireStationDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.MedicalRecordDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.PersonDataImportation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

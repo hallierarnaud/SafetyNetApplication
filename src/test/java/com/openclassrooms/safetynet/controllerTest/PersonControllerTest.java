@@ -2,11 +2,11 @@ package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.endpoint.PersonController;
 import com.openclassrooms.safetynet.domain.object.Person;
-import com.openclassrooms.safetynet.domain.service.DataReader;
-import com.openclassrooms.safetynet.domain.service.FireStationDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
+import com.openclassrooms.safetynet.domain.service.DataImportation.FireStationDataImportation;
 import com.openclassrooms.safetynet.domain.service.MapService;
-import com.openclassrooms.safetynet.domain.service.MedicalRecordDataImportation;
-import com.openclassrooms.safetynet.domain.service.PersonDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.MedicalRecordDataImportation;
+import com.openclassrooms.safetynet.domain.service.DataImportation.PersonDataImportation;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 
 import org.junit.jupiter.api.Test;
