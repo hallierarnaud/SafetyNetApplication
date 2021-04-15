@@ -65,13 +65,13 @@ public class PersonController {
     }
   }
 
-  @DeleteMapping("/persons/{id}")
-  public void deletePersonById(@PathVariable("id") long id) {
+  @DeleteMapping("/persons/{firstName}/{lastName}")
+  public void deletePersonByFirstAndLastName(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
     try {
-      personService.deletePerson(id);
-      throw new ResponseStatusException(HttpStatus.OK, "person " + id + " was deleted");
+      personService.deletePerson(firstName, lastName);
+      throw new ResponseStatusException(HttpStatus.OK, firstName + " " + lastName + " was deleted");
     } catch (NoSuchElementException e) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "person " + id + " doesn't exist");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, firstName + " " + lastName + " doesn't exist");
     }
   }
 

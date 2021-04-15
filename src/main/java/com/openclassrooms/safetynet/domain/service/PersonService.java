@@ -49,11 +49,11 @@ public class PersonService {
             .collect(Collectors.toList());
   }
 
-  public void deletePerson(final Long id) {
-    if (!personDAO.existById(id)) {
-      throw new NoSuchElementException("person " + id + " doesn't exist");
+  public void deletePerson(final String firstName, final String lastName) {
+    if (!personDAO.existByFirstAndLastName(firstName, lastName)) {
+      throw new NoSuchElementException(firstName + " " + lastName + " doesn't exist");
     }
-    personDAO.deleteById(id);
+    personDAO.deleteByFirstAndLastName(firstName, lastName);
   }
 
   public Person updateSimplePerson(final Long id, PersonAddOrUpdateRequest personUpdateRequest) {

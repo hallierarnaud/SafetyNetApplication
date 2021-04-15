@@ -4,9 +4,9 @@ import com.openclassrooms.safetynet.controller.endpoint.PersonController;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
 import com.openclassrooms.safetynet.domain.service.DataImportation.FireStationDataImportation;
-import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.DataImportation.MedicalRecordDataImportation;
 import com.openclassrooms.safetynet.domain.service.DataImportation.PersonDataImportation;
+import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 
 import org.junit.jupiter.api.Test;
@@ -90,14 +90,14 @@ public class PersonControllerTest {
 
   @Test
   public void deletePerson_shouldReturnOk() throws Exception {
-    doNothing().when(personService).deletePerson(any());
-    mockMvc.perform(delete("/persons/1")).andExpect(status().isOk());
+    doNothing().when(personService).deletePerson(any(), any());
+    mockMvc.perform(delete("/persons/John/Boyd")).andExpect(status().isOk());
   }
 
   @Test
   public void deletePerson_shouldReturnNotFound() throws Exception {
-    doThrow(NoSuchElementException.class).when(personService).deletePerson(any());
-    mockMvc.perform(delete("/persons/1")).andExpect(status().isNotFound());
+    doThrow(NoSuchElementException.class).when(personService).deletePerson(any(), any());
+    mockMvc.perform(delete("/persons/John/Boyd")).andExpect(status().isNotFound());
   }
 
   @Test

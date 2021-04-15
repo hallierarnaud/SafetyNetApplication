@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -89,28 +90,30 @@ public class PersonServiceTest {
   public void deletePerson_shouldReturnOk () {
     // GIVEN
     Person person = new Person();
-    person.setId(1L);
-    when(personDAO.existById(anyLong())).thenReturn(TRUE);
+    person.setFirstName("John");
+    person.setLastName("Boyd");
+    when(personDAO.existByFirstAndLastName(anyString(), anyString())).thenReturn(TRUE);
 
     // WHEN
-    personService.deletePerson(person.getId());
+    personService.deletePerson(person.getFirstName(), person.getLastName());
 
     // THEN
-    verify(personDAO).deleteById(person.getId());
+    verify(personDAO).deleteByFirstAndLastName(person.getFirstName(), person.getLastName());
   }
 
   @Test
   public void deletePerson_shouldReturnNotFound () {
     // GIVEN
     Person person = new Person();
-    person.setId(1L);
+    person.setFirstName("John");
+    person.setLastName("Boyd");
 
     // WHEN
-    when(personDAO.existById(anyLong())).thenReturn(FALSE);
+    when(personDAO.existByFirstAndLastName(anyString(), anyString())).thenReturn(FALSE);
 
     // THEN
-    Throwable exception = assertThrows(NoSuchElementException.class, () -> personService.deletePerson(person.getId()));
-    assertEquals("person 1 doesn't exist", exception.getMessage());
+    Throwable exception = assertThrows(NoSuchElementException.class, () -> personService.deletePerson(person.getFirstName(), person.getLastName()));
+    assertEquals("John Boyd doesn't exist", exception.getMessage());
   }
 
   @Test

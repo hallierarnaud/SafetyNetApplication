@@ -58,8 +58,12 @@ public class PersonDAO {
     return personRepository.existsById(id);
   }
 
-  public void deleteById(Long id) {
-    personRepository.deleteById(id);
+  public Boolean existByFirstAndLastName(String firstName, String lastName) {
+    return personRepository.existsByFirstNameAndLastName(firstName, lastName);
+  }
+
+  public void deleteByFirstAndLastName(String firstName, String lastName) {
+    personRepository.deleteByFirstNameAndLastName(firstName, lastName);
   }
 
   public List<Person> findByLastName(String lastName) {
