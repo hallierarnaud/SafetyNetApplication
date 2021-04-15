@@ -61,15 +61,14 @@ public class PersonIT {
 
   @Test
   public void testDeletePerson_shouldReturnOk() throws Exception {
-    mockMvc.perform(delete("/persons/1"))
-            .andExpect(status().isOk());
+    mockMvc.perform(delete("/persons/John/Boyd"));
     mockMvc.perform(get("/persons/1"))
             .andExpect(status().isNotFound());
   }
 
   @Test
   public void testDeletePerson_shouldReturnNotFound() throws Exception {
-    mockMvc.perform(delete("/persons/100"))
+    mockMvc.perform(delete("/persons/Clark/Kent"))
             .andExpect(status().isNotFound());
   }
 
