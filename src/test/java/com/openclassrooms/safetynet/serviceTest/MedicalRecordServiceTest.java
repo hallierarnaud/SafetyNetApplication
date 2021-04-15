@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -97,28 +98,30 @@ public class MedicalRecordServiceTest {
   public void deleteMedicalRecord_shouldReturnOk () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
-    medicalRecord.setId(1L);
-    when(medicalRecordDAO.existById(anyLong())).thenReturn(TRUE);
+    medicalRecord.setFirstName("John");
+    medicalRecord.setLastName("Boyd");
+    when(medicalRecordDAO.existByFirstAndLastName(anyString(), anyString())).thenReturn(TRUE);
 
     // WHEN
-    medicalRecordService.deleteMedicalRecord(medicalRecord.getId());
+    medicalRecordService.deleteMedicalRecord(medicalRecord.getFirstName(), medicalRecord.getLastName());
 
     // THEN
-    verify(medicalRecordDAO).deleteById(medicalRecord.getId());
+    verify(medicalRecordDAO).deleteByFirstAndLastName(medicalRecord.getFirstName(), medicalRecord.getLastName());
   }
 
   @Test
   public void deleteMedicalRecord_shouldReturnNotFound () {
     // GIVEN
     MedicalRecord medicalRecord = new MedicalRecord();
-    medicalRecord.setId(1L);
+    medicalRecord.setFirstName("John");
+    medicalRecord.setLastName("Boyd");
 
     // WHEN
-    when(medicalRecordDAO.existById(anyLong())).thenReturn(FALSE);
+    when(medicalRecordDAO.existByFirstAndLastName(anyString(), anyString())).thenReturn(FALSE);
 
     // THEN
-    Throwable exception = assertThrows(NoSuchElementException.class, () -> medicalRecordService.deleteMedicalRecord(medicalRecord.getId()));
-    assertEquals("medicalrecord 1 doesn't exist", exception.getMessage());
+    Throwable exception = assertThrows(NoSuchElementException.class, () -> medicalRecordService.deleteMedicalRecord(medicalRecord.getFirstName(), medicalRecord.getLastName()));
+    assertEquals("medicalrecord of John Boyd doesn't exist", exception.getMessage());
   }
 
   @Test

@@ -90,14 +90,14 @@ public class MedicalRecordControllerTest {
 
   @Test
   public void deleteMedicalRecord_shouldReturnOk() throws Exception {
-    doNothing().when(medicalRecordService).deleteMedicalRecord(any());
-    mockMvc.perform(delete("/medicalrecords/1")).andExpect(status().isOk());
+    doNothing().when(medicalRecordService).deleteMedicalRecord(any(), any());
+    mockMvc.perform(delete("/medicalrecords/John/Boyd")).andExpect(status().isOk());
   }
 
   @Test
   public void deleteMedicalRecord_shouldReturnNotFound() throws Exception {
-    doThrow(NoSuchElementException.class).when(medicalRecordService).deleteMedicalRecord(any());
-    mockMvc.perform(delete("/medicalrecords/1")).andExpect(status().isNotFound());
+    doThrow(NoSuchElementException.class).when(medicalRecordService).deleteMedicalRecord(any(), any());
+    mockMvc.perform(delete("/medicalrecords/John/Boyd")).andExpect(status().isNotFound());
   }
 
   @Test

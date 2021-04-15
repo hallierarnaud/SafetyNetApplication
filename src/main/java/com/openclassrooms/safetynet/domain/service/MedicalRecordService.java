@@ -43,11 +43,11 @@ public class MedicalRecordService {
             .collect(Collectors.toList());
   }
 
-  public void deleteMedicalRecord(final Long id) {
-    if (!medicalRecordDAO.existById(id)) {
-      throw new NoSuchElementException("medicalrecord " + id + " doesn't exist");
+  public void deleteMedicalRecord(final String firstName, final String lastName) {
+    if (!medicalRecordDAO.existByFirstAndLastName(firstName, lastName)) {
+      throw new NoSuchElementException("medicalrecord of " + firstName + " " + lastName + " doesn't exist");
     }
-    medicalRecordDAO.deleteById(id);
+    medicalRecordDAO.deleteByFirstAndLastName(firstName, lastName);
   }
 
   public MedicalRecord updateMedicalRecord(final Long id, MedicalRecordAddOrUpdateRequest medicalRecordUpdateRequest) {

@@ -65,8 +65,12 @@ public class MedicalRecordDAO {
     return medicalRecordRepository.existsById(id);
   }
 
-  public void deleteById(Long id) {
-    medicalRecordRepository.deleteById(id);
+  public Boolean existByFirstAndLastName(String firstName, String lastName) {
+    return medicalRecordRepository.existsByPersonEntity_FirstNameAndPersonEntity_LastName(firstName, lastName);
+  }
+
+  public void deleteByFirstAndLastName(String firstName, String lastName) {
+    medicalRecordRepository.deleteByPersonEntity_FirstNameAndPersonEntity_LastName(firstName, lastName);
   }
 
 }

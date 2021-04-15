@@ -56,13 +56,13 @@ public class MedicalRecordController {
     }
   }
 
-  @DeleteMapping("/medicalrecords/{id}")
-  public void deleteMedicalRecordById(@PathVariable("id") long id) {
+  @DeleteMapping("/medicalrecords/{firstName}/{lastName}")
+  public void deleteMedicalRecordByFirstAndLastName(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
     try {
-      medicalRecordService.deleteMedicalRecord(id);
-      throw new ResponseStatusException(HttpStatus.OK, "medicalrecord " + id + " was deleted");
+      medicalRecordService.deleteMedicalRecord(firstName, lastName);
+      throw new ResponseStatusException(HttpStatus.OK, "medicalrecord of " + firstName + " " + lastName + " was deleted");
     } catch (NoSuchElementException e) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "medicalrecord " + id + " doesn't exist");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "medicalrecord of " + firstName + " " + lastName + " doesn't exist");
     }
   }
 
