@@ -47,6 +47,8 @@ public class PersonDAO {
 
   public Person addSimplePerson(Person person) {
     PersonEntity personEntity = new PersonEntity();
+    personEntity.setFirstName(person.getFirstName());
+    personEntity.setLastName(person.getLastName());
     mapDAO.updatePersonEntityWithPerson(personEntity, person);
     personRepository.save(personEntity);
     return person;

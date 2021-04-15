@@ -84,6 +84,8 @@ public class PersonService {
     }
     Person person = new Person();
     person.setId(personAddRequest.getId());
+    person.setFirstName(personAddRequest.getFirstName());
+    person.setLastName(personAddRequest.getLastName());
     mapService.updatePersonWithPersonRequest(person, personAddRequest);
     return personDAO.addSimplePerson(person);
   }

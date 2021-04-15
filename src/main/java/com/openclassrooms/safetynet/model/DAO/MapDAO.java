@@ -25,8 +25,6 @@ public class MapDAO {
   }
 
   public PersonEntity updatePersonEntityWithPerson (PersonEntity personEntity, Person person) {
-    personEntity.setFirstName(person.getFirstName());
-    personEntity.setLastName(person.getLastName());
     personEntity.setPhone(person.getPhone());
     personEntity.setZip(person.getZip());
     personEntity.setAddress(person.getAddress());

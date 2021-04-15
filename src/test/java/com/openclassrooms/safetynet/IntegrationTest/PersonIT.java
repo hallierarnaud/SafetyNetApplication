@@ -76,13 +76,13 @@ public class PersonIT {
   @Test
   public void testUpdatePerson_shouldReturnOk() throws Exception {
     mockMvc.perform(get("/persons/1"))
-            .andExpect(jsonPath("$.firstName", is("John")));
+            .andExpect(jsonPath("$.city", is("Culver")));
     mockMvc.perform(put("/persons/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"id\": \"1\", \"firstName\":\"Bart\",\"lastName\":\"Simpson\",\"address\":\"1509 Culver St\",\"city\":\"Springville\",\"zip\":\"97451\",\"phone\":\"555-555\",\"email\":\"simpson@email.com\"}"))
             .andExpect(status().isOk());
     mockMvc.perform(get("/persons/1"))
-            .andExpect(jsonPath("$.firstName", is("Bart")));
+            .andExpect(jsonPath("$.city", is("Springville")));
   }
 
   @Test

@@ -29,8 +29,6 @@ public class MapService {
   }
 
   public Person updatePersonWithPersonRequest(Person person, PersonAddOrUpdateRequest personAddOrUpdateRequest) {
-    person.setFirstName(personAddOrUpdateRequest.getFirstName());
-    person.setLastName(personAddOrUpdateRequest.getLastName());
     person.setPhone(personAddOrUpdateRequest.getPhone());
     person.setZip(personAddOrUpdateRequest.getZip());
     person.setAddress(personAddOrUpdateRequest.getAddress());
