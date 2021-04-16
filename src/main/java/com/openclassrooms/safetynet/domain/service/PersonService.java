@@ -94,6 +94,10 @@ public class PersonService {
     return personDAO.findByLastName(lastName);
   }
 
+  public List<Person> getPersonsByFireStationNumber(String stationNumber) {
+    return personDAO.getPersonsByFireStationNumber(stationNumber);
+  }
+
   public FireStationEntity getPersonFireStation(Long id) {
     PersonEntity person = personRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException());

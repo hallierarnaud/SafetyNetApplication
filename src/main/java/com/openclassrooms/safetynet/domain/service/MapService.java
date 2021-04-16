@@ -5,6 +5,7 @@ import com.openclassrooms.safetynet.controller.DTO.FireStationResponse;
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
 import com.openclassrooms.safetynet.domain.object.FireStation;
 import com.openclassrooms.safetynet.domain.object.MedicalRecord;
@@ -26,6 +27,15 @@ public class MapService {
     personResponse.setCity(person.getCity());
     personResponse.setEmail(person.getEmail());
     return personResponse;
+  }
+
+  public PersonByFireStationResponse convertPersonToPersonByFireStationResponse(Person person) {
+    PersonByFireStationResponse personByFireStationResponse = new PersonByFireStationResponse();
+    personByFireStationResponse.setFirstName(person.getFirstName());
+    personByFireStationResponse.setLastName(person.getLastName());
+    personByFireStationResponse.setAddress(person.getAddress());
+    personByFireStationResponse.setPhone(person.getPhone());
+    return personByFireStationResponse;
   }
 
   public Person updatePersonWithPersonRequest(Person person, PersonAddOrUpdateRequest personAddOrUpdateRequest) {

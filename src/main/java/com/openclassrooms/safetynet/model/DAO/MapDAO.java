@@ -7,9 +7,9 @@ import com.openclassrooms.safetynet.model.entity.FireStationEntity;
 import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 public class MapDAO {
 
   public Person updatePersonWithPersonEntity (Person person, PersonEntity personEntity) {

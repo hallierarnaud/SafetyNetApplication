@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,7 +48,7 @@ public class FireStationEntity {
     return stationNumber.concat(": ") + String.join(", ", addresses);
   }
 
-  @OneToMany(mappedBy = "fireStationEntity")
+  @OneToMany(mappedBy = "fireStationEntity", orphanRemoval = true, cascade = CascadeType.ALL)
   List<PersonEntity> personEntities;
 
 }

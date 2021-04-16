@@ -15,6 +15,8 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
   @Transactional
   void deleteByFirstNameAndLastName(String firstName, String lastName);
 
+  List<PersonEntity> findAllByFireStationEntityStationNumber(String stationNumber);
+
   List<PersonEntity> findByLastName(String lastName);
 
 }

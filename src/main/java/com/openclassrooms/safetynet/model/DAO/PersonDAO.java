@@ -66,6 +66,18 @@ public class PersonDAO {
     personRepository.deleteByFirstNameAndLastName(firstName, lastName);
   }
 
+  public List<Person> getPersonsByFireStationNumber(String stationNumber) {
+    List<PersonEntity> personEntities = personRepository.findAllByFireStationEntityStationNumber(stationNumber);
+    return personEntities.stream().map((personEntity) -> {
+      Person person = new Person();
+      person.setFirstName(personEntity.getFirstName());
+      person.setLastName(personEntity.getLastName());
+      person.setAddress(personEntity.getAddress());
+      person.setPhone(personEntity.getPhone());
+      return person;
+    }).collect(Collectors.toList());
+  }
+
   public List<Person> findByLastName(String lastName) {
     List<PersonEntity> personEntities = personRepository.findByLastName(lastName);
     return personEntities.stream().map((personEntity) -> {
