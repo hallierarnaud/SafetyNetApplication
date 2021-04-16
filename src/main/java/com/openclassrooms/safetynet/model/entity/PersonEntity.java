@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -38,5 +39,8 @@ public class PersonEntity {
 
   @OneToOne(fetch = FetchType.LAZY, mappedBy = "personEntity", orphanRemoval = true, cascade = CascadeType.ALL)
   MedicalRecordEntity medicalRecordEntity;
+
+  @ManyToOne
+  FireStationEntity fireStationEntity;
 
 }

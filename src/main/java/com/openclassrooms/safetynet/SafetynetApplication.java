@@ -1,10 +1,11 @@
 package com.openclassrooms.safetynet;
 
-import com.openclassrooms.safetynet.model.entity.PersonEntity;
 import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
 import com.openclassrooms.safetynet.domain.service.DataImportation.FireStationDataImportation;
 import com.openclassrooms.safetynet.domain.service.DataImportation.MedicalRecordDataImportation;
 import com.openclassrooms.safetynet.domain.service.DataImportation.PersonDataImportation;
+import com.openclassrooms.safetynet.model.entity.FireStationEntity;
+import com.openclassrooms.safetynet.model.entity.PersonEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -40,8 +41,8 @@ public class SafetynetApplication implements ApplicationRunner {
   @Override
   public void run(ApplicationArguments args) throws Exception {
     //dataReader.getData(INPUT_DATA_PATH);
-    List<PersonEntity> personList = personDataImportation.getPersonList(INPUT_DATA_PATH);
-    fireStationDataImportation.getFireStationList(INPUT_DATA_PATH);
+    List<FireStationEntity> fireStationList = fireStationDataImportation.getFireStationList(INPUT_DATA_PATH);
+    List<PersonEntity> personList = personDataImportation.getPersonList(INPUT_DATA_PATH, fireStationList);
     medicalRecordDataImportation.getMedicalRecordList(INPUT_DATA_PATH, personList);
   }
 

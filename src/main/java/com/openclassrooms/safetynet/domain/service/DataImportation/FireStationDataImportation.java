@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import lombok.Data;
 
@@ -24,7 +26,7 @@ public class FireStationDataImportation {
 
   private DataReader dataReader = new DataReader();
 
-  public void getFireStationList(String filePath) throws IOException {
+  public List<FireStationEntity> getFireStationList(String filePath) throws IOException {
     Any fireStationAny = dataReader.getData(filePath).get("firestations");
     Map<String, FireStationEntity> fireStationMap = new HashMap<>();
     fireStationAny.forEach(anyStation -> {
@@ -35,6 +37,6 @@ public class FireStationDataImportation {
     });
     List<FireStationEntity> fireStationEntities = new ArrayList<>(fireStationMap.values());
     fireStationEntities.forEach(fireStation -> System.out.println("Firestation " + fireStation.toString()));
-    fireStationRepository.saveAll(fireStationEntities);
+    return StreamSupport.stream(fireStationRepository.saveAll(fireStationEntities).spliterator(), false).collect(Collectors.toList());
   }
 }

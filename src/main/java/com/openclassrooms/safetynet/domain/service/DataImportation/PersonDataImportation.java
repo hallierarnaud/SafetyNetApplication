@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.domain.service.DataImportation;
 
 import com.jsoniter.any.Any;
+import com.openclassrooms.safetynet.model.entity.FireStationEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
 import com.openclassrooms.safetynet.model.repository.PersonRepository;
 
@@ -24,10 +25,14 @@ public class PersonDataImportation {
 
   private DataReader dataReader = new DataReader();
 
-  public List<PersonEntity> getPersonList(String filePath) throws IOException {
+  public List<PersonEntity> getPersonList(String filePath, List<FireStationEntity> fireStationEntities) throws IOException {
     Any personAny = dataReader.getData(filePath).get("persons");
     List<PersonEntity> personEntities = new ArrayList<>();
-    personAny.forEach(a -> personEntities.add(PersonEntity.builder()
+    personAny.forEach(a -> {
+      FireStationEntity f = fireStationEntities.stream()
+              .filter(fireStation -> { return fireStation.getAddresses().contains(a.get("address").toString()); })
+              .findFirst().orElse(null);
+      personEntities.add(PersonEntity.builder()
             .firstName(a.get("firstName").toString())
             .address(a.get("address").toString())
             .city(a.get("city").toString())
@@ -35,7 +40,9 @@ public class PersonDataImportation {
             .phone(a.get("phone").toString())
             .zip(a.get("zip").toString())
             .email(a.get("email").toString())
-            .build()));
+            .fireStationEntity(f)
+            .build());
+    });
     return StreamSupport.stream(personRepository.saveAll(personEntities).spliterator(),false).collect(Collectors.toList());
   }
 
