@@ -70,6 +70,7 @@ public class PersonDAO {
     List<PersonEntity> personEntities = personRepository.findAllByFireStationEntityStationNumber(stationNumber);
     return personEntities.stream().map((personEntity) -> {
       Person person = new Person();
+      person.setId(personEntity.getId());
       person.setFirstName(personEntity.getFirstName());
       person.setLastName(personEntity.getLastName());
       person.setAddress(personEntity.getAddress());
@@ -78,7 +79,7 @@ public class PersonDAO {
     }).collect(Collectors.toList());
   }
 
-  public List<Person> findByLastName(String lastName) {
+  /*public List<Person> findByLastName(String lastName) {
     List<PersonEntity> personEntities = personRepository.findByLastName(lastName);
     return personEntities.stream().map((personEntity) -> {
       Person person = new Person();
@@ -86,6 +87,6 @@ public class PersonDAO {
       person.setLastName(personEntity.getLastName());
       return person;
     }).collect(Collectors.toList());
-  }
+  }*/
 
 }

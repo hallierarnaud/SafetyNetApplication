@@ -1,13 +1,14 @@
 package com.openclassrooms.safetynet.controller.DTO;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
 public class PersonByFireStationResponse {
 
-  private String firstName;
-  private String lastName;
-  private String address;
-  private String phone;
+  private List<ShortPersonResponse> personsByFireStation;
+  private int minorNumber;
+  private int majorNumber;
 
 }

@@ -3,14 +3,13 @@ package com.openclassrooms.safetynet.domain.service;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
-import com.openclassrooms.safetynet.model.entity.FireStationEntity;
-import com.openclassrooms.safetynet.model.entity.PersonEntity;
-import com.openclassrooms.safetynet.model.repository.FireStationRepository;
-import com.openclassrooms.safetynet.model.repository.PersonRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -24,15 +23,18 @@ import lombok.Data;
 @Service
 public class PersonService {
 
-  // TODO : personRepository pourra être supprimer une fois que le personDAO fera le job
-  @Autowired
+  // TODO : Repository pourront être supprimés une fois que les DAO feront le job
+  /*@Autowired
   private PersonRepository personRepository;
+
+  @Autowired
+  private FireStationRepository fireStationRepository;*/
 
   @Autowired
   private PersonDAO personDAO;
 
   @Autowired
-  private FireStationRepository fireStationRepository;
+  private MedicalRecordService medicalRecordService;
 
   @Autowired
   private MapService mapService;
@@ -90,15 +92,31 @@ public class PersonService {
     return personDAO.addSimplePerson(person);
   }
 
-  public List<Person> findByLastNameLike(String lastName) {
-    return personDAO.findByLastName(lastName);
-  }
-
   public List<Person> getPersonsByFireStationNumber(String stationNumber) {
     return personDAO.getPersonsByFireStationNumber(stationNumber);
   }
 
-  public FireStationEntity getPersonFireStation(Long id) {
+  public int countMinorByFireStation(String stationNumber) {
+    int minorNumber= 0;
+    List<Person> personByFireStationList = personDAO.getPersonsByFireStationNumber(stationNumber);
+    for (Person person : personByFireStationList) {
+      LocalDate currentDate = LocalDate.now();
+      DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+      String stringPersonBirthDate = medicalRecordService.getMedicalRecord(person.getId()).getBirthdate();
+      LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
+      Period personAge = Period.between(datePersonBirthDate, currentDate);
+      if (personAge.getYears() < 18.0) {
+        minorNumber++;
+      }
+    }
+    return minorNumber;
+  }
+
+  /*public List<Person> findByLastNameLike(String lastName) {
+    return personDAO.findByLastName(lastName);
+  }*/
+
+  /*public FireStationEntity getPersonFireStation(Long id) {
     PersonEntity person = personRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException());
     String personAddress = person.getAddress();
@@ -107,6 +125,6 @@ public class PersonService {
             .filter(fireStation -> fireStation.getAddresses().contains(personAddress))
             .findFirst()
             .orElseThrow(() -> new NoSuchElementException());
-  }
+  }*/
 
 }

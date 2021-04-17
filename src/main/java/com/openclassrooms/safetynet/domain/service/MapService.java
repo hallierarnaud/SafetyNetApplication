@@ -7,14 +7,22 @@ import com.openclassrooms.safetynet.controller.DTO.MedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
+import com.openclassrooms.safetynet.controller.DTO.ShortPersonResponse;
 import com.openclassrooms.safetynet.domain.object.FireStation;
 import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MapService {
+
+  @Autowired
+  private PersonService personService;
 
   public PersonResponse convertPersonToPersonResponse(Person person) {
     PersonResponse personResponse = new PersonResponse();
@@ -29,12 +37,21 @@ public class MapService {
     return personResponse;
   }
 
-  public PersonByFireStationResponse convertPersonToPersonByFireStationResponse(Person person) {
+  public PersonByFireStationResponse convertPersonToPersonByFireStationResponse(String stationNumber) {
+    List<Person> personByFireStationList = personService.getPersonsByFireStationNumber(stationNumber);
+    List<ShortPersonResponse> shortPersonResponseList = new ArrayList<>();
+    for (Person personByFireStation : personByFireStationList) {
+      ShortPersonResponse shortPersonResponse = new ShortPersonResponse();
+      shortPersonResponse.setFirstName(personByFireStation.getFirstName());
+      shortPersonResponse.setLastName(personByFireStation.getLastName());
+      shortPersonResponse.setAddress(personByFireStation.getAddress());
+      shortPersonResponse.setPhone(personByFireStation.getPhone());
+      shortPersonResponseList.add(shortPersonResponse);
+    }
     PersonByFireStationResponse personByFireStationResponse = new PersonByFireStationResponse();
-    personByFireStationResponse.setFirstName(person.getFirstName());
-    personByFireStationResponse.setLastName(person.getLastName());
-    personByFireStationResponse.setAddress(person.getAddress());
-    personByFireStationResponse.setPhone(person.getPhone());
+    personByFireStationResponse.setPersonsByFireStation(shortPersonResponseList);
+    personByFireStationResponse.setMinorNumber(personService.countMinorByFireStation(stationNumber));
+    personByFireStationResponse.setMajorNumber(personByFireStationList.size() - personByFireStationResponse.getMinorNumber());
     return personByFireStationResponse;
   }
 
