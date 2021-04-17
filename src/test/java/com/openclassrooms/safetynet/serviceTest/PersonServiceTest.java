@@ -1,8 +1,9 @@
 package com.openclassrooms.safetynet.serviceTest;
 
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
+import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
-import com.openclassrooms.safetynet.domain.service.MapService;
+import com.openclassrooms.safetynet.domain.service.MedicalRecordService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 
@@ -36,7 +37,7 @@ public class PersonServiceTest {
   private PersonDAO personDAO;
 
   @Mock
-  private MapService mapService;
+  private MedicalRecordService medicalRecordService;
 
   @InjectMocks
   private PersonService personService;
@@ -173,6 +174,30 @@ public class PersonServiceTest {
 
     // THEN
     assertThrows(NoSuchElementException.class, () -> personService.getPerson(person.getId()));
+  }
+
+  @Test
+  public void createPersonByFireStationResponse_shouldReturnOk () {
+    // GIVEN
+    Person person = new Person();
+    person.setId(1L);
+    person.setFirstName("Homer");
+    List<Person> personByFireStationList = new ArrayList<>();
+    personByFireStationList.add(person);
+    when(personDAO.getPersonsByFireStationNumber(anyString())).thenReturn(personByFireStationList);
+    MedicalRecord medicalRecord = new MedicalRecord();
+    medicalRecord.setBirthdate("01/01/2020");
+    when(medicalRecordService.getMedicalRecord(anyLong())).thenReturn(medicalRecord);
+
+    // WHEN
+    String expectedFirstName = personService.createPersonByFireStationResponse("1").getPersonsByFireStation().get(0).getFirstName();
+    int expectedMinorNumber = personService.createPersonByFireStationResponse("1").getMinorNumber();
+
+    // THEN
+    assertEquals("Homer", expectedFirstName);
+    assertEquals(1, expectedMinorNumber);
+    verify(personDAO, times(2)).getPersonsByFireStationNumber(anyString());
+    verify(medicalRecordService, times (2)).getMedicalRecord(anyLong());
   }
 
 }
