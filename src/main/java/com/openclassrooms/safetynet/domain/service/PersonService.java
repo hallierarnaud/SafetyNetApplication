@@ -1,6 +1,8 @@
 package com.openclassrooms.safetynet.domain.service;
 
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
+import com.openclassrooms.safetynet.controller.DTO.ShortPersonResponse;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -92,24 +95,31 @@ public class PersonService {
     return personDAO.addSimplePerson(person);
   }
 
-  public List<Person> getPersonsByFireStationNumber(String stationNumber) {
-    return personDAO.getPersonsByFireStationNumber(stationNumber);
-  }
-
-  public int countMinorByFireStation(String stationNumber) {
+  public PersonByFireStationResponse createPersonByFireStationResponse(String stationNumber) {
     int minorNumber= 0;
     List<Person> personByFireStationList = personDAO.getPersonsByFireStationNumber(stationNumber);
-    for (Person person : personByFireStationList) {
+    List<ShortPersonResponse> shortPersonResponseList = new ArrayList<>();
+    for (Person personByFireStation : personByFireStationList) {
+      ShortPersonResponse shortPersonResponse = new ShortPersonResponse();
+      shortPersonResponse.setFirstName(personByFireStation.getFirstName());
+      shortPersonResponse.setLastName(personByFireStation.getLastName());
+      shortPersonResponse.setAddress(personByFireStation.getAddress());
+      shortPersonResponse.setPhone(personByFireStation.getPhone());
+      shortPersonResponseList.add(shortPersonResponse);
       LocalDate currentDate = LocalDate.now();
       DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
-      String stringPersonBirthDate = medicalRecordService.getMedicalRecord(person.getId()).getBirthdate();
+      String stringPersonBirthDate = medicalRecordService.getMedicalRecord(personByFireStation.getId()).getBirthdate();
       LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
       Period personAge = Period.between(datePersonBirthDate, currentDate);
       if (personAge.getYears() < 18.0) {
         minorNumber++;
       }
     }
-    return minorNumber;
+    PersonByFireStationResponse personByFireStationResponse = new PersonByFireStationResponse();
+    personByFireStationResponse.setPersonsByFireStation(shortPersonResponseList);
+    personByFireStationResponse.setMinorNumber(minorNumber);
+    personByFireStationResponse.setMajorNumber(personByFireStationList.size() - minorNumber);
+    return personByFireStationResponse;
   }
 
   /*public List<Person> findByLastNameLike(String lastName) {
