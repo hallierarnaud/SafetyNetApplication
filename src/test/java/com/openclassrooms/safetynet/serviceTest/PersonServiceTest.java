@@ -304,4 +304,22 @@ public class PersonServiceTest {
     verify(personDAO, times(6)).getPersonMedicalRecord(anyLong());
   }
 
+  @Test
+  public void getEmailsByCity_shouldReturnOk () {
+    // GIVEN
+    Person person = new Person();
+    person.setId(1L);
+    person.setEmail("simpson@email.fr");
+    List<Person> emailByCityList = new ArrayList<>();
+    emailByCityList.add(person);
+    when(personDAO.getPersonByCity(anyString())).thenReturn(emailByCityList);
+
+    // WHEN
+    String expectedEmail = personService.getEmailsByCity(anyString()).get(0).getEmail();
+
+    // THEN
+    assertEquals("simpson@email.fr", expectedEmail);
+    verify(personDAO).getPersonByCity(anyString());
+  }
+
 }

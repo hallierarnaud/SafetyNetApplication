@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.controller.endpoint;
 
 import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
+import com.openclassrooms.safetynet.controller.DTO.EmailResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
@@ -120,6 +121,11 @@ public class PersonController {
   @GetMapping("/personInfo")
   public List<PersonInfoResponse> getPersonsInfo(@RequestParam("lastName") String lastName) {
     return personService.getPersonInfo(lastName);
+  }
+
+  @GetMapping("/communityEmail")
+  public List<EmailResponse> getEmailsByCity(@RequestParam("city") String city) {
+    return personService.getEmailsByCity(city);
   }
 
   /*@GetMapping("/persons/name")

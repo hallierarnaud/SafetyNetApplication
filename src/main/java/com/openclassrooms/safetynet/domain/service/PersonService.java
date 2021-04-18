@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.domain.service;
 
 import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
+import com.openclassrooms.safetynet.controller.DTO.EmailResponse;
 import com.openclassrooms.safetynet.controller.DTO.FirstLastNameAndAgeResponse;
 import com.openclassrooms.safetynet.controller.DTO.NamePhoneAgeAndMedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
@@ -201,6 +202,17 @@ public class PersonService {
       personInfoResponseList.add(personInfoResponse);
     }
     return personInfoResponseList;
+  }
+
+  public List<EmailResponse> getEmailsByCity(String city) {
+    List<Person> personByCityList = personDAO.getPersonByCity(city);
+    List<EmailResponse> emailByCityList = new ArrayList<>();
+    for (Person personByCity : personByCityList) {
+      EmailResponse emailResponse = new EmailResponse();
+      emailResponse.setEmail(personByCity.getEmail());
+      emailByCityList.add(emailResponse);
+    }
+    return emailByCityList;
   }
 
 }

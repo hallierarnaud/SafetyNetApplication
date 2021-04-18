@@ -166,4 +166,13 @@ public class PersonControllerTest {
             .andExpect(status().isOk());
   }
 
+  @Test
+  public void getEmailsByCity_shouldReturnOk() throws Exception {
+    when(personService.getEmailsByCity(anyString())).thenReturn(new ArrayList<>());
+    mockMvc.perform(get("/communityEmail")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("city", "Culver"))
+            .andExpect(status().isOk());
+  }
+
 }

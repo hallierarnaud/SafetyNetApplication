@@ -137,4 +137,13 @@ public class PersonIT {
             .andExpect(jsonPath("$[0].lastName", is("Boyd")));
   }
 
+  @Test
+  public void testGetEmailsByCity_shouldReturnOk() throws Exception {
+    mockMvc.perform(get("/communityEmail")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("city", "Culver"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].email", is("drk@email.com")));
+  }
+
 }
