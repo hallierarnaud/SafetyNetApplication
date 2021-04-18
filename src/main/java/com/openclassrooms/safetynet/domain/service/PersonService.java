@@ -20,8 +20,10 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -181,6 +183,40 @@ public class PersonService {
     personByAddressResponse.setNamePhoneAgeAndMedicalRecordResponseList(namePhoneAgeAndMedicalRecordList);
     personByAddressResponse.setStationNumber(personDAO.getPersonFireStation(personByAddressList.get(0).getId()).getStationNumber());
     return personByAddressResponse;
+  }
+
+  public List<List<List<NamePhoneAgeAndMedicalRecordResponse>>> getFamiliesByFireStations(List<Integer> stationNumberList) {
+    Set<String> addressSet = new HashSet<>();
+    List<List<List<NamePhoneAgeAndMedicalRecordResponse>>> familiesByFireStations = new ArrayList<>();
+    for (Integer stationNumber : stationNumberList) {
+      List<List<NamePhoneAgeAndMedicalRecordResponse>> familiesByFireStationNumber = new ArrayList<>();
+      List<Person> personsByFireStationNumber = personDAO.getPersonsByFireStationNumber(String.valueOf(stationNumber));
+      for (Person personByFireStation : personsByFireStationNumber) {
+        addressSet.add(personByFireStation.getAddress());
+      }
+      for (String address : addressSet) {
+        List<Person> familyByFireStation = personDAO.getPersonByAddress(address);
+        List<NamePhoneAgeAndMedicalRecordResponse> namePhoneAgeAndMedicalRecordsByAddressByFireStationNumber = new ArrayList<>();
+        for (Person person : familyByFireStation) {
+          LocalDate currentDate = LocalDate.now();
+          DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+          String stringPersonBirthDate = personDAO.getPersonMedicalRecord(person.getId()).getBirthdate();
+          LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
+          Period personAge = Period.between(datePersonBirthDate, currentDate);
+          NamePhoneAgeAndMedicalRecordResponse namePhoneAgeAndMedicalRecordResponse = new NamePhoneAgeAndMedicalRecordResponse();
+          namePhoneAgeAndMedicalRecordResponse.setLastName(person.getLastName());
+          namePhoneAgeAndMedicalRecordResponse.setPhone(person.getPhone());
+          namePhoneAgeAndMedicalRecordResponse.setAge(personAge.getYears());
+          namePhoneAgeAndMedicalRecordResponse.setMedications(personDAO.getPersonMedicalRecord(person.getId()).getMedications());
+          namePhoneAgeAndMedicalRecordResponse.setAllergies(personDAO.getPersonMedicalRecord(person.getId()).getAllergies());
+          namePhoneAgeAndMedicalRecordsByAddressByFireStationNumber.add(namePhoneAgeAndMedicalRecordResponse);
+        }
+        familiesByFireStationNumber.add(namePhoneAgeAndMedicalRecordsByAddressByFireStationNumber);
+      }
+      familiesByFireStations.add(familiesByFireStationNumber);
+      addressSet.clear();
+    }
+    return familiesByFireStations;
   }
 
   public List<PersonInfoResponse> getPersonInfo(String lastName) {

@@ -129,6 +129,15 @@ public class PersonIT {
   }
 
   @Test
+  public void testGetFamiliesByFireStations_shouldReturnOk() throws Exception {
+    mockMvc.perform(get("/flood/stations")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("stations", "1,2"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].[0].[0].lastName", is("Walker")));
+  }
+
+  @Test
   public void testGetPersonInfo_shouldReturnOk() throws Exception {
     mockMvc.perform(get("/personInfo")
             .contentType(MediaType.APPLICATION_JSON)

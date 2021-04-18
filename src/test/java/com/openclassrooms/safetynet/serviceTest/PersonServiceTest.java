@@ -279,6 +279,42 @@ public class PersonServiceTest {
   }
 
   @Test
+  public void getFamiliesByFireStations_shouldReturnOk () {
+    // GIVEN
+    int stationNumber = 1;
+    List<Integer> stationNumberList = new ArrayList<>();
+    stationNumberList.add(stationNumber);
+    Person person = new Person();
+    person.setId(1L);
+    person.setLastName("Simpson");
+    person.setAddress("1st Springville road");
+    List<Person> personsByFireStationNumber = new ArrayList<>();
+    personsByFireStationNumber.add(person);
+    when(personDAO.getPersonsByFireStationNumber(anyString())).thenReturn(personsByFireStationNumber);
+    List<Person> familyByFireStation = new ArrayList<>();
+    familyByFireStation.add(person);
+    when(personDAO.getPersonByAddress(anyString())).thenReturn(familyByFireStation);
+    MedicalRecord medicalRecord = new MedicalRecord();
+    medicalRecord.setBirthdate("01/01/2000");
+    List<String> medications = Arrays.asList("aspirin", "ivermectine");
+    medicalRecord.setMedications(medications);
+    when(personDAO.getPersonMedicalRecord(anyLong())).thenReturn(medicalRecord);
+
+    // WHEN
+    String expectedLastName = personService.getFamiliesByFireStations(stationNumberList).get(0).get(0).get(0).getLastName();
+    int expectedAge = personService.getFamiliesByFireStations(stationNumberList).get(0).get(0).get(0).getAge();
+    String expectedMedication = personService.getFamiliesByFireStations(stationNumberList).get(0).get(0).get(0).getMedications().get(0);
+
+    // THEN
+    assertEquals("Simpson", expectedLastName);
+    assertEquals(21, expectedAge);
+    assertEquals("aspirin", expectedMedication);
+    verify(personDAO, times(3)).getPersonsByFireStationNumber(anyString());
+    verify(personDAO, times(3)).getPersonByAddress(anyString());
+    verify(personDAO, times(9)).getPersonMedicalRecord(anyLong());
+  }
+
+  @Test
   public void getPersonInfo_shouldReturnOk () {
     // GIVEN
     Person person = new Person();

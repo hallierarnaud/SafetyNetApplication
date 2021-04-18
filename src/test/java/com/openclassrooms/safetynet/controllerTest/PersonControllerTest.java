@@ -158,6 +158,15 @@ public class PersonControllerTest {
   }
 
   @Test
+  public void getFamiliesByFireStations_shouldReturnOk() throws Exception {
+    when(personService.getFamiliesByFireStations(any())).thenReturn(new ArrayList<>());
+    mockMvc.perform(get("/flood/stations")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("stations", "1,2"))
+            .andExpect(status().isOk());
+  }
+
+  @Test
   public void getPersonInfo_shouldReturnOk() throws Exception {
     when(personService.getPersonInfo(anyString())).thenReturn(new ArrayList<>());
     mockMvc.perform(get("/personInfo")

@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet.controller.endpoint;
 
 import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.EmailResponse;
+import com.openclassrooms.safetynet.controller.DTO.NamePhoneAgeAndMedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
@@ -116,6 +117,11 @@ public class PersonController {
   @GetMapping("/fire")
   public PersonByAddressResponse getPersonsByAddress(@RequestParam("address") String address) {
     return personService.getPersonsByAddress(address);
+  }
+
+  @GetMapping("/flood/stations")
+  public List<List<List<NamePhoneAgeAndMedicalRecordResponse>>> getFamiliesByFireStation(@RequestParam("stations") List<Integer> stationNumberList) {
+    return personService.getFamiliesByFireStations(stationNumberList);
   }
 
   @GetMapping("/personInfo")
