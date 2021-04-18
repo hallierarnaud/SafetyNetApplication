@@ -177,7 +177,7 @@ public class PersonServiceTest {
   }
 
   @Test
-  public void createPersonByFireStationResponse_shouldReturnOk () {
+  public void getPersonsByFireStation_shouldReturnOk () {
     // GIVEN
     Person person = new Person();
     person.setId(1L);
@@ -190,8 +190,8 @@ public class PersonServiceTest {
     when(medicalRecordService.getMedicalRecord(anyLong())).thenReturn(medicalRecord);
 
     // WHEN
-    String expectedFirstName = personService.createPersonByFireStationResponse("1").getPersonsByFireStation().get(0).getFirstName();
-    int expectedMinorNumber = personService.createPersonByFireStationResponse("1").getMinorNumber();
+    String expectedFirstName = personService.getPersonsByFireStation("1").getPersonsByFireStation().get(0).getFirstName();
+    int expectedMinorNumber = personService.getPersonsByFireStation("1").getMinorNumber();
 
     // THEN
     assertEquals("Homer", expectedFirstName);

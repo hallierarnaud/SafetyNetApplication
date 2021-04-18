@@ -95,7 +95,7 @@ public class PersonService {
     return personDAO.addSimplePerson(person);
   }
 
-  public PersonByFireStationResponse createPersonByFireStationResponse(String stationNumber) {
+  public PersonByFireStationResponse getPersonsByFireStation(String stationNumber) {
     int minorNumber= 0;
     List<Person> personByFireStationList = personDAO.getPersonsByFireStationNumber(stationNumber);
     List<ShortPersonResponse> shortPersonResponseList = new ArrayList<>();

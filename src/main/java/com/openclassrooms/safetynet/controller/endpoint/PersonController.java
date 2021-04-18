@@ -95,7 +95,7 @@ public class PersonController {
 
   @GetMapping("/firestation")
   public PersonByFireStationResponse getPersonsByFireStationNumber(@RequestParam("stationNumber") String stationNumber) {
-    return personService.createPersonByFireStationResponse(stationNumber);
+    return personService.getPersonsByFireStation(stationNumber);
   }
 
   /*@GetMapping("/persons/name")
