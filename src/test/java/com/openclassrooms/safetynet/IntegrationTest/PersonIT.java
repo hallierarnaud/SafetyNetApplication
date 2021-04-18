@@ -92,4 +92,13 @@ public class PersonIT {
             .andExpect(status().isUnprocessableEntity());
   }
 
+  @Test
+  public void testGetPersonsByFireStation_shouldReturnOk() throws Exception {
+    mockMvc.perform(get("/firestation")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("stationNumber", "1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.personsByFireStation.[0]firstName", is("Peter")));
+  }
+
 }
