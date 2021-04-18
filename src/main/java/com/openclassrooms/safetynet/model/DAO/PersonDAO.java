@@ -124,14 +124,4 @@ public class PersonDAO {
     return mapDAO.updateMedicalRecordWithMedicalRecordEntity(medicalRecord, medicalRecordEntity);
   }
 
-  /*public List<Person> findByLastName(String lastName) {
-    List<PersonEntity> personEntities = personRepository.findByLastName(lastName);
-    return personEntities.stream().map((personEntity) -> {
-      Person person = new Person();
-      person.setFirstName(personEntity.getFirstName());
-      person.setLastName(personEntity.getLastName());
-      return person;
-    }).collect(Collectors.toList());
-  }*/
-
 }

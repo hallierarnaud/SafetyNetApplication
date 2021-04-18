@@ -31,13 +31,6 @@ import lombok.Data;
 @Service
 public class PersonService {
 
-  // TODO : Repository pourront être supprimés une fois que les DAO feront le job
-  /*@Autowired
-  private PersonRepository personRepository;
-
-  @Autowired
-  private FireStationRepository fireStationRepository;*/
-
   @Autowired
   private PersonDAO personDAO;
 
@@ -187,9 +180,5 @@ public class PersonService {
     personByAddressResponse.setStationNumber(personDAO.getPersonFireStation(personByAddressList.get(0).getId()).getStationNumber());
     return personByAddressResponse;
   }
-
-  /*public List<Person> findByLastNameLike(String lastName) {
-    return personDAO.findByLastName(lastName);
-  }*/
 
 }

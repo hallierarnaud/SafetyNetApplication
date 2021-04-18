@@ -19,6 +19,4 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
   List<PersonEntity> findAllByAddressLike(String address);
 
-  //List<PersonEntity> findByLastName(String lastName);
-
 }
