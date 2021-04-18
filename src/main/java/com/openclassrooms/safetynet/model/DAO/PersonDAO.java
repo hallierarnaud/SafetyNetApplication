@@ -1,7 +1,13 @@
 package com.openclassrooms.safetynet.model.DAO;
 
+import com.openclassrooms.safetynet.domain.object.FireStation;
+import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
+import com.openclassrooms.safetynet.model.entity.FireStationEntity;
+import com.openclassrooms.safetynet.model.entity.MedicalRecordEntity;
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
+import com.openclassrooms.safetynet.model.repository.FireStationRepository;
+import com.openclassrooms.safetynet.model.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynet.model.repository.PersonRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +23,12 @@ public class PersonDAO {
 
   @Autowired
   private PersonRepository personRepository;
+
+  @Autowired
+  private MedicalRecordRepository medicalRecordRepository;
+
+  @Autowired
+  private FireStationRepository fireStationRepository;
 
   @Autowired
   MapDAO mapDAO;
@@ -79,15 +91,37 @@ public class PersonDAO {
     }).collect(Collectors.toList());
   }
 
-  public List<Person> getChildrenByAddress(String address) {
+  public List<Person> getPersonByAddress(String address) {
     List<PersonEntity> personEntities = personRepository.findAllByAddressLike(address);
     return personEntities.stream().map((personEntity) -> {
       Person person = new Person();
       person.setId(personEntity.getId());
       person.setFirstName(personEntity.getFirstName());
       person.setLastName(personEntity.getLastName());
+      person.setPhone(personEntity.getPhone());
       return person;
     }).collect(Collectors.toList());
+  }
+
+  public FireStation getPersonFireStation(Long id) {
+    PersonEntity person = personRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException());
+    String personAddress = person.getAddress();
+    FireStationEntity fireStationEntity = fireStationRepository.findAll()
+            .stream()
+            .filter(fireStation -> fireStation.getAddresses().contains(personAddress))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException());
+    FireStation fireStation = new FireStation();
+    return mapDAO.updateFireStationWithFireStationEntity(fireStation, fireStationEntity);
+  }
+
+  public MedicalRecord getPersonMedicalRecord(Long id) {
+    PersonEntity person = personRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException());
+    MedicalRecordEntity medicalRecordEntity = medicalRecordRepository.findByPersonEntityFirstNameAndPersonEntityLastName(person.getFirstName(), person.getLastName());
+    MedicalRecord medicalRecord = new MedicalRecord();
+    return mapDAO.updateMedicalRecordWithMedicalRecordEntity(medicalRecord, medicalRecordEntity);
   }
 
   /*public List<Person> findByLastName(String lastName) {

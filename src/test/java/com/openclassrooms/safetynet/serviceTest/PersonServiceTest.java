@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.serviceTest;
 
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
+import com.openclassrooms.safetynet.domain.object.FireStation;
 import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.domain.service.MapService;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -212,17 +214,17 @@ public class PersonServiceTest {
     person.setFirstName("Homer");
     List<Person> childrenByAddressList = new ArrayList<>();
     childrenByAddressList.add(person);
-    when(personDAO.getChildrenByAddress(anyString())).thenReturn(childrenByAddressList);
+    when(personDAO.getPersonByAddress(anyString())).thenReturn(childrenByAddressList);
     MedicalRecord medicalRecord = new MedicalRecord();
     medicalRecord.setBirthdate("01/01/2020");
     when(medicalRecordService.getMedicalRecord(anyLong())).thenReturn(medicalRecord);
 
     // WHEN
-    String expectedFirstName = personService.getChildrenByAddress(anyString()).getChildrenByAddress().get(0).getFirstName();
+    String expectedFirstName = personService.getChildrenByAddress(anyString()).getChildrenByAddressList().get(0).getFirstName();
 
     // THEN
     assertEquals("Homer", expectedFirstName);
-    verify(personDAO).getChildrenByAddress(anyString());
+    verify(personDAO).getPersonByAddress(anyString());
     verify(medicalRecordService).getMedicalRecord(anyLong());
   }
 
@@ -242,6 +244,38 @@ public class PersonServiceTest {
     // THEN
     assertEquals("555-555-5555", expectedPhone);
     verify(personDAO).getPersonsByFireStationNumber(anyString());
+  }
+
+  @Test
+  public void getPersonsByAddress_shouldReturnOk () {
+    // GIVEN
+    Person person = new Person();
+    person.setId(1L);
+    person.setLastName("Simpson");
+    List<Person> personsByAddressList = new ArrayList<>();
+    personsByAddressList.add(person);
+    when(personDAO.getPersonByAddress(anyString())).thenReturn(personsByAddressList);
+    MedicalRecord medicalRecord = new MedicalRecord();
+    medicalRecord.setBirthdate("01/01/2000");
+    List<String> medications = Arrays.asList("aspirin", "ivermectine");
+    medicalRecord.setMedications(medications);
+    when(personDAO.getPersonMedicalRecord(anyLong())).thenReturn(medicalRecord);
+    FireStation fireStation = new FireStation();
+    fireStation.setStationNumber("2");
+    when(personDAO.getPersonFireStation(anyLong())).thenReturn(fireStation);
+
+    // WHEN
+    String expectedLastName = personService.getPersonsByAddress(anyString()).getNamePhoneAgeAndMedicalRecordResponseList().get(0).getLastName();
+    int expectedAge = personService.getPersonsByAddress(anyString()).getNamePhoneAgeAndMedicalRecordResponseList().get(0).getAge();
+    String expectedMedication = personService.getPersonsByAddress(anyString()).getNamePhoneAgeAndMedicalRecordResponseList().get(0).getMedications().get(0);
+
+    // THEN
+    assertEquals("Simpson", expectedLastName);
+    assertEquals(21, expectedAge);
+    assertEquals("aspirin", expectedMedication);
+    verify(personDAO, times(3)).getPersonByAddress(anyString());
+    verify(personDAO, times(9)).getPersonMedicalRecord(anyLong());
+    verify(personDAO, times(3)).getPersonFireStation(anyLong());
   }
 
 }

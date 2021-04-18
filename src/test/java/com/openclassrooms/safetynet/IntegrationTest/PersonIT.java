@@ -119,4 +119,13 @@ public class PersonIT {
             .andExpect(jsonPath("$[0].phone", is("841-874-6513")));
   }
 
+  @Test
+  public void testGetPersonByAddress_shouldReturnOk() throws Exception {
+    mockMvc.perform(get("/fire")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("address", "892 Downing Ct"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.namePhoneAgeAndMedicalRecordResponseList.[0]lastName", is("Zemicks")));
+  }
+
 }

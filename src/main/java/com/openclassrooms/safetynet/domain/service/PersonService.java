@@ -1,10 +1,12 @@
 package com.openclassrooms.safetynet.domain.service;
 
 import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
-import com.openclassrooms.safetynet.controller.DTO.FirstAndLastNameResponse;
+import com.openclassrooms.safetynet.controller.DTO.FirstLastNameAndAgeResponse;
+import com.openclassrooms.safetynet.controller.DTO.NamePhoneAgeAndMedicalRecordResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
+import com.openclassrooms.safetynet.controller.DTO.PersonByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
-import com.openclassrooms.safetynet.controller.DTO.PhoneByFireStationResponse;
+import com.openclassrooms.safetynet.controller.DTO.PhoneResponse;
 import com.openclassrooms.safetynet.controller.DTO.ShortPersonResponse;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
@@ -126,9 +128,9 @@ public class PersonService {
   }
 
   public ChildrenByAddressResponse getChildrenByAddress(String address) {
-    List<Person> childrenByAddressList = personDAO.getChildrenByAddress(address);
-    List<FirstAndLastNameResponse> childrenFirstAndLastNameResponseList = new ArrayList<>();
-    List<FirstAndLastNameResponse> adultFirstAndLastNameResponseList = new ArrayList<>();
+    List<Person> childrenByAddressList = personDAO.getPersonByAddress(address);
+    List<FirstLastNameAndAgeResponse> childrenFirstLastNameAndAgeResponseList = new ArrayList<>();
+    List<FirstLastNameAndAgeResponse> adultFirstLastNameAndAgeResponseList = new ArrayList<>();
     for (Person childrenByAddress : childrenByAddressList) {
       LocalDate currentDate = LocalDate.now();
       DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
@@ -136,49 +138,61 @@ public class PersonService {
       LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
       Period personAge = Period.between(datePersonBirthDate, currentDate);
       if (personAge.getYears() < 18.0) {
-        FirstAndLastNameResponse firstAndLastNameResponse = new FirstAndLastNameResponse();
-        firstAndLastNameResponse.setFirstName(childrenByAddress.getFirstName());
-        firstAndLastNameResponse.setLastName(childrenByAddress.getLastName());
-        firstAndLastNameResponse.setAge(personAge.getYears());
-        childrenFirstAndLastNameResponseList.add(firstAndLastNameResponse);
+        FirstLastNameAndAgeResponse firstLastNameAndAgeResponse = new FirstLastNameAndAgeResponse();
+        firstLastNameAndAgeResponse.setFirstName(childrenByAddress.getFirstName());
+        firstLastNameAndAgeResponse.setLastName(childrenByAddress.getLastName());
+        firstLastNameAndAgeResponse.setAge(personAge.getYears());
+        childrenFirstLastNameAndAgeResponseList.add(firstLastNameAndAgeResponse);
       } else {
-        FirstAndLastNameResponse firstAndLastNameResponse = new FirstAndLastNameResponse();
-        firstAndLastNameResponse.setFirstName(childrenByAddress.getFirstName());
-        firstAndLastNameResponse.setLastName(childrenByAddress.getLastName());
-        firstAndLastNameResponse.setAge(personAge.getYears());
-        adultFirstAndLastNameResponseList.add(firstAndLastNameResponse);
+        FirstLastNameAndAgeResponse firstLastNameAndAgeResponse = new FirstLastNameAndAgeResponse();
+        firstLastNameAndAgeResponse.setFirstName(childrenByAddress.getFirstName());
+        firstLastNameAndAgeResponse.setLastName(childrenByAddress.getLastName());
+        firstLastNameAndAgeResponse.setAge(personAge.getYears());
+        adultFirstLastNameAndAgeResponseList.add(firstLastNameAndAgeResponse);
       }
     }
-    ChildrenByAddressResponse childrenByAddress = new ChildrenByAddressResponse();
-    childrenByAddress.setChildrenByAddress(childrenFirstAndLastNameResponseList);
-    childrenByAddress.setAdultByAddress(adultFirstAndLastNameResponseList);
-    return childrenByAddress;
+    ChildrenByAddressResponse childrenByAddressResponse = new ChildrenByAddressResponse();
+    childrenByAddressResponse.setChildrenByAddressList(childrenFirstLastNameAndAgeResponseList);
+    childrenByAddressResponse.setAdultByAddressList(adultFirstLastNameAndAgeResponseList);
+    return childrenByAddressResponse;
   }
 
-  public List<PhoneByFireStationResponse> getPhonesByFireStation(String stationNumber) {
+  public List<PhoneResponse> getPhonesByFireStation(String stationNumber) {
     List<Person> personByFireStationList = personDAO.getPersonsByFireStationNumber(stationNumber);
-    List<PhoneByFireStationResponse> phoneByFireStationList = new ArrayList<>();
+    List<PhoneResponse> phoneByFireStationList = new ArrayList<>();
     for (Person personByFireStation : personByFireStationList) {
-      PhoneByFireStationResponse phoneByFireStationResponse = new PhoneByFireStationResponse();
-      phoneByFireStationResponse.setPhone(personByFireStation.getPhone());
-      phoneByFireStationList.add(phoneByFireStationResponse);
+      PhoneResponse phoneResponse = new PhoneResponse();
+      phoneResponse.setPhone(personByFireStation.getPhone());
+      phoneByFireStationList.add(phoneResponse);
     }
     return phoneByFireStationList;
   }
 
+  public PersonByAddressResponse getPersonsByAddress(String address) {
+    List<Person> personByAddressList = personDAO.getPersonByAddress(address);
+    List<NamePhoneAgeAndMedicalRecordResponse> namePhoneAgeAndMedicalRecordList = new ArrayList<>();
+    for (Person personByAddress : personByAddressList) {
+      LocalDate currentDate = LocalDate.now();
+      DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+      String stringPersonBirthDate = personDAO.getPersonMedicalRecord(personByAddress.getId()).getBirthdate();
+      LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
+      Period personAge = Period.between(datePersonBirthDate, currentDate);
+      NamePhoneAgeAndMedicalRecordResponse namePhoneAgeAndMedicalRecordResponse = new NamePhoneAgeAndMedicalRecordResponse();
+      namePhoneAgeAndMedicalRecordResponse.setLastName(personByAddress.getLastName());
+      namePhoneAgeAndMedicalRecordResponse.setPhone(personByAddress.getPhone());
+      namePhoneAgeAndMedicalRecordResponse.setAge(personAge.getYears());
+      namePhoneAgeAndMedicalRecordResponse.setMedications(personDAO.getPersonMedicalRecord(personByAddress.getId()).getMedications());
+      namePhoneAgeAndMedicalRecordResponse.setAllergies(personDAO.getPersonMedicalRecord(personByAddress.getId()).getAllergies());
+      namePhoneAgeAndMedicalRecordList.add(namePhoneAgeAndMedicalRecordResponse);
+    }
+    PersonByAddressResponse personByAddressResponse = new PersonByAddressResponse();
+    personByAddressResponse.setNamePhoneAgeAndMedicalRecordResponseList(namePhoneAgeAndMedicalRecordList);
+    personByAddressResponse.setStationNumber(personDAO.getPersonFireStation(personByAddressList.get(0).getId()).getStationNumber());
+    return personByAddressResponse;
+  }
+
   /*public List<Person> findByLastNameLike(String lastName) {
     return personDAO.findByLastName(lastName);
-  }*/
-
-  /*public FireStationEntity getPersonFireStation(Long id) {
-    PersonEntity person = personRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException());
-    String personAddress = person.getAddress();
-    return fireStationRepository.findAll()
-            .stream()
-            .filter(fireStation -> fireStation.getAddresses().contains(personAddress))
-            .findFirst()
-            .orElseThrow(() -> new NoSuchElementException());
   }*/
 
 }

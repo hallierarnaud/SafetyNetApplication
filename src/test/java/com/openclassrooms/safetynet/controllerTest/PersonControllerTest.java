@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.controllerTest;
 
 import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
+import com.openclassrooms.safetynet.controller.DTO.PersonByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
 import com.openclassrooms.safetynet.controller.endpoint.PersonController;
 import com.openclassrooms.safetynet.domain.object.Person;
@@ -144,6 +145,15 @@ public class PersonControllerTest {
     mockMvc.perform(get("/phoneAlert")
             .contentType(MediaType.APPLICATION_JSON)
             .param("stationNumber", "1"))
+            .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getPersonByAddress_shouldReturnOk() throws Exception {
+    when(personService.getPersonsByAddress(anyString())).thenReturn(new PersonByAddressResponse());
+    mockMvc.perform(get("/fire")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("address", "1509 Culver St"))
             .andExpect(status().isOk());
   }
 

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class ChildrenByAddressResponse {
 
-  private List<FirstAndLastNameResponse> childrenByAddress;
-  private List<FirstAndLastNameResponse> adultByAddress;
+  private List<FirstLastNameAndAgeResponse> childrenByAddressList;
+  private List<FirstLastNameAndAgeResponse> adultByAddressList;
 
 }

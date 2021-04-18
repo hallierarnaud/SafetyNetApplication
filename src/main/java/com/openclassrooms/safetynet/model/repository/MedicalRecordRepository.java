@@ -11,6 +11,8 @@ public interface MedicalRecordRepository extends CrudRepository<MedicalRecordEnt
 
   Boolean existsByPersonEntity_FirstNameAndPersonEntity_LastName(String personEntity_firstName, String personEntity_lastName);
 
+  MedicalRecordEntity findByPersonEntityFirstNameAndPersonEntityLastName(String personEntity_firstName, String personEntity_lastName);
+
   @Transactional
   void deleteByPersonEntity_FirstNameAndPersonEntity_LastName(String personEntity_firstName, String personEntity_lastName);
 
