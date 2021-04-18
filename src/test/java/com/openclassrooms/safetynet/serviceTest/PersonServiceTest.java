@@ -226,4 +226,22 @@ public class PersonServiceTest {
     verify(medicalRecordService).getMedicalRecord(anyLong());
   }
 
+  @Test
+  public void getPhonesByFireStation_shouldReturnOk () {
+    // GIVEN
+    Person person = new Person();
+    person.setId(1L);
+    person.setPhone("555-555-5555");
+    List<Person> phoneByFireStationList = new ArrayList<>();
+    phoneByFireStationList.add(person);
+    when(personDAO.getPersonsByFireStationNumber(anyString())).thenReturn(phoneByFireStationList);
+
+    // WHEN
+    String expectedPhone = personService.getPhonesByFireStation(anyString()).get(0).getPhone();
+
+    // THEN
+    assertEquals("555-555-5555", expectedPhone);
+    verify(personDAO).getPersonsByFireStationNumber(anyString());
+  }
+
 }

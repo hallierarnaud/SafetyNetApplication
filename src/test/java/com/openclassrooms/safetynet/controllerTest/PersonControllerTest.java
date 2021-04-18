@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityExistsException;
@@ -134,6 +135,15 @@ public class PersonControllerTest {
     mockMvc.perform(get("/childAlert")
             .contentType(MediaType.APPLICATION_JSON)
             .param("address", "1509 Culver St"))
+            .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getPhonesByFireStationNumber_shouldReturnOk() throws Exception {
+    when(personService.getPhonesByFireStation(anyString())).thenReturn(new ArrayList<>());
+    mockMvc.perform(get("/phoneAlert")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("stationNumber", "1"))
             .andExpect(status().isOk());
   }
 

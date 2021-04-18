@@ -4,6 +4,7 @@ import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.FirstAndLastNameResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
+import com.openclassrooms.safetynet.controller.DTO.PhoneByFireStationResponse;
 import com.openclassrooms.safetynet.controller.DTO.ShortPersonResponse;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
@@ -152,6 +153,17 @@ public class PersonService {
     childrenByAddress.setChildrenByAddress(childrenFirstAndLastNameResponseList);
     childrenByAddress.setAdultByAddress(adultFirstAndLastNameResponseList);
     return childrenByAddress;
+  }
+
+  public List<PhoneByFireStationResponse> getPhonesByFireStation(String stationNumber) {
+    List<Person> personByFireStationList = personDAO.getPersonsByFireStationNumber(stationNumber);
+    List<PhoneByFireStationResponse> phoneByFireStationList = new ArrayList<>();
+    for (Person personByFireStation : personByFireStationList) {
+      PhoneByFireStationResponse phoneByFireStationResponse = new PhoneByFireStationResponse();
+      phoneByFireStationResponse.setPhone(personByFireStation.getPhone());
+      phoneByFireStationList.add(phoneByFireStationResponse);
+    }
+    return phoneByFireStationList;
   }
 
   /*public List<Person> findByLastNameLike(String lastName) {
