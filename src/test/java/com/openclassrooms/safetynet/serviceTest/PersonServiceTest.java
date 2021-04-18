@@ -193,7 +193,7 @@ public class PersonServiceTest {
     when(personDAO.getPersonsByFireStationNumber(anyString())).thenReturn(personByFireStationList);
     MedicalRecord medicalRecord = new MedicalRecord();
     medicalRecord.setBirthdate("01/01/2020");
-    when(medicalRecordService.getMedicalRecord(anyLong())).thenReturn(medicalRecord);
+    when(personDAO.getPersonMedicalRecord(anyLong())).thenReturn(medicalRecord);
 
     // WHEN
     String expectedFirstName = personService.getPersonsByFireStation(anyString()).getPersonsByFireStation().get(0).getFirstName();
@@ -203,7 +203,7 @@ public class PersonServiceTest {
     assertEquals("Homer", expectedFirstName);
     assertEquals(1, expectedMinorNumber);
     verify(personDAO, times(2)).getPersonsByFireStationNumber(anyString());
-    verify(medicalRecordService, times (2)).getMedicalRecord(anyLong());
+    verify(personDAO, times (2)).getPersonMedicalRecord(anyLong());
   }
 
   @Test
@@ -217,7 +217,7 @@ public class PersonServiceTest {
     when(personDAO.getPersonByAddress(anyString())).thenReturn(childrenByAddressList);
     MedicalRecord medicalRecord = new MedicalRecord();
     medicalRecord.setBirthdate("01/01/2020");
-    when(medicalRecordService.getMedicalRecord(anyLong())).thenReturn(medicalRecord);
+    when(personDAO.getPersonMedicalRecord(anyLong())).thenReturn(medicalRecord);
 
     // WHEN
     String expectedFirstName = personService.getChildrenByAddress(anyString()).getChildrenByAddressList().get(0).getFirstName();
@@ -225,7 +225,7 @@ public class PersonServiceTest {
     // THEN
     assertEquals("Homer", expectedFirstName);
     verify(personDAO).getPersonByAddress(anyString());
-    verify(medicalRecordService).getMedicalRecord(anyLong());
+    verify(personDAO).getPersonMedicalRecord(anyLong());
   }
 
   @Test

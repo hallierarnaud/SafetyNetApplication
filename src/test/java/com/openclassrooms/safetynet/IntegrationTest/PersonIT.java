@@ -107,7 +107,7 @@ public class PersonIT {
             .contentType(MediaType.APPLICATION_JSON)
             .param("address", "892 Downing Ct"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.childrenByAddress.[0]firstName", is("Zach")));
+            .andExpect(jsonPath("$.childrenByAddressList.[0]firstName", is("Zach")));
   }
 
   @Test

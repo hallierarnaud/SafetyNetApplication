@@ -42,9 +42,6 @@ public class PersonService {
   private PersonDAO personDAO;
 
   @Autowired
-  private MedicalRecordService medicalRecordService;
-
-  @Autowired
   private MapService mapService;
 
   public Person getPerson(final Long id) {
@@ -113,7 +110,7 @@ public class PersonService {
       shortPersonResponseList.add(shortPersonResponse);
       LocalDate currentDate = LocalDate.now();
       DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
-      String stringPersonBirthDate = medicalRecordService.getMedicalRecord(personByFireStation.getId()).getBirthdate();
+      String stringPersonBirthDate = personDAO.getPersonMedicalRecord(personByFireStation.getId()).getBirthdate();
       LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
       Period personAge = Period.between(datePersonBirthDate, currentDate);
       if (personAge.getYears() < 18.0) {
@@ -134,7 +131,7 @@ public class PersonService {
     for (Person childrenByAddress : childrenByAddressList) {
       LocalDate currentDate = LocalDate.now();
       DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
-      String stringPersonBirthDate = medicalRecordService.getMedicalRecord(childrenByAddress.getId()).getBirthdate();
+      String stringPersonBirthDate = personDAO.getPersonMedicalRecord(childrenByAddress.getId()).getBirthdate();
       LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
       Period personAge = Period.between(datePersonBirthDate, currentDate);
       if (personAge.getYears() < 18.0) {
