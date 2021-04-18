@@ -157,4 +157,13 @@ public class PersonControllerTest {
             .andExpect(status().isOk());
   }
 
+  @Test
+  public void getPersonInfo_shouldReturnOk() throws Exception {
+    when(personService.getPersonInfo(anyString())).thenReturn(new ArrayList<>());
+    mockMvc.perform(get("/personInfo")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("lastName", "Boyd"))
+            .andExpect(status().isOk());
+  }
+
 }

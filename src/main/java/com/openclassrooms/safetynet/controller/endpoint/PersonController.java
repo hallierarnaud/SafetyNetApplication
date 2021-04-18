@@ -4,6 +4,7 @@ import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
+import com.openclassrooms.safetynet.controller.DTO.PersonInfoResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonResponse;
 import com.openclassrooms.safetynet.controller.DTO.PhoneResponse;
 import com.openclassrooms.safetynet.domain.service.MapService;
@@ -114,6 +115,11 @@ public class PersonController {
   @GetMapping("/fire")
   public PersonByAddressResponse getPersonsByAddress(@RequestParam("address") String address) {
     return personService.getPersonsByAddress(address);
+  }
+
+  @GetMapping("/personInfo")
+  public List<PersonInfoResponse> getPersonsInfo(@RequestParam("lastName") String lastName) {
+    return personService.getPersonInfo(lastName);
   }
 
   /*@GetMapping("/persons/name")

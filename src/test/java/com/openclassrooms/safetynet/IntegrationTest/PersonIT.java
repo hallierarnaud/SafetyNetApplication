@@ -128,4 +128,13 @@ public class PersonIT {
             .andExpect(jsonPath("$.namePhoneAgeAndMedicalRecordResponseList.[0]lastName", is("Zemicks")));
   }
 
+  @Test
+  public void testGetPersonInfo_shouldReturnOk() throws Exception {
+    mockMvc.perform(get("/personInfo")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("lastName", "Boyd"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].lastName", is("Boyd")));
+  }
+
 }

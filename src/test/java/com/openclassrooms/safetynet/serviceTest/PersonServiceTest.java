@@ -278,4 +278,30 @@ public class PersonServiceTest {
     verify(personDAO, times(3)).getPersonFireStation(anyLong());
   }
 
+  @Test
+  public void getPersonInfo_shouldReturnOk () {
+    // GIVEN
+    Person person = new Person();
+    person.setId(1L);
+    person.setLastName("Simpson");
+    List<Person> persons = new ArrayList<>();
+    persons.add(person);
+    when(personDAO.getPersonByLastName(anyString())).thenReturn(persons);
+    MedicalRecord medicalRecord = new MedicalRecord();
+    medicalRecord.setBirthdate("01/01/2000");
+    List<String> medications = Arrays.asList("aspirin", "ivermectine");
+    medicalRecord.setMedications(medications);
+    when(personDAO.getPersonMedicalRecord(anyLong())).thenReturn(medicalRecord);
+
+    // WHEN
+    String expectedLastName = personService.getPersonInfo(anyString()).get(0).getLastName();
+    int expectedAge = personService.getPersonInfo(anyString()).get(0).getAge();
+
+    // THEN
+    assertEquals("Simpson", expectedLastName);
+    assertEquals(21, expectedAge);
+    verify(personDAO, times(2)).getPersonByLastName(anyString());
+    verify(personDAO, times(6)).getPersonMedicalRecord(anyLong());
+  }
+
 }

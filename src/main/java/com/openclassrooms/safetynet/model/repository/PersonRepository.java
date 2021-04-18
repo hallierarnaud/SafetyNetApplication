@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.model.repository;
 
 import com.openclassrooms.safetynet.model.entity.PersonEntity;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,5 +19,7 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
   List<PersonEntity> findAllByFireStationEntityStationNumber(String stationNumber);
 
   List<PersonEntity> findAllByAddressLike(String address);
+
+  List<PersonEntity> findByLastName(String lastName);
 
 }

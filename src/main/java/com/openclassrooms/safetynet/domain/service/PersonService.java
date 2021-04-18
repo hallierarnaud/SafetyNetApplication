@@ -6,6 +6,7 @@ import com.openclassrooms.safetynet.controller.DTO.NamePhoneAgeAndMedicalRecordR
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
+import com.openclassrooms.safetynet.controller.DTO.PersonInfoResponse;
 import com.openclassrooms.safetynet.controller.DTO.PhoneResponse;
 import com.openclassrooms.safetynet.controller.DTO.ShortPersonResponse;
 import com.openclassrooms.safetynet.domain.object.Person;
@@ -179,6 +180,27 @@ public class PersonService {
     personByAddressResponse.setNamePhoneAgeAndMedicalRecordResponseList(namePhoneAgeAndMedicalRecordList);
     personByAddressResponse.setStationNumber(personDAO.getPersonFireStation(personByAddressList.get(0).getId()).getStationNumber());
     return personByAddressResponse;
+  }
+
+  public List<PersonInfoResponse> getPersonInfo(String lastName) {
+    List<Person> persons = personDAO.getPersonByLastName(lastName);
+    List<PersonInfoResponse> personInfoResponseList = new ArrayList<>();
+    for (Person person : persons) {
+      LocalDate currentDate = LocalDate.now();
+      DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+      String stringPersonBirthDate = personDAO.getPersonMedicalRecord(person.getId()).getBirthdate();
+      LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
+      Period personAge = Period.between(datePersonBirthDate, currentDate);
+      PersonInfoResponse personInfoResponse = new PersonInfoResponse();
+      personInfoResponse.setLastName(person.getLastName());
+      personInfoResponse.setAddress(person.getAddress());
+      personInfoResponse.setAge(personAge.getYears());
+      personInfoResponse.setEmail(person.getEmail());
+      personInfoResponse.setMedications(personDAO.getPersonMedicalRecord(person.getId()).getMedications());
+      personInfoResponse.setAllergies(personDAO.getPersonMedicalRecord(person.getId()).getAllergies());
+      personInfoResponseList.add(personInfoResponse);
+    }
+    return personInfoResponseList;
   }
 
 }
