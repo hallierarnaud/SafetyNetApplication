@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynet.controllerTest;
 
+import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
 import com.openclassrooms.safetynet.controller.endpoint.PersonController;
 import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.domain.service.DataImportation.DataReader;
@@ -114,6 +115,15 @@ public class PersonControllerTest {
     mockMvc.perform(put("/persons/1")
             .contentType(MediaType.APPLICATION_JSON).content("{}"))
             .andExpect(status().isUnprocessableEntity());
+  }
+
+  @Test
+  public void getPersonsByFireStationNumber_shouldReturnOk() throws Exception {
+    when(personService.getPersonsByFireStation(any())).thenReturn(new PersonByFireStationResponse());
+    mockMvc.perform(get("/firestation")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("stationNumber", "1"))
+            .andExpect(status().isOk());
   }
 
 }
