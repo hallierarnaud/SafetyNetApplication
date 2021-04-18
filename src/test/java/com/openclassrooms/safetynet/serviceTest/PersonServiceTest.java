@@ -3,6 +3,7 @@ package com.openclassrooms.safetynet.serviceTest;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.domain.object.MedicalRecord;
 import com.openclassrooms.safetynet.domain.object.Person;
+import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.MedicalRecordService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
@@ -38,6 +39,9 @@ public class PersonServiceTest {
 
   @Mock
   private MedicalRecordService medicalRecordService;
+
+  @Mock
+  private MapService mapService;
 
   @InjectMocks
   private PersonService personService;
@@ -121,7 +125,7 @@ public class PersonServiceTest {
   public void updatePerson_shouldReturnOk () {
     // GIVEN
     PersonAddOrUpdateRequest personUpdateRequest = new PersonAddOrUpdateRequest();
-    personUpdateRequest.setFirstName("Homer");
+    personUpdateRequest.setCity("Springville");
     Person person = new Person();
     person.setId(1L);
     when(personDAO.findById(anyLong())).thenReturn(person);
@@ -131,7 +135,7 @@ public class PersonServiceTest {
     Person updated = personService.updateSimplePerson(person.getId(), personUpdateRequest);
 
     // THEN
-    assertEquals(person.getFirstName(), updated.getFirstName());
+    assertEquals(person.getCity(), updated.getCity());
     verify(personDAO, times(2)).findById(person.getId());
     verify(personDAO).updateSimplePerson(person.getId(), person);
   }
@@ -190,14 +194,36 @@ public class PersonServiceTest {
     when(medicalRecordService.getMedicalRecord(anyLong())).thenReturn(medicalRecord);
 
     // WHEN
-    String expectedFirstName = personService.getPersonsByFireStation("1").getPersonsByFireStation().get(0).getFirstName();
-    int expectedMinorNumber = personService.getPersonsByFireStation("1").getMinorNumber();
+    String expectedFirstName = personService.getPersonsByFireStation(anyString()).getPersonsByFireStation().get(0).getFirstName();
+    int expectedMinorNumber = personService.getPersonsByFireStation(anyString()).getMinorNumber();
 
     // THEN
     assertEquals("Homer", expectedFirstName);
     assertEquals(1, expectedMinorNumber);
     verify(personDAO, times(2)).getPersonsByFireStationNumber(anyString());
     verify(medicalRecordService, times (2)).getMedicalRecord(anyLong());
+  }
+
+  @Test
+  public void getChildrenByAddress_shouldReturnOk () {
+    // GIVEN
+    Person person = new Person();
+    person.setId(1L);
+    person.setFirstName("Homer");
+    List<Person> childrenByAddressList = new ArrayList<>();
+    childrenByAddressList.add(person);
+    when(personDAO.getChildrenByAddress(anyString())).thenReturn(childrenByAddressList);
+    MedicalRecord medicalRecord = new MedicalRecord();
+    medicalRecord.setBirthdate("01/01/2020");
+    when(medicalRecordService.getMedicalRecord(anyLong())).thenReturn(medicalRecord);
+
+    // WHEN
+    String expectedFirstName = personService.getChildrenByAddress(anyString()).getChildrenByAddress().get(0).getFirstName();
+
+    // THEN
+    assertEquals("Homer", expectedFirstName);
+    verify(personDAO).getChildrenByAddress(anyString());
+    verify(medicalRecordService).getMedicalRecord(anyLong());
   }
 
 }

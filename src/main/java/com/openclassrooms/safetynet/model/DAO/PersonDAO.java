@@ -79,6 +79,17 @@ public class PersonDAO {
     }).collect(Collectors.toList());
   }
 
+  public List<Person> getChildrenByAddress(String address) {
+    List<PersonEntity> personEntities = personRepository.findAllByAddressLike(address);
+    return personEntities.stream().map((personEntity) -> {
+      Person person = new Person();
+      person.setId(personEntity.getId());
+      person.setFirstName(personEntity.getFirstName());
+      person.setLastName(personEntity.getLastName());
+      return person;
+    }).collect(Collectors.toList());
+  }
+
   /*public List<Person> findByLastName(String lastName) {
     List<PersonEntity> personEntities = personRepository.findByLastName(lastName);
     return personEntities.stream().map((personEntity) -> {

@@ -1,5 +1,7 @@
 package com.openclassrooms.safetynet.domain.service;
 
+import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
+import com.openclassrooms.safetynet.controller.DTO.FirstAndLastNameResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonAddOrUpdateRequest;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
 import com.openclassrooms.safetynet.controller.DTO.ShortPersonResponse;
@@ -96,7 +98,7 @@ public class PersonService {
   }
 
   public PersonByFireStationResponse getPersonsByFireStation(String stationNumber) {
-    int minorNumber= 0;
+    int minorNumber = 0;
     List<Person> personByFireStationList = personDAO.getPersonsByFireStationNumber(stationNumber);
     List<ShortPersonResponse> shortPersonResponseList = new ArrayList<>();
     for (Person personByFireStation : personByFireStationList) {
@@ -120,6 +122,36 @@ public class PersonService {
     personByFireStationResponse.setMinorNumber(minorNumber);
     personByFireStationResponse.setMajorNumber(personByFireStationList.size() - minorNumber);
     return personByFireStationResponse;
+  }
+
+  public ChildrenByAddressResponse getChildrenByAddress(String address) {
+    List<Person> childrenByAddressList = personDAO.getChildrenByAddress(address);
+    List<FirstAndLastNameResponse> childrenFirstAndLastNameResponseList = new ArrayList<>();
+    List<FirstAndLastNameResponse> adultFirstAndLastNameResponseList = new ArrayList<>();
+    for (Person childrenByAddress : childrenByAddressList) {
+      LocalDate currentDate = LocalDate.now();
+      DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+      String stringPersonBirthDate = medicalRecordService.getMedicalRecord(childrenByAddress.getId()).getBirthdate();
+      LocalDate datePersonBirthDate = LocalDate.parse(stringPersonBirthDate, dateTimeFormatter);
+      Period personAge = Period.between(datePersonBirthDate, currentDate);
+      if (personAge.getYears() < 18.0) {
+        FirstAndLastNameResponse firstAndLastNameResponse = new FirstAndLastNameResponse();
+        firstAndLastNameResponse.setFirstName(childrenByAddress.getFirstName());
+        firstAndLastNameResponse.setLastName(childrenByAddress.getLastName());
+        firstAndLastNameResponse.setAge(personAge.getYears());
+        childrenFirstAndLastNameResponseList.add(firstAndLastNameResponse);
+      } else {
+        FirstAndLastNameResponse firstAndLastNameResponse = new FirstAndLastNameResponse();
+        firstAndLastNameResponse.setFirstName(childrenByAddress.getFirstName());
+        firstAndLastNameResponse.setLastName(childrenByAddress.getLastName());
+        firstAndLastNameResponse.setAge(personAge.getYears());
+        adultFirstAndLastNameResponseList.add(firstAndLastNameResponse);
+      }
+    }
+    ChildrenByAddressResponse childrenByAddress = new ChildrenByAddressResponse();
+    childrenByAddress.setChildrenByAddress(childrenFirstAndLastNameResponseList);
+    childrenByAddress.setAdultByAddress(adultFirstAndLastNameResponseList);
+    return childrenByAddress;
   }
 
   /*public List<Person> findByLastNameLike(String lastName) {

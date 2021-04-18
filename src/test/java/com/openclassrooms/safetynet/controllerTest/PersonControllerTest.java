@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynet.controllerTest;
 
+import com.openclassrooms.safetynet.controller.DTO.ChildrenByAddressResponse;
 import com.openclassrooms.safetynet.controller.DTO.PersonByFireStationResponse;
 import com.openclassrooms.safetynet.controller.endpoint.PersonController;
 import com.openclassrooms.safetynet.domain.object.Person;
@@ -22,6 +23,7 @@ import java.util.NoSuchElementException;
 import javax.persistence.EntityExistsException;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -119,10 +121,19 @@ public class PersonControllerTest {
 
   @Test
   public void getPersonsByFireStationNumber_shouldReturnOk() throws Exception {
-    when(personService.getPersonsByFireStation(any())).thenReturn(new PersonByFireStationResponse());
+    when(personService.getPersonsByFireStation(anyString())).thenReturn(new PersonByFireStationResponse());
     mockMvc.perform(get("/firestation")
             .contentType(MediaType.APPLICATION_JSON)
             .param("stationNumber", "1"))
+            .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getChildrenByAddress_shouldReturnOk() throws Exception {
+    when(personService.getChildrenByAddress(anyString())).thenReturn(new ChildrenByAddressResponse());
+    mockMvc.perform(get("/childAlert")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("address", "1509 Culver St"))
             .andExpect(status().isOk());
   }
 

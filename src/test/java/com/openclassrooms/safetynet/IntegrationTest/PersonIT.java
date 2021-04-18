@@ -101,4 +101,13 @@ public class PersonIT {
             .andExpect(jsonPath("$.personsByFireStation.[0]firstName", is("Peter")));
   }
 
+  @Test
+  public void testGetChildrenByAddress_shouldReturnOk() throws Exception {
+    mockMvc.perform(get("/childAlert")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("address", "892 Downing Ct"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.childrenByAddress.[0]firstName", is("Zach")));
+  }
+
 }
