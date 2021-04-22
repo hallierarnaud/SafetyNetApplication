@@ -12,6 +12,8 @@ import com.openclassrooms.safetynet.controller.DTO.PhoneResponse;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,8 +32,13 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
+@Slf4j
 public class PersonController {
+
+  private static Logger logger = LoggerFactory.getLogger(PersonController.class);
 
   @Autowired
   private PersonService personService;
@@ -101,6 +108,7 @@ public class PersonController {
 
   @GetMapping("/firestation")
   public PersonByFireStationResponse getPersonsByFireStationNumber(@RequestParam("stationNumber") String stationNumber) {
+    logger.info("Requête {}", stationNumber);
     return personService.getPersonsByFireStation(stationNumber);
   }
 
