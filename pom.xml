@@ -89,6 +89,10 @@
                 <configuration>
                     <excludes>
                         <exclude>com/openclassrooms/safetynet/controller/DTO/**/*</exclude>
+                        <exclude>com/openclassrooms/safetynet/domain/object/**/*</exclude>
+                        <exclude>com/openclassrooms/safetynet/model/entity/**/*</exclude>
+                        <exclude>com/openclassrooms/safetynet/domain/service/DataImportation/**/*</exclude>
+                        <exclude>com/openclassrooms/safetynet/model/repository/**/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
