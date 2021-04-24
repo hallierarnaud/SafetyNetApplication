@@ -104,9 +104,9 @@ public class PersonDAO {
   }
 
   public FireStation getPersonFireStation(Long id) {
-    PersonEntity person = personRepository.findById(id)
+    PersonEntity personEntity = personRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException());
-    String personAddress = person.getAddress();
+    String personAddress = personEntity.getAddress();
     FireStationEntity fireStationEntity = fireStationRepository.findAll()
             .stream()
             .filter(fireStation -> fireStation.getAddresses().contains(personAddress))
@@ -117,9 +117,9 @@ public class PersonDAO {
   }
 
   public MedicalRecord getPersonMedicalRecord(Long id) {
-    PersonEntity person = personRepository.findById(id)
+    PersonEntity personEntity = personRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException());
-    MedicalRecordEntity medicalRecordEntity = medicalRecordRepository.findByPersonEntityFirstNameAndPersonEntityLastName(person.getFirstName(), person.getLastName());
+    MedicalRecordEntity medicalRecordEntity = medicalRecordRepository.findByPersonEntityFirstNameAndPersonEntityLastName(personEntity.getFirstName(), personEntity.getLastName());
     MedicalRecord medicalRecord = new MedicalRecord();
     return mapDAO.updateMedicalRecordWithMedicalRecordEntity(medicalRecord, medicalRecordEntity);
   }
