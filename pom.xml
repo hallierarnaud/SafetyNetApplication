@@ -93,6 +93,8 @@
                         <exclude>com/openclassrooms/safetynet/model/entity/**/*</exclude>
                         <exclude>com/openclassrooms/safetynet/domain/service/DataImportation/**/*</exclude>
                         <exclude>com/openclassrooms/safetynet/model/repository/**/*</exclude>
+                        <exclude>com/openclassrooms/safetynet/domain/service/MapService.class</exclude>
+                        <exclude>com/openclassrooms/safetynet/model/DAO/MapDAO.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
