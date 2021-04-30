@@ -69,13 +69,6 @@ public class MedicalRecordDAO {
     return medicalRecordRepository.existsByPersonEntity_FirstNameAndPersonEntity_LastName(firstName, lastName);
   }
 
-  public MedicalRecord findByFirstAndLastName(String firstName, String lastName) {
-    MedicalRecordEntity medicalRecordEntity = medicalRecordRepository.findByPersonEntityFirstNameAndPersonEntityLastName(firstName, lastName);
-    MedicalRecord medicalRecord = new MedicalRecord();
-    mapDAO.updateMedicalRecordWithMedicalRecordEntity(medicalRecord, medicalRecordEntity);
-    return medicalRecord;
-  }
-
   public void deleteByFirstAndLastName(String firstName, String lastName) {
     medicalRecordRepository.deleteByPersonEntity_FirstNameAndPersonEntity_LastName(firstName, lastName);
   }

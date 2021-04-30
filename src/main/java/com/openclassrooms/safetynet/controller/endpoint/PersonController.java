@@ -53,15 +53,6 @@ public class PersonController {
     }
   }
 
-  /*@PostMapping("/persons")
-  public PersonMedicalRecordResponse addPerson(@RequestBody PersonMedicalRecordResponse personMedicalRecordResponse) {
-    try {
-      return mapService.convertPersonToPersonMedicalRecordDTO(personService.addPerson(personMedicalRecordResponse));
-    } catch (EntityExistsException e) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "person " + personMedicalRecordResponse.getId() + " already exists");
-    }
-  }*/
-
   @PostMapping("/persons")
   public PersonResponse addSimplePerson(@RequestBody PersonAddOrUpdateRequest personAddRequest) {
     try {
@@ -80,15 +71,6 @@ public class PersonController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, firstName + " " + lastName + " doesn't exist");
     }
   }
-
-  /*@PutMapping("/persons/{id}")
-  public PersonMedicalRecordResponse updatePerson(@PathVariable("id") long id, @RequestBody PersonUpdateRequest personUpdateRequest) {
-    try {
-      return mapService.convertPersonToPersonMedicalRecordDTO(personService.updatePerson(id, personUpdateRequest));
-    } catch (EntityNotFoundException e) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "person " + id + " doesn't exist");
-    }
-  }*/
 
   @PutMapping("/persons/{id}")
   public PersonResponse updateSimplePerson(@PathVariable("id") long id, @RequestBody PersonAddOrUpdateRequest personUpdateRequest) {
@@ -161,19 +143,5 @@ public class PersonController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "there is no result for city " + city);
     }
   }
-
-  /*@GetMapping("/persons/name")
-  public List<PersonResponse> getPersonByLastName(@RequestParam("lastName") String lastName) {
-    return personService.findByLastNameLike(lastName).stream().map(p -> mapService.convertPersonToPersonResponse(p)).collect(Collectors.toList());
-  }*/
-
-  /*@GetMapping("/persons/firestations/{id}")
-  public FireStationEntity getPersonFireStation(@PathVariable("id") long id) {
-    try {
-      return personService.getPersonFireStation(id);
-    } catch (NoSuchElementException e) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "person " + id + " doesn't exist or hasn't a firestation");
-    }
-  }*/
 
 }

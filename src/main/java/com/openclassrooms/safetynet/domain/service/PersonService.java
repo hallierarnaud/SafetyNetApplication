@@ -82,18 +82,6 @@ public class PersonService {
     return personDAO.updateSimplePerson(id, person);
   }
 
-  /*public PersonEntity addPerson(PersonMedicalRecordResponse personMedicalRecordResponse) {
-    PersonEntity person = new PersonEntity();
-    MedicalRecordEntity medicalRecord = new MedicalRecordEntity();
-    person.setMedicalRecord(medicalRecord);
-    medicalRecord.setPerson(person);
-    mapService.updatePersonWithPersonMedicalDTO(person, medicalRecord, personMedicalRecordResponse);
-    if (personRepository.existsById(personMedicalRecordResponse.getId())) {
-      throw new EntityExistsException("person " + personMedicalRecordResponse.getId() + " already exists");
-    }
-    return personRepository.save(person);
-  }*/
-
   public Person addSimplePerson(PersonAddOrUpdateRequest personAddRequest) {
     if (personDAO.existById(personAddRequest.getId())) {
       throw new EntityExistsException("person " + personAddRequest.getId() + " already exists");
