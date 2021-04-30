@@ -7,6 +7,7 @@ import com.openclassrooms.safetynet.domain.object.Person;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.MedicalRecordService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
+import com.openclassrooms.safetynet.model.DAO.FireStationDAO;
 import com.openclassrooms.safetynet.model.DAO.PersonDAO;
 
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,9 @@ public class PersonServiceTest {
 
   @Mock
   private PersonDAO personDAO;
+
+  @Mock
+  private FireStationDAO fireStationDAO;
 
   @Mock
   private MedicalRecordService medicalRecordService;
@@ -202,7 +206,7 @@ public class PersonServiceTest {
     // THEN
     assertEquals("Homer", expectedFirstName);
     assertEquals(1, expectedMinorNumber);
-    verify(personDAO, times(2)).getPersonsByFireStationNumber(anyString());
+    verify(personDAO, times(4)).getPersonsByFireStationNumber(anyString());
     verify(personDAO, times (2)).getPersonMedicalRecord(anyLong());
   }
 
@@ -212,6 +216,10 @@ public class PersonServiceTest {
     Person person = new Person();
     person.setId(1L);
     person.setFirstName("Homer");
+    person.setAddress("1st Springville road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    when(personDAO.findAll()).thenReturn(personList);
     List<Person> childrenByAddressList = new ArrayList<>();
     childrenByAddressList.add(person);
     when(personDAO.getPersonByAddress(anyString())).thenReturn(childrenByAddressList);
@@ -220,10 +228,11 @@ public class PersonServiceTest {
     when(personDAO.getPersonMedicalRecord(anyLong())).thenReturn(medicalRecord);
 
     // WHEN
-    String expectedFirstName = personService.getChildrenByAddress(anyString()).getChildrenByAddressList().get(0).getFirstName();
+    String expectedFirstName = personService.getChildrenByAddress("1st Springville road").getChildrenByAddressList().get(0).getFirstName();
 
     // THEN
     assertEquals("Homer", expectedFirstName);
+    verify(personDAO).findAll();
     verify(personDAO).getPersonByAddress(anyString());
     verify(personDAO).getPersonMedicalRecord(anyLong());
   }
@@ -243,7 +252,7 @@ public class PersonServiceTest {
 
     // THEN
     assertEquals("555-555-5555", expectedPhone);
-    verify(personDAO).getPersonsByFireStationNumber(anyString());
+    verify(personDAO, times(2)).getPersonsByFireStationNumber(anyString());
   }
 
   @Test
@@ -273,7 +282,7 @@ public class PersonServiceTest {
     assertEquals("Simpson", expectedLastName);
     assertEquals(21, expectedAge);
     assertEquals("aspirin", expectedMedication);
-    verify(personDAO, times(3)).getPersonByAddress(anyString());
+    verify(personDAO, times(6)).getPersonByAddress(anyString());
     verify(personDAO, times(9)).getPersonMedicalRecord(anyLong());
     verify(personDAO, times(3)).getPersonFireStation(anyLong());
   }
@@ -288,6 +297,11 @@ public class PersonServiceTest {
     person.setId(1L);
     person.setLastName("Simpson");
     person.setAddress("1st Springville road");
+    FireStation fireStation = new FireStation();
+    fireStation.setStationNumber("1");
+    List<FireStation> fireStationList = new ArrayList<>();
+    fireStationList.add(fireStation);
+    when(fireStationDAO.findAll()).thenReturn(fireStationList);
     List<Person> personsByFireStationNumber = new ArrayList<>();
     personsByFireStationNumber.add(person);
     when(personDAO.getPersonsByFireStationNumber(anyString())).thenReturn(personsByFireStationNumber);
@@ -336,7 +350,7 @@ public class PersonServiceTest {
     // THEN
     assertEquals("Simpson", expectedLastName);
     assertEquals(21, expectedAge);
-    verify(personDAO, times(2)).getPersonByLastName(anyString());
+    verify(personDAO, times(4)).getPersonByLastName(anyString());
     verify(personDAO, times(6)).getPersonMedicalRecord(anyLong());
   }
 
@@ -355,7 +369,7 @@ public class PersonServiceTest {
 
     // THEN
     assertEquals("simpson@email.fr", expectedEmail);
-    verify(personDAO).getPersonByCity(anyString());
+    verify(personDAO, times(2)).getPersonByCity(anyString());
   }
 
 }

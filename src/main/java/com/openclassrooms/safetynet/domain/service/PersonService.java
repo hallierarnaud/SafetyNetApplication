@@ -141,7 +141,7 @@ public class PersonService {
 
   public ChildrenByAddressResponse getChildrenByAddress(String address) {
     logger.info("Query : localhost:9000/childAlert?address={}", address);
-    List<Person> personList = getPersons();
+    List<Person> personList = personDAO.findAll();
     List <String> addresses = new ArrayList<>();
     for (Person person : personList) {
       addresses.add(person.getAddress());
