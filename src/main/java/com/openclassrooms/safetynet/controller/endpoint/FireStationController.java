@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 
+/**
+ * a class to perform CRUD operations on fire station
+ */
 @RestController
 public class FireStationController {
 
@@ -31,11 +34,18 @@ public class FireStationController {
   @Autowired
   MapService mapService;
 
+  /**
+   * @return a list of all fire stations in the database
+   */
   @GetMapping("/firestations")
   public List<FireStationResponse> getFireStations() {
     return fireStationService.getFireStations().stream().map(f -> mapService.convertFireStationToFireStationResponse(f)).collect(Collectors.toList());
   }
 
+  /**
+   * @param id a fire station's id
+   * @return a fire station corresponding to the id
+   */
   @GetMapping("/firestations/{id}")
   public FireStationResponse getFireStationById(@PathVariable("id") long id) {
     try {
@@ -45,6 +55,10 @@ public class FireStationController {
     }
   }
 
+  /**
+   * @param fireStationAddRequest a fire station defined by his attributes
+   * @return add the fire station to the database
+   */
   @PostMapping("/firestations")
   public FireStationResponse addFireStation(@RequestBody FireStationAddOrUpdateRequest fireStationAddRequest) {
     try {
@@ -54,6 +68,9 @@ public class FireStationController {
     }
   }
 
+  /**
+   * @param id a fire station's id
+   */
   @DeleteMapping("/firestations/{id}")
   public void deleteFireStationById(@PathVariable("id") long id) {
     try {
@@ -64,6 +81,11 @@ public class FireStationController {
     }
   }
 
+  /**
+   * @param id a fire station's id
+   * @param fireStationUpdateRequest a fire station defined by his attributes
+   * @return update the fire station in the database
+   */
   @PutMapping("/firestations/{id}")
   public FireStationResponse updateFireStation(@PathVariable("id") long id, @RequestBody FireStationAddOrUpdateRequest fireStationUpdateRequest) {
     try {

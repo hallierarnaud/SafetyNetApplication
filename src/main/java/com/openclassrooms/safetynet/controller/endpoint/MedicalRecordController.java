@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 
+/**
+ * a class to perform CRUD operations on medical record
+ */
 @RestController
 public class MedicalRecordController {
 
@@ -31,11 +34,18 @@ public class MedicalRecordController {
   @Autowired
   MapService mapService;
 
+  /**
+   * @return a list of all medical records in the database
+   */
   @GetMapping("/medicalrecords")
   public List<MedicalRecordResponse> getMedicalRecords() {
     return medicalRecordService.getMedicalRecords().stream().map(m -> mapService.convertMedicalRecordToMedicalRecordResponse(m)).collect(Collectors.toList());
   }
 
+  /**
+   * @param id a medical record's id
+   * @return a medical record corresponding to the id
+   */
   @GetMapping("/medicalrecords/{id}")
   public MedicalRecordResponse getMedicalRecordById(@PathVariable("id") long id) {
     try {
@@ -45,6 +55,10 @@ public class MedicalRecordController {
     }
   }
 
+  /**
+   * @param medicalRecordAddRequest a medical record defined by his attributes
+   * @return add the medical record to the database
+   */
   @PostMapping("/medicalrecords")
   public MedicalRecordResponse addMedicalRecord(@RequestBody MedicalRecordAddOrUpdateRequest medicalRecordAddRequest) {
     try {
@@ -56,6 +70,10 @@ public class MedicalRecordController {
     }
   }
 
+  /**
+   * @param firstName first name of a person
+   * @param lastName last name of a person
+   */
   @DeleteMapping("/medicalrecords/{firstName}/{lastName}")
   public void deleteMedicalRecordByFirstAndLastName(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
     try {
@@ -66,6 +84,11 @@ public class MedicalRecordController {
     }
   }
 
+  /**
+   * @param id a medical record's id
+   * @param medicalRecordUpdateRequest a medical record defined by his attributes
+   * @return update the medical record in the database
+   */
   @PutMapping("/medicalrecords/{id}")
   public MedicalRecordResponse updateMedicalRecord(@PathVariable("id") long id, @RequestBody MedicalRecordAddOrUpdateRequest medicalRecordUpdateRequest) {
     try {

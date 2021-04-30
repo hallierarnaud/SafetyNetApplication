@@ -30,6 +30,9 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 
+/**
+ * a class to perform CRUD operations on person and business treatments
+ */
 @RestController
 public class PersonController {
 
@@ -39,11 +42,18 @@ public class PersonController {
   @Autowired
   private MapService mapService;
 
+  /**
+   * @return a list of all persons in the database
+   */
   @GetMapping("/persons")
   public List<PersonResponse> getPersons() {
     return personService.getPersons().stream().map(p -> mapService.convertPersonToPersonResponse(p)).collect(Collectors.toList());
   }
 
+  /**
+   * @param id a person's id
+   * @return a person corresponding to the id
+   */
   @GetMapping("/persons/{id}")
   public PersonResponse getPersonById(@PathVariable("id") long id) {
     try {
@@ -53,6 +63,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param personAddRequest a person defined by his attributes
+   * @return add the person to the database
+   */
   @PostMapping("/persons")
   public PersonResponse addSimplePerson(@RequestBody PersonAddOrUpdateRequest personAddRequest) {
     try {
@@ -62,6 +76,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param firstName first name of a person
+   * @param lastName last name of a person
+   */
   @DeleteMapping("/persons/{firstName}/{lastName}")
   public void deletePersonByFirstAndLastName(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
     try {
@@ -72,6 +90,11 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param id a person's id
+   * @param personUpdateRequest a person defined by his attributes
+   * @return update the person in the database
+   */
   @PutMapping("/persons/{id}")
   public PersonResponse updateSimplePerson(@PathVariable("id") long id, @RequestBody PersonAddOrUpdateRequest personUpdateRequest) {
     try {
@@ -81,6 +104,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param stationNumber a number identifying a fire station
+   * @return a list of the persons covered by the fire station and the number of children and adults
+   */
   @GetMapping("/firestation")
   public PersonByFireStationResponse getPersonsByFireStationNumber(@RequestParam("stationNumber") String stationNumber) {
     try {
@@ -90,6 +117,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param address a person's address
+   * @return a list of children (persons under 18) living at the address
+   */
   @GetMapping("/childAlert")
   public ChildrenByAddressResponse getChildrenByAddress(@RequestParam("address") String address) {
     try {
@@ -99,6 +130,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param stationNumber a number identifying a fire station
+   * @return a phone number list of persons covered by the fire station
+   */
   @GetMapping("/phoneAlert")
   public List<PhoneResponse> getPhonesByFireStation(@RequestParam("stationNumber") String stationNumber) {
     try {
@@ -108,6 +143,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param address a person's address
+   * @return a list of persons living at the address with their medical record and their fire station number
+   */
   @GetMapping("/fire")
   public PersonByAddressResponse getPersonsByAddress(@RequestParam("address") String address) {
     try {
@@ -117,6 +156,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param stationNumberList a list of fire station numbers
+   * @return lists of persons covered by each fire station with their medical record and grouped by address
+   */
   @GetMapping("/flood/stations")
   public List<List<List<NamePhoneAgeAndMedicalRecordResponse>>> getFamiliesByFireStation(@RequestParam("stations") List<Integer> stationNumberList) {
     try {
@@ -126,6 +169,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param lastName last name of a person
+   * @return a list of persons with the same last name with their medical record
+   */
   @GetMapping("/personInfo")
   public List<PersonInfoResponse> getPersonsInfo(@RequestParam("lastName") String lastName) {
     try {
@@ -135,6 +182,10 @@ public class PersonController {
     }
   }
 
+  /**
+   * @param city a city name
+   * @return a list of all the emails of the city
+   */
   @GetMapping("/communityEmail")
   public List<EmailResponse> getEmailsByCity(@RequestParam("city") String city) {
     try {
