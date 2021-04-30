@@ -12,8 +12,6 @@ import com.openclassrooms.safetynet.controller.DTO.PhoneResponse;
 import com.openclassrooms.safetynet.domain.service.MapService;
 import com.openclassrooms.safetynet.domain.service.PersonService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,13 +30,8 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
-@Slf4j
 public class PersonController {
-
-  private static Logger logger = LoggerFactory.getLogger(PersonController.class);
 
   @Autowired
   private PersonService personService;
@@ -108,38 +101,65 @@ public class PersonController {
 
   @GetMapping("/firestation")
   public PersonByFireStationResponse getPersonsByFireStationNumber(@RequestParam("stationNumber") String stationNumber) {
-    logger.info("Requête {}", stationNumber);
-    return personService.getPersonsByFireStation(stationNumber);
+    try {
+      return personService.getPersonsByFireStation(stationNumber);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "there is no result for firestation " + stationNumber);
+    }
   }
 
   @GetMapping("/childAlert")
   public ChildrenByAddressResponse getChildrenByAddress(@RequestParam("address") String address) {
-    return personService.getChildrenByAddress(address);
+    try {
+      return personService.getChildrenByAddress(address);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "address " + address + " doesn't exist");
+    }
   }
 
   @GetMapping("/phoneAlert")
   public List<PhoneResponse> getPhonesByFireStation(@RequestParam("stationNumber") String stationNumber) {
-    return personService.getPhonesByFireStation(stationNumber);
+    try {
+      return personService.getPhonesByFireStation(stationNumber);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "there is no result for firestation " + stationNumber);
+    }
   }
 
   @GetMapping("/fire")
   public PersonByAddressResponse getPersonsByAddress(@RequestParam("address") String address) {
-    return personService.getPersonsByAddress(address);
+    try {
+      return personService.getPersonsByAddress(address);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "there is no result for address " + address);
+    }
   }
 
   @GetMapping("/flood/stations")
   public List<List<List<NamePhoneAgeAndMedicalRecordResponse>>> getFamiliesByFireStation(@RequestParam("stations") List<Integer> stationNumberList) {
-    return personService.getFamiliesByFireStations(stationNumberList);
+    try {
+      return personService.getFamiliesByFireStations(stationNumberList);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "there is a firestation number in the list " + stationNumberList + " which doesn't exist");
+    }
   }
 
   @GetMapping("/personInfo")
   public List<PersonInfoResponse> getPersonsInfo(@RequestParam("lastName") String lastName) {
-    return personService.getPersonInfo(lastName);
+    try {
+      return personService.getPersonInfo(lastName);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "there is no result for last name " + lastName);
+    }
   }
 
   @GetMapping("/communityEmail")
   public List<EmailResponse> getEmailsByCity(@RequestParam("city") String city) {
-    return personService.getEmailsByCity(city);
+    try {
+      return personService.getEmailsByCity(city);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "there is no result for city " + city);
+    }
   }
 
   /*@GetMapping("/persons/name")
