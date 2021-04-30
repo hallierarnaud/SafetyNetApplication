@@ -238,6 +238,33 @@ public class PersonServiceTest {
   }
 
   @Test
+  public void getChildrenByAddress_shouldReturnAdult () {
+    // GIVEN
+    Person person = new Person();
+    person.setId(1L);
+    person.setFirstName("Homer");
+    person.setAddress("1st Springville road");
+    List<Person> personList = new ArrayList<>();
+    personList.add(person);
+    when(personDAO.findAll()).thenReturn(personList);
+    List<Person> childrenByAddressList = new ArrayList<>();
+    childrenByAddressList.add(person);
+    when(personDAO.getPersonByAddress(anyString())).thenReturn(childrenByAddressList);
+    MedicalRecord medicalRecord = new MedicalRecord();
+    medicalRecord.setBirthdate("01/01/2000");
+    when(personDAO.getPersonMedicalRecord(anyLong())).thenReturn(medicalRecord);
+
+    // WHEN
+    String expectedFirstName = personService.getChildrenByAddress("1st Springville road").getAdultByAddressList().get(0).getFirstName();
+
+    // THEN
+    assertEquals("Homer", expectedFirstName);
+    verify(personDAO).findAll();
+    verify(personDAO).getPersonByAddress(anyString());
+    verify(personDAO).getPersonMedicalRecord(anyLong());
+  }
+
+  @Test
   public void getPhonesByFireStation_shouldReturnOk () {
     // GIVEN
     Person person = new Person();

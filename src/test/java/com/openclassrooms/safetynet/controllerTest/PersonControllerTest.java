@@ -131,12 +131,30 @@ public class PersonControllerTest {
   }
 
   @Test
+  public void getPersonsByFireStationNumber_shouldReturnNotFound() throws Exception {
+    when(personService.getPersonsByFireStation(anyString())).thenThrow(new NoSuchElementException());
+    mockMvc.perform(get("/firestation")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("stationNumber", "1"))
+            .andExpect(status().isNotFound());
+  }
+
+  @Test
   public void getChildrenByAddress_shouldReturnOk() throws Exception {
     when(personService.getChildrenByAddress(anyString())).thenReturn(new ChildrenByAddressResponse());
     mockMvc.perform(get("/childAlert")
             .contentType(MediaType.APPLICATION_JSON)
             .param("address", "1509 Culver St"))
             .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getChildrenByAddress_shouldReturnUnprocessableEntity() throws Exception {
+    when(personService.getChildrenByAddress(anyString())).thenThrow(new NoSuchElementException());
+    mockMvc.perform(get("/childAlert")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("address", "1509 Culver St"))
+            .andExpect(status().isUnprocessableEntity());
   }
 
   @Test
@@ -149,12 +167,30 @@ public class PersonControllerTest {
   }
 
   @Test
+  public void getPhonesByFireStationNumber_shouldReturnNotFound() throws Exception {
+    when(personService.getPhonesByFireStation(anyString())).thenThrow(new NoSuchElementException());
+    mockMvc.perform(get("/phoneAlert")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("stationNumber", "1"))
+            .andExpect(status().isNotFound());
+  }
+
+  @Test
   public void getPersonByAddress_shouldReturnOk() throws Exception {
     when(personService.getPersonsByAddress(anyString())).thenReturn(new PersonByAddressResponse());
     mockMvc.perform(get("/fire")
             .contentType(MediaType.APPLICATION_JSON)
             .param("address", "1509 Culver St"))
             .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getPersonByAddress_shouldReturnNotFound() throws Exception {
+    when(personService.getPersonsByAddress(anyString())).thenThrow(new NoSuchElementException());
+    mockMvc.perform(get("/fire")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("address", "1509 Culver St"))
+            .andExpect(status().isNotFound());
   }
 
   @Test
@@ -167,6 +203,15 @@ public class PersonControllerTest {
   }
 
   @Test
+  public void getFamiliesByFireStations_shouldReturnNotFound() throws Exception {
+    when(personService.getFamiliesByFireStations(any())).thenThrow(new NoSuchElementException());
+    mockMvc.perform(get("/flood/stations")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("stations", "1,2"))
+            .andExpect(status().isNotFound());
+  }
+
+  @Test
   public void getPersonInfo_shouldReturnOk() throws Exception {
     when(personService.getPersonInfo(anyString())).thenReturn(new ArrayList<>());
     mockMvc.perform(get("/personInfo")
@@ -176,12 +221,30 @@ public class PersonControllerTest {
   }
 
   @Test
+  public void getPersonInfo_shouldReturnNotFound() throws Exception {
+    when(personService.getPersonInfo(anyString())).thenThrow(new NoSuchElementException());
+    mockMvc.perform(get("/personInfo")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("lastName", "Boyd"))
+            .andExpect(status().isNotFound());
+  }
+
+  @Test
   public void getEmailsByCity_shouldReturnOk() throws Exception {
     when(personService.getEmailsByCity(anyString())).thenReturn(new ArrayList<>());
     mockMvc.perform(get("/communityEmail")
             .contentType(MediaType.APPLICATION_JSON)
             .param("city", "Culver"))
             .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getEmailsByCity_shouldReturnNotFound() throws Exception {
+    when(personService.getEmailsByCity(anyString())).thenThrow(new NoSuchElementException());
+    mockMvc.perform(get("/communityEmail")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("city", "Culver"))
+            .andExpect(status().isNotFound());
   }
 
 }
